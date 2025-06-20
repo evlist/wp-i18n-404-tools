@@ -41,10 +41,14 @@ define( 'I18N_404_TOOLS_VERSION', '1.0.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-i18n-404-tools-activator.php
  */
+require_once plugin_dir_path(__FILE__) . 'admin/class-wpcli-updater.php';
 function activate_i18n_404_tools() {
-	require_once plugin_dir_path( __FILE__ ) . 'admin/wp-cli-updater.php';
-	i18n_404_tools_wpcli_download_phar();
-}
+
+	if ( isset( $GLOBALS['i18n_404_tools_wpcli_updater'] ) ) {
+		error_log('download_phar_with_notice: '.$GLOBALS['i18n_404_tools_wpcli_updater']->download_phar_with_notice());
+	}
+};
+
 
 
 register_activation_hook( __FILE__, 'activate_i18n_404_tools' );
