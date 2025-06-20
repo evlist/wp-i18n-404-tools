@@ -13,6 +13,10 @@ if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
         const NOTICE_TRANSIENT = 'i18n_404_tools_wpcli_update_notice';
         const PHAR_URL = 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar';
 
+        public static function get_phar_path() {
+            return plugin_dir_path(dirname(__FILE__)) . self::BIN_DIR . self::PHAR_FILE;
+        }
+
         /**
          * Private: Download and check version. Returns true or error string.
          */
@@ -48,9 +52,9 @@ if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
             $output = shell_exec( $cmd );
 
             if (
-                empty( $output ) ||
-                ! preg_match( '/WP-CLI(?:\s+version)?\s+([0-9.]+)/i', $output, $matches )
-            ) {
+                    empty( $output ) ||
+                    ! preg_match( '/WP-CLI(?:\s+version)?\s+([0-9.]+)/i', $output, $matches )
+               ) {
                 return 'Could not execute wp-cli.phar or retrieve version. Output: ' . esc_html( $output );
             }
             $version = trim( $matches[1] );
@@ -69,22 +73,22 @@ if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
             $result = $this->download_phar();
             if ( $result === true ) {
                 set_transient(
-                    self::NOTICE_TRANSIENT,
-                    array(
-                        'type'    => 'success',
-                        'message' => $success_msg ?: __( 'WP-CLI was successfully installed.', 'i18n-404-tools' )
-                    ),
-                    30
-                );
+                        self::NOTICE_TRANSIENT,
+                        array(
+                            'type'    => 'success',
+                            'message' => $success_msg ?: __( 'WP-CLI was successfully installed.', 'i18n-404-tools' )
+                            ),
+                        30
+                        );
             } else {
                 set_transient(
-                    self::NOTICE_TRANSIENT,
-                    array(
-                        'type'    => 'error',
-                        'message' => $result
-                    ),
-                    30
-                );
+                        self::NOTICE_TRANSIENT,
+                        array(
+                            'type'    => 'error',
+                            'message' => $result
+                            ),
+                        30
+                        );
             }
             return $result;
         }
