@@ -114,9 +114,11 @@ if ( ! class_exists( 'I18n_404_Tools_Pot_Generator' ) ) :
             $cmd = $wp_cli . ' i18n make-pot '
                 . escapeshellarg( $plugin_dir ) . ' '
                 . escapeshellarg( $pot_path )
-                . ' --exclude=node_modules,vendor,tests,test --domain=' . escapeshellarg( $domain ) . ' --include=php,js';
+                . ' --domain=' . escapeshellarg( $domain ) ;
 
+            error_log('wp-cli command:' . $cmd); 
             @exec( $cmd . ' 2>&1', $output, $exit_code );
+            error_log('wp-cli command output' . print_r($output, true));
 
             if ( $exit_code === 0 && file_exists( $pot_path ) ) {
                 wp_send_json_success( [
