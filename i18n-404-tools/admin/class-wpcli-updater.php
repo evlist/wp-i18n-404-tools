@@ -14,7 +14,7 @@ if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
         const PHAR_URL = 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar';
 
         public static function get_phar_path() {
-            return plugin_dir_path(dirname(__FILE__)) . self::BIN_DIR . self::PHAR_FILE;
+            return plugin_dir_path(__FILE__) . self::BIN_DIR . self::PHAR_FILE;
         }
 
         /**
