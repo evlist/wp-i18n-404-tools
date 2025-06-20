@@ -42,41 +42,10 @@ define( 'I18N_404_TOOLS_VERSION', '1.0.0' );
  * This action is documented in includes/class-i18n-404-tools-activator.php
  */
 function activate_i18n_404_tools() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-i18n-404-tools-activator.php';
-	I18n_404_Tools_Activator::activate();
+	require_once plugin_dir_path( __FILE__ ) . 'admin/wp-cli-updater.php';
+	i18n_404_tools_wpcli_download_phar();
 }
 
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-i18n-404-tools-deactivator.php
- */
-function deactivate_i18n_404_tools() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-i18n-404-tools-deactivator.php';
-	I18n_404_Tools_Deactivator::deactivate();
-}
 
 register_activation_hook( __FILE__, 'activate_i18n_404_tools' );
-register_deactivation_hook( __FILE__, 'deactivate_i18n_404_tools' );
 
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-i18n-404-tools.php';
-
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
- */
-function run_i18n_404_tools() {
-
-	$plugin = new I18n_404_Tools();
-	$plugin->run();
-
-}
-run_i18n_404_tools();
