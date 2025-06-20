@@ -19,8 +19,8 @@
  * Version:           1.0.0
  * Author:            Eric van der Vlist
  * Author URI:        https://e.vli.st/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License:           GPL-3.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       i18n-404-tools
  * Domain Path:       /languages
  */
