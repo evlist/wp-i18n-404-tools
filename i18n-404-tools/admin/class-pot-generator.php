@@ -49,12 +49,12 @@ if ( ! class_exists( 'I18n_404_Tools_Pot_Generator' ) ) :
                     true
                     );
             wp_localize_script( 'i18n-404-tools-pot-generator-vanilla', 'I18n404PotGen', [
-                    'ajax_url' => admin_url( 'admin-ajax.php' ),
-                    'modal_title' => __( 'Generate .pot file', 'i18n-404-tools' ),
-                    'generating' => __( 'Generating .pot file, please wait...', 'i18n-404-tools' ),
+                    'ajax_url'        => admin_url( 'admin-ajax.php' ),
+                    'modal_title'     => __( 'Generate .pot file', 'i18n-404-tools' ),
+                    'generating'      => __( 'Generating .pot file, please wait...', 'i18n-404-tools' ),
                     'overwrite_confirm' => __( 'A .pot file already exists. Overwrite?', 'i18n-404-tools' ),
-                    'btn_yes' => __( 'Yes, overwrite', 'i18n-404-tools' ),
-                    'btn_no' => __( 'Cancel', 'i18n-404-tools' ),
+                    'btn_yes'         => __( 'Yes, overwrite', 'i18n-404-tools' ),
+                    'btn_no'          => __( 'Cancel', 'i18n-404-tools' ),
             ] );
         }
 
@@ -104,7 +104,6 @@ if ( ! class_exists( 'I18n_404_Tools_Pot_Generator' ) ) :
 
             // Build WP-CLI command
             $phar_path = I18n_404_Tools_WPCLI_Updater::get_phar_path();
-            error_log('$phar_path: '.$phar_path);
             if ( ! file_exists( $phar_path ) ) {
                 wp_send_json_error( [ 'message' => __( 'wp-cli.phar not found.', 'i18n-404-tools' ) ] );
             }
@@ -116,17 +115,20 @@ if ( ! class_exists( 'I18n_404_Tools_Pot_Generator' ) ) :
                 . escapeshellarg( $pot_path )
                 . ' --domain=' . escapeshellarg( $domain ) ;
 
-            error_log('wp-cli command:' . $cmd); 
+            // Capture both stdout and stderr output
             @exec( $cmd . ' 2>&1', $output, $exit_code );
-            error_log('wp-cli command output' . print_r($output, true));
+
+            $cli_output = implode( "\n", $output );
 
             if ( $exit_code === 0 && file_exists( $pot_path ) ) {
                 wp_send_json_success( [
-                        'message' => sprintf( __( 'POT file generated: %s', 'i18n-404-tools' ), esc_html( $pot_path ) ),
+                        'message'    => sprintf( __( 'POT file generated: %s', 'i18n-404-tools' ), esc_html( $pot_path ) ),
+                        'cli_output' => $cli_output,
                 ] );
             } else {
                 wp_send_json_error( [
-                        'message' => __( 'Failed to generate POT file.', 'i18n-404-tools' ) . '<br><pre>' . esc_html( implode( "\n", $output ) ) . '</pre>',
+                        'message'    => __( 'Failed to generate POT file.', 'i18n-404-tools' ),
+                        'cli_output' => $cli_output,
                 ] );
             }
         }
