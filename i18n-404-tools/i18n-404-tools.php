@@ -49,7 +49,17 @@ function activate_i18n_404_tools() {
 	}
 };
 
+add_action('load-plugins.php', function() {
+    require_once plugin_dir_path(__FILE__) . 'admin/class-pot-generator.php';
+    // new I18n_404_Tools_Pot_Generator();
+});
 
+if (
+    (is_admin() && isset($_GET['page']) && $_GET['page'] === 'plugins') ||
+    (defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && $_POST['action'] === 'i18n_404_tools_generate_pot')
+) {
+    require_once plugin_dir_path(__FILE__) . 'admin/class-pot-generator.php';
+}
 
 register_activation_hook( __FILE__, 'activate_i18n_404_tools' );
 
