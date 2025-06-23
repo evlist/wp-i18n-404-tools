@@ -1,103 +1,103 @@
-// admin/js/i18n-404-tools-modal.js
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Open the modal when a trigger button is clicked
-    document.body.addEventListener('click', function(e) {
-        var target = e.target.closest('.i18n-404-tools-generate-pot');
-        if (target) {
+document.addEventListener('DOMContentLoaded', function () {
+    // Listen for clicks on the Generate .pot action link
+    document.body.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('i18n-404-tools-generate-pot')) {
             e.preventDefault();
-            var plugin = target.getAttribute('data-plugin');
-            var command = target.getAttribute('data-command') || 'generate_pot';
-            showModal({ plugin, command, step: 'check' });
+            showI18n404ToolsModal('Loading…');
+            const plugin = e.target.getAttribute('data-plugin');
+            const command = e.target.getAttribute('data-command') || 'generate_pot';
+            // Initial AJAX call to fetch modal content
+            fetchPotModalContent(plugin, command);
         }
     });
 
-    // Handle modal internal button actions
-    document.body.addEventListener('click', function(e) {
-        var modal = document.querySelector('.i18n-modal');
-        if (!modal || !modal.contains(e.target)) return;
-        var t = e.target;
-
-        // Confirm button: trigger next step via AJAX
-        if (t.classList.contains('i18n-confirm')) {
-            var step = t.getAttribute('data-step');
-            var overwrite = t.getAttribute('data-overwrite');
-            var data = Object.assign({}, modal._modalData || {});
-            data.step = step;
-            if (overwrite) data.overwrite = 1;
-            fetchStep(data);
+    // Close modal on ESC or background click
+    document.body.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('i18n-404-tools-modal-overlay')) {
+            closeI18n404ToolsModal();
         }
-
-        // Cancel or close buttons
-        if (t.classList.contains('i18n-cancel') || t.classList.contains('i18n-close')) {
-            closeModal();
+        if (e.target && e.target.classList.contains('i18n-404-tools-modal-close')) {
+            closeI18n404ToolsModal();
         }
-
-        // Copy to clipboard button
-        if (t.classList.contains('i18n-copy-btn')) {
-            var pre = modal.querySelector('.i18n-modal-output');
-            if (pre) {
-                navigator.clipboard.writeText(pre.textContent).then(function() {
-                    t.classList.add('copied');
-                    setTimeout(function() { t.classList.remove('copied'); }, 1000);
-                });
-            }
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeI18n404ToolsModal();
         }
     });
 
-    function showModal(data) {
-        var modal = document.querySelector('.i18n-modal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.className = 'i18n-modal';
-            // Basic modal styles (customize as needed)
-            modal.style.position = 'fixed';
-            modal.style.top = '0'; modal.style.left = '0';
-            modal.style.width = '100vw'; modal.style.height = '100vh';
-            modal.style.background = 'rgba(0,0,0,0.5)';
-            modal.style.zIndex = '9999';
-            modal.style.display = 'flex';
-            modal.style.alignItems = 'center';
-            modal.style.justifyContent = 'center';
-            document.body.appendChild(modal);
+    // Helper: Show modal with given HTML content
+    function showI18n404ToolsModal(content) {
+        closeI18n404ToolsModal();
+        const overlay = document.createElement('div');
+        overlay.className = 'i18n-404-tools-modal-overlay';
+        overlay.innerHTML = `
+            <div class="i18n-404-tools-modal-content">
+                <span class="dashicons dashicons-no-alt i18n-404-tools-modal-close" title="Close"></span>
+                <div class="i18n-404-tools-modal-body">${content}</div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Helper: Close modal
+    function closeI18n404ToolsModal() {
+        const overlay = document.querySelector('.i18n-404-tools-modal-overlay');
+        if (overlay) {
+            overlay.remove();
+            document.body.style.overflow = '';
         }
-        modal.innerHTML = '<div class="i18n-modal-content"><p>Loading...</p></div>';
-        modal._modalData = data;
-        fetchStep(data);
-        modal.style.display = 'flex';
     }
 
-    function closeModal() {
-        var modal = document.querySelector('.i18n-modal');
-        if (modal) modal.style.display = 'none';
-    }
+    // Helper: AJAX to fetch modal content
+    function fetchPotModalContent(plugin, command, step = 'start', data = {}) {
+        const postData = Object.assign({}, data, {
+            action: 'i18n_404_tools_command',
+            plugin: plugin,
+            command: command,
+            step: step,
+            _ajax_nonce: typeof I18n404PotGen !== 'undefined' && I18n404PotGen.nonce ? I18n404PotGen.nonce : undefined
+        });
 
-    function fetchStep(data) {
-        var modal = document.querySelector('.i18n-modal');
-        if (!modal) return;
-        modal._modalData = data;
-        var formData = new FormData();
-        for (var k in data) formData.append(k, data[k]);
-        formData.append('action', 'i18n_404_tools_command');
-        fetch(window.ajaxurl || (window.I18n404PotGen && I18n404PotGen.ajax_url), {
+        fetch(I18n404PotGen.ajax_url, {
             method: 'POST',
             credentials: 'same-origin',
-            body: formData
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: Object.keys(postData).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(postData[key])).join('&')
         })
-        .then(function(response) { return response.json(); })
-        .then(function(resp) {
-            if (resp.success && resp.data && resp.data.html) {
-                modal.innerHTML = resp.data.html;
-            } else if (resp.data && resp.data.html) {
-                modal.innerHTML = resp.data.html;
-            } else {
-                modal.innerHTML = '<div class="i18n-modal-content"><p>' +
-                    (resp.data && resp.data.message ? resp.data.message : 'Error') +
-                    '</p><button type="button" class="button i18n-close">Close</button></div>';
-            }
-        })
-        .catch(function() {
-            modal.innerHTML = '<div class="i18n-modal-content"><p>Error</p><button type="button" class="button i18n-close">Close</button></div>';
+            .then(resp => resp.json())
+            .then(json => {
+                if (json.success && json.data && json.data.html) {
+                    showI18n404ToolsModal(json.data.html);
+                    attachModalActionHandlers(plugin, command);
+                } else if (json.data && json.data.message) {
+                    showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + json.data.message + '</div>');
+                } else {
+                    showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">Error: Unexpected response.</div>');
+                }
+            })
+            .catch(() => {
+                showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">Error: AJAX request failed.</div>');
+            });
+    }
+
+    // Helper: Attach handlers for buttons in modal, e.g., Next, Retry, etc.
+    function attachModalActionHandlers(plugin, command) {
+        const modal = document.querySelector('.i18n-404-tools-modal-content');
+        if (!modal) return;
+        modal.querySelectorAll('[data-i18n-404-tools-step]').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const step = btn.getAttribute('data-i18n-404-tools-step');
+                // Collect user input fields if needed
+                const data = {};
+                modal.querySelectorAll('[name]').forEach(input => {
+                    data[input.name] = input.value;
+                });
+                showI18n404ToolsModal('Loading…');
+                fetchPotModalContent(plugin, command, step, data);
+            });
         });
     }
 });
