@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Listen for clicks on the Generate .pot action link
+    // Listen for clicks on any action link with our class
     document.body.addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('i18n-404-tools-generate-pot')) {
+        if (e.target && e.target.classList.contains('i18n-404-tools-action')) {
             e.preventDefault();
             showI18n404ToolsModal('Loading…');
             const plugin = e.target.getAttribute('data-plugin');
-            const command = e.target.getAttribute('data-command') || 'generate_pot';
-            // Initial AJAX call to fetch modal content
-            fetchPotModalContent(plugin, command);
+            const command = e.target.getAttribute('data-command');
+            const step = e.target.getAttribute('data-step') || 'start';
+            fetchI18n404ToolsModalContent(plugin, command, step);
         }
     });
 
-    // Close modal on ESC or background click
+    // Close modal on ESC or background click or close icon
     document.body.addEventListener('click', function (e) {
         if (e.target && e.target.classList.contains('i18n-404-tools-modal-overlay')) {
             closeI18n404ToolsModal();
@@ -51,7 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Helper: AJAX to fetch modal content
-    function fetchPotModalContent(plugin, command, step = 'start', data = {}) {
+    function fetchI18n404ToolsModalContent(plugin, command, step = 'start', data = {}) {
+        if (!command) {
+            showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">Error: No command specified.</div>');
+            return;
+        }
         const postData = Object.assign({}, data, {
             action: 'i18n_404_tools_command',
             plugin: plugin,
@@ -70,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(json => {
                 if (json.success && json.data && json.data.html) {
                     showI18n404ToolsModal(json.data.html);
-                    attachModalActionHandlers(plugin, command);
+                    attachI18n404ToolsModalActionHandlers(plugin, command);
                 } else if (json.data && json.data.message) {
                     showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + json.data.message + '</div>');
                 } else {
@@ -83,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Helper: Attach handlers for buttons in modal, e.g., Next, Retry, etc.
-    function attachModalActionHandlers(plugin, command) {
+    function attachI18n404ToolsModalActionHandlers(plugin, command) {
         const modal = document.querySelector('.i18n-404-tools-modal-content');
         if (!modal) return;
         modal.querySelectorAll('[data-i18n-404-tools-step]').forEach(btn => {
@@ -96,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data[input.name] = input.value;
                 });
                 showI18n404ToolsModal('Loading…');
-                fetchPotModalContent(plugin, command, step, data);
+                fetchI18n404ToolsModalContent(plugin, command, step, data);
             });
         });
     }
