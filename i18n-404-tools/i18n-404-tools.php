@@ -69,7 +69,7 @@ add_action('init', function() {
 // Add the "Generate .pot" link to each plugin row on the Plugins page
 add_filter('plugin_action_links', function($actions, $plugin_file) {
         if ( current_user_can('manage_options') ) {
-        $actions['i18n_pot'] = '<a href="#" class="i18n-404-tools-generate-pot" data-plugin="' . esc_attr($plugin_file) . '" data-command="generate_pot" data-step="check">' . esc_html__('Generate .pot', 'i18n-404-tools') . '</a>';
+        $actions['i18n_pot'] = '<a href="#" class="i18n-404-tools-action" data-plugin="' . esc_attr($plugin_file) . '" data-command="generate_pot" data-step="check">' . esc_html__('Generate .pot', 'i18n-404-tools') . '</a>';
         }
         return $actions;
         }, 10, 2);
