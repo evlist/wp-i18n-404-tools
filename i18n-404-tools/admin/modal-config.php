@@ -1,5 +1,7 @@
 <?php
-return [
+global $i18n404tools_modal_config;
+
+$i18n404tools_modal_config = [
     // CSS classes
     'action_class'   => 'i18n404tools-action',
     'overlay_class'  => 'i18n404tools-modal-overlay',
