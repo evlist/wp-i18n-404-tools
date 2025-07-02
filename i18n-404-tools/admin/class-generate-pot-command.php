@@ -12,6 +12,14 @@ require_once __DIR__ . '/class-i18n-command-base.php';
  */
 class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 
+    public function __construct( $plugin ) {
+        parent::__construct( $plugin );
+        
+        // Load modal config and helpers for action attributes
+        require_once __DIR__ . '/modal-config.php';
+        require_once __DIR__ . '/helpers.php';
+    }
+
     /**
      * Handle specific steps for .pot generation.
      *
@@ -26,7 +34,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
                 return [
                     'html' => '<div class="i18n-modal-content">'
                         . '<p>' . esc_html__('A .pot file already exists. Overwrite?', 'i18n-404-tools') . '</p>'
-                        . '<button type="button" class="button button-primary i18n-confirm" data-step="generate" data-overwrite="1">'
+                        . '<button type="button" ' . i18n404tools_action_attrs('generate_pot', $this->plugin, 'generate', 'button button-primary') . ' data-overwrite="1">'
                         . esc_html__('Yes, overwrite', 'i18n-404-tools')
                         . '</button> '
                         . '<button type="button" class="button i18n-cancel">'
@@ -38,7 +46,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
                 return [
                     'html' => '<div class="i18n-modal-content">'
                         . '<p>' . esc_html__('No .pot file exists. Generate now?', 'i18n-404-tools') . '</p>'
-                        . '<button type="button" class="button button-primary i18n-confirm" data-step="generate">'
+                        . '<button type="button" ' . i18n404tools_action_attrs('generate_pot', $this->plugin, 'generate', 'button button-primary') . '>'
                         . esc_html__('Generate', 'i18n-404-tools')
                         . '</button> '
                         . '<button type="button" class="button i18n-cancel">'
