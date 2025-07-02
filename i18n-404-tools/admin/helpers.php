@@ -1,3 +1,4 @@
+<?php
 /**
  * Output attributes for a modal action element.
  *
