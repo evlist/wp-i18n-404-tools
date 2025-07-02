@@ -88,11 +88,13 @@ add_action('admin_enqueue_scripts', function($hook) {
                 true
                 );
         wp_enqueue_style('dashicons');
+        $config = require plugin_dir_path(__FILE__) . 'admin/modal-config.php';
         wp_localize_script(
                 'i18n-404-tools-modal',
-                'I18n404PotGen',
+                'I18n404ToolsConfig',
                 [
                 'ajax_url' => admin_url('admin-ajax.php'),
+                'ui'      => $config,
                 ]
                 );
         wp_enqueue_style(
