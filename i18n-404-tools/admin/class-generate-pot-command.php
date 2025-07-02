@@ -34,24 +34,27 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
                 return [
                     'html' => '<div class="i18n-modal-content">'
                         . '<p>' . esc_html__('A .pot file already exists. Overwrite?', 'i18n-404-tools') . '</p>'
-                        . '<button type="button" ' . i18n404tools_action_attrs('generate_pot', $this->plugin, 'generate', 'button button-primary') . ' data-overwrite="1">'
-                        . esc_html__('Yes, overwrite', 'i18n-404-tools')
-                        . '</button> '
-                        . '<button type="button" class="button i18n-cancel">'
-                        . esc_html__('Cancel', 'i18n-404-tools')
-                        . '</button>'
+                        . $this->generate_action_button(
+                            __('Yes, overwrite', 'i18n-404-tools'),
+                            'generate_pot',
+                            'generate',
+                            'button-primary',
+                            ['data-overwrite' => '1']
+                        ) . ' '
+                        . $this->generate_cancel_button( __('Cancel', 'i18n-404-tools') )
                         . '</div>'
                 ];
             } else {
                 return [
                     'html' => '<div class="i18n-modal-content">'
                         . '<p>' . esc_html__('No .pot file exists. Generate now?', 'i18n-404-tools') . '</p>'
-                        . '<button type="button" ' . i18n404tools_action_attrs('generate_pot', $this->plugin, 'generate', 'button button-primary') . '>'
-                        . esc_html__('Generate', 'i18n-404-tools')
-                        . '</button> '
-                        . '<button type="button" class="button i18n-cancel">'
-                        . esc_html__('Cancel', 'i18n-404-tools')
-                        . '</button>'
+                        . $this->generate_action_button(
+                            __('Generate', 'i18n-404-tools'),
+                            'generate_pot',
+                            'generate',
+                            'button-primary'
+                        ) . ' '
+                        . $this->generate_cancel_button( __('Cancel', 'i18n-404-tools') )
                         . '</div>'
                 ];
             }
@@ -64,9 +67,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
                 return [
                     'html' => '<div class="i18n-modal-content">'
                         . '<p>' . esc_html__('POT file exists; overwrite not confirmed.', 'i18n-404-tools') . '</p>'
-                        . '<button type="button" class="button i18n-close">'
-                        . esc_html__('Close', 'i18n-404-tools')
-                        . '</button>'
+                        . $this->generate_cancel_button( __('Close', 'i18n-404-tools') )
                         . '</div>'
                 ];
             }
@@ -98,9 +99,9 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
                     . $output
                     . '</pre>'
                     . '</div>'
-                    . '<button type="button" class="button i18n-close" style="margin-top:12px;">'
-                    . esc_html__('Close', 'i18n-404-tools')
-                    . '</button>'
+                    . '<div style="margin-top:12px;">'
+                    . $this->generate_cancel_button( __('Close', 'i18n-404-tools') )
+                    . '</div>'
                     . '</div>'
             ];
         }
@@ -109,9 +110,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
         return [
             'html' => '<div class="i18n-modal-content">'
                 . '<p>' . esc_html__('Unknown step.', 'i18n-404-tools') . '</p>'
-                . '<button type="button" class="button i18n-close">'
-                . esc_html__('Close', 'i18n-404-tools')
-                . '</button>'
+                . $this->generate_cancel_button( __('Close', 'i18n-404-tools') )
                 . '</div>'
         ];
     }
