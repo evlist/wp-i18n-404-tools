@@ -68,6 +68,64 @@ abstract class I18N_404_Command_Base {
     abstract public function run_step( $step, $request );
 
     /**
+     * Generate a cancel/close button with proper classes from modal-config.php.
+     *
+     * @param string $label              Button label text
+     * @param string $additional_classes Optional additional CSS classes
+     * @return string                    HTML for the cancel button
+     */
+    protected function generate_cancel_button( $label, $additional_classes = '' ) {
+        global $i18n404tools_modal_config;
+        
+        // Ensure modal config is loaded
+        if ( ! isset( $i18n404tools_modal_config ) ) {
+            require_once __DIR__ . '/modal-config.php';
+        }
+        
+        $classes = [ 'button', $i18n404tools_modal_config['close_class'] ];
+        if ( ! empty( $additional_classes ) ) {
+            $classes[] = $additional_classes;
+        }
+        
+        return '<button type="button" class="' . esc_attr( implode( ' ', $classes ) ) . '">'
+            . esc_html( $label )
+            . '</button>';
+    }
+
+    /**
+     * Generate an action button with proper classes and data attributes from modal-config.php.
+     *
+     * @param string $label              Button label text
+     * @param string $command            Command name for the action
+     * @param string $step               Step name for the action
+     * @param string $additional_classes Optional additional CSS classes
+     * @param array  $additional_attrs   Optional additional data attributes
+     * @return string                    HTML for the action button
+     */
+    protected function generate_action_button( $label, $command, $step, $additional_classes = '', $additional_attrs = [] ) {
+        global $i18n404tools_modal_config;
+        
+        // Ensure modal config and helpers are loaded
+        if ( ! isset( $i18n404tools_modal_config ) ) {
+            require_once __DIR__ . '/modal-config.php';
+        }
+        if ( ! function_exists( 'i18n404tools_action_attrs' ) ) {
+            require_once __DIR__ . '/helpers.php';
+        }
+        
+        $base_attrs = i18n404tools_action_attrs( $command, $this->plugin, $step, $additional_classes );
+        
+        $extra_attrs = '';
+        foreach ( $additional_attrs as $attr_name => $attr_value ) {
+            $extra_attrs .= ' ' . esc_attr( $attr_name ) . '="' . esc_attr( $attr_value ) . '"';
+        }
+        
+        return '<button type="button" ' . $base_attrs . $extra_attrs . '>'
+            . esc_html( $label )
+            . '</button>';
+    }
+
+    /**
      * Run a WP-CLI command with flexible arguments.
      * - Numeric keys are positional arguments.
      * - String keys with null values become flags (--foo).
