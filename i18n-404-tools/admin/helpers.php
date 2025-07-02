@@ -8,7 +8,7 @@
  * @param string $extra_classes (optional)
  * @return string
  */
-function i18n404tools_action_attrs( $command, $plugin, $step, $extra_classes = '' ) {
+function i18n404tools_action_attrs( $command, $plugin, $step = 'check', $extra_classes = '' ) {
     global $i18n404tools_modal_config; // Assume this is set elsewhere
     $attrs = [];
 

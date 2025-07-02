@@ -73,7 +73,7 @@ add_filter('plugin_action_links', function($actions, $plugin_file) {
         require_once plugin_dir_path(__FILE__) . 'admin/modal-config.php';
         require_once plugin_dir_path(__FILE__) . 'admin/helpers.php';
         
-        $attrs = i18n404tools_action_attrs('generate_pot', $plugin_file, 'check');
+        $attrs = i18n404tools_action_attrs('generate_pot', $plugin_file);
         $actions['i18n_pot'] = '<a href="#" ' . $attrs . '>' . esc_html__('Generate .pot', 'i18n-404-tools') . '</a>';
         }
         return $actions;
