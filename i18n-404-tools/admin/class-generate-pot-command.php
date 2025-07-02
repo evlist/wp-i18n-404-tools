@@ -62,15 +62,6 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 
         // Step 2: Generate the .pot file and return output/result
         if ( $step === 'generate' ) {
-            $overwrite = ! empty( $request['overwrite'] );
-            if ( file_exists( $this->pot_path ) && ! $overwrite ) {
-                return [
-                    'html' => '<div class="i18n-modal-content">'
-                        . '<p>' . esc_html__('POT file exists; overwrite not confirmed.', 'i18n-404-tools') . '</p>'
-                        . $this->generate_cancel_button( __('Close', 'i18n-404-tools') )
-                        . '</div>'
-                ];
-            }
 
             $result = $this->run_wp_cli_command(
                 'i18n make-pot',
