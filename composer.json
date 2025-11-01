@@ -1,0 +1,9 @@
+{
+  "name": "evlist/wp-i18n-404-tools",
+  "require-dev": {
+    "php-stubs/wordpress-stubs": "^6.0"
+  },
+  "config": {
+    "vendor-dir": "vendor"
+  }
+}

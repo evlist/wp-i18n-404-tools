@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Dev workspace container (primary container for VS Code / Codespaces)
+  workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/wp-i18n-404-tools:cached
+    command: sleep infinity
+    ports:
+      - "9003:9003" # xdebug (optional)
+    depends_on:
+      - wordpress
+      - db
+
+  # MySQL for WP
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # Official WordPress image — exposes site at port 8080
+  wordpress:
+    image: wordpress:6.4-php8.1-apache
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    # mount your repo (plugin) into WP plugins directory
+    volumes:
+      - ..:/var/www/html/wp-content/plugins/wp-i18n-404-tools:ro
+      - wordpress_data:/var/www/html
+
+volumes:
+  db_data:
+  wordpress_data:
