@@ -2,7 +2,7 @@
 
 Start a Codespace preconfigured with the devcontainer in this repository:
 
-[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repo=evlist/wp-i18n-404-
+[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repo=evlist/wp-i18n-404-tools&ref=main&devcontainer_path=.devcontainer)
 
 # Codespace / Devcontainer for wp-i18n-404-tools
 
