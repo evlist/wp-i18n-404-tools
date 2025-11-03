@@ -1,0 +1,10 @@
+{
+  // Intelephense indexing and include WP stub paths so WP functions/classes are recognized
+  "intelephense.files.maxSize": 5000000,
+  "intelephense.environment.includePaths": [
+    "vendor/php-stubs/wordpress-stubs"
+  ],
+  // Use the container php binary (already in devcontainer image)
+  "php.validate.executablePath": "/usr/local/bin/php",
+  "editor.formatOnSave": true
+}

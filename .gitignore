@@ -18,3 +18,5 @@ sandbox/
 
 *~
 
+# Composer dependencies
+vendor/
