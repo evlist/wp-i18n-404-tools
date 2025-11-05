@@ -38,7 +38,7 @@ services:
     volumes:
       - ..:/var/www/html/wp-content/plugins/wp-i18n-404-tools:ro
       - wordpress_data:/var/www/html
-      - ../mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./.devcontainer/wp-config.php:/var/www/html/wp-config.php:ro
 
 volumes:
   db_data:
