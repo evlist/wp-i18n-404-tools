@@ -27,6 +27,8 @@ RUN curl -Lo /usr/local/bin/docker-compose \
 # (Optional) create a non-root group mapping if you want; with DOCKER_HOST to tcp this may not be needed
 USER vscode
 
+USER root
+
 # Install WP-CLI (phar)
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
   && chmod +x /usr/local/bin/wp \
