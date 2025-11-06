@@ -34,7 +34,7 @@ services:
 
   wordpress:
     build:
-      context: .devcontainer/wordpress
+      context: wordpress
       dockerfile: Dockerfile
     ports:
       - "8080:80"
