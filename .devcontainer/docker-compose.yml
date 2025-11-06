@@ -33,7 +33,9 @@ services:
       - db_data:/var/lib/mysql
 
   wordpress:
-    image: wordpress:6.4-php8.1-apache
+    build:
+      context: .devcontainer/wordpress
+      dockerfile: Dockerfile
     ports:
       - "8080:80"
     environment:
