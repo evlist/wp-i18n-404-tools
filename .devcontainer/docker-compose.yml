@@ -47,6 +47,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+      DEVCONTAINER: 1
     volumes:
       - ..:/var/www/html/wp-content/plugins/wp-i18n-404-tools:ro
       - wordpress_data:/var/www/html

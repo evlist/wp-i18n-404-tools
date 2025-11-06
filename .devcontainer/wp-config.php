@@ -6,61 +6,72 @@
  * It will attempt to detect a Codespace/devcontainer environment before
  * forcing WP_HOME / WP_SITEURL. Do NOT use in production.
  */
-
-/* Detect whether we're running in a Codespace / devcontainer.
- * We check:
- *  - the CODESPACE_NAME env var (set in Codespaces), OR
- *  - whether the repository is mounted under /workspaces (common in Codespaces),
- *  - OR the presence of the /.devcontainer folder path in the current dir.
+/**
+ * Simple devcontainer-only normalization and redirect.
+ *
+ * Behavior (dirty, explicit):
+ * - Only runs when an explicit environment variable is present (DEVCONTAINER or CODESPACE_NAME).
+ * - If HTTP_X_FORWARDED_HOST looks like a Codespaces tunnel host (*.app.github.dev) we build a
+ *   base URL using HTTP_X_SCHEME or HTTP_X_FORWARDED_PROTO and DO NOT append any port.
+ * - Sets WP_HOME and WP_SITEURL if not already defined.
+ *
+ * Keep this intentionally small and noisy so it only affects devcontainers when you opt in.
  */
-$in_devcontainer = false;
-if (getenv('CODESPACE_NAME')) {
-    $in_devcontainer = true;
-} elseif (strpos(__DIR__, '/workspaces/') !== false) {
-    $in_devcontainer = true;
-} elseif (file_exists(__DIR__ . '/../.devcontainer')) {
-    $in_devcontainer = true;
-}
+
+$in_devcontainer = (bool) (getenv('DEVCONTAINER') || getenv('CODESPACE_NAME') || getenv('GITHUB_CODESPACES'));
 
 if ($in_devcontainer) {
-    // ---- Normalise proxy/request headers so WP does not append :8080 ----
-    // If the proxy indicates https, make PHP treat the request as secure.
-    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-        $xfp = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']);
-        if ($xfp === 'https') {
-            $_SERVER['HTTPS'] = 'on';
-            $_SERVER['SERVER_PORT'] = '443';
-        } else {
-            $_SERVER['HTTPS'] = 'off';
-            $_SERVER['SERVER_PORT'] = '80';
+    $xf_host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? null;
+    $xf_scheme = $_SERVER['HTTP_X_SCHEME'] ?? ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? null);
+
+    // Basic sanity check: only trust forwarded host values that look like Codespaces tunnels
+    // e.g. something-xxxx-8080.app.github.dev or something-xxxx-443.app.github.dev
+    $is_codespace_host = false;
+    if ($xf_host) {
+        // If there are multiple hosts in the header, take the first one
+        $xf_host = trim(explode(',', $xf_host)[0]);
+
+        // strip any trailing port if present (we will not append a port later)
+        $xf_host_noport = preg_replace('/:\d+$/', '', $xf_host);
+
+        // crude but effective check for Codespaces tunnel host
+        if (preg_match('/\.app\.github\.dev$/i', $xf_host_noport)) {
+            $is_codespace_host = true;
+            $xf_host = $xf_host_noport;
         }
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
-        $_SERVER['HTTPS'] = 'on';
-        $_SERVER['SERVER_PORT'] = '443';
     }
 
-    // Strip any trailing :port from HTTP_HOST to avoid WordPress adding it back.
-    if (!empty($_SERVER['HTTP_HOST'])) {
-        $_SERVER['HTTP_HOST'] = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
+    if ($is_codespace_host && $xf_scheme) {
+        // prefer explicit scheme header, fall back to https if absent
+        $scheme = strtolower(trim(explode(',', $xf_scheme)[0]));
+        if ($scheme !== 'http' && $scheme !== 'https') {
+            // if scheme looks bogus, default to https for tunnels
+            $scheme = 'https';
+        }
+
+        $public_base = $scheme . '://' . $xf_host;
+
+        // Only set WP_HOME/WP_SITEURL if not already defined
+        if (!defined('WP_HOME')) {
+            define('WP_HOME', $public_base);
+        }
+        if (!defined('WP_SITEURL')) {
+            define('WP_SITEURL', $public_base);
+        }
+
+        // Normalize a couple server vars so WP/core/plugins expecting them behave
+        $_SERVER['SERVER_PORT'] = ($scheme === 'https') ? '443' : '80';
+        if ($scheme === 'https') {
+            $_SERVER['HTTPS'] = 'on';
+        } else {
+            unset($_SERVER['HTTPS']);
+        }
     }
+}
 
-    // Detect scheme (prefer X-Forwarded-Proto / X-Forwarded-SSL set by proxy)
-    $scheme = 'http';
-    if (
-        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
-        || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
-        || (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    ) {
-        $scheme = 'https';
-    }
-
-    // Build host-based site URL from the incoming request host
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $public_site = $scheme . '://' . $host;
-
-    // Force WP to use the request host (prevents installer / redirects from using :8080)
-    define('WP_HOME', $public_site);
-    define('WP_SITEURL', $public_site);
+// Small helper flag other code can test
+if (!defined('WP_IN_DEVCONTAINER')) {
+    define('WP_IN_DEVCONTAINER', $in_devcontainer);
 }
 
 /* -------------------------
