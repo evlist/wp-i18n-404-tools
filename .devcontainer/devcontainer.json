@@ -11,12 +11,16 @@
 	],
 	"shutdownAction": "stopCompose",
 	"postStartCommand": "composer install --no-interaction || true; ./scripts/bootstrap-wp.sh || true",
-	"extensions": [
-		"bmewburn.vscode-intelephense-client",
-		"junstyle.php-cs-fixer",
-		"mikestead.dotenv",
-		"EditorConfig.EditorConfig"
-	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"junstyle.php-cs-fixer",
+				"mikestead.dotenv",
+				"EditorConfig.EditorConfig"
+			]
+		}
+	},
 	"forwardPorts": [
 		8080
 	],
