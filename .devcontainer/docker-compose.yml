@@ -2,15 +2,6 @@ version: '3.8'
 
 services:
 
-  docker:
-    image: docker:24-dind
-    privileged: true
-    environment:
-      # disable TLS so workspace can connect via tcp://docker:2375
-      - DOCKER_TLS_CERTDIR=
-    volumes:
-      - docker_data:/var/lib/docker
-
   # Dev workspace container (primary container for VS Code / Codespaces)
   workspace:
     build:
@@ -18,16 +9,17 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ..:/workspaces/wp-i18n-404-tools:cached
+      # Mount the host docker socket so docker CLI inside workspace talks to the host daemon
+      - /var/run/docker.sock:/var/run/docker.sock
     command: sleep infinity
     ports:
       - "9003:9003"
     depends_on:
       - wordpress
       - db
-      - docker
     environment:
-      # make docker CLI connect to the dind service
-      - DOCKER_HOST=tcp://docker:2375
+      # optional: point docker to unix socket explicitly
+      - DOCKER_HOST=unix:///var/run/docker.sock
 
   # MySQL for WP
   db:
@@ -55,6 +47,5 @@ services:
       - ./wp-config.php:/var/www/html/wp-config.php:ro
 
 volumes:
-  docker_data:
   db_data:
   wordpress_data:

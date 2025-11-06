@@ -1,17 +1,24 @@
 {
-  "name": "wp-i18n-404-tools Codespace",
-  "dockerComposeFile": ["docker-compose.yml"],
-  "service": "workspace",
-  "workspaceFolder": "/workspaces/wp-i18n-404-tools",
-  "runServices": ["wordpress", "db"],
-  "shutdownAction": "none",
-  "postStartCommand": "composer install --no-interaction || true; ./scripts/bootstrap-wp.sh || true",
-  "extensions": [
-    "bmewburn.vscode-intelephense-client",
-    "junstyle.php-cs-fixer",
-    "mikestead.dotenv",
-    "EditorConfig.EditorConfig"
-  ],
-  "forwardPorts": [8080],
-  "remoteUser": "vscode"
+	"name": "wp-i18n-404-tools Codespace",
+	"dockerComposeFile": [
+		"docker-compose.yml"
+	],
+	"service": "workspace",
+	"workspaceFolder": "/workspaces/wp-i18n-404-tools",
+	"runServices": [
+		"wordpress",
+		"db"
+	],
+	"shutdownAction": "stopCompose",
+	"postStartCommand": "composer install --no-interaction || true; ./scripts/bootstrap-wp.sh || true",
+	"extensions": [
+		"bmewburn.vscode-intelephense-client",
+		"junstyle.php-cs-fixer",
+		"mikestead.dotenv",
+		"EditorConfig.EditorConfig"
+	],
+	"forwardPorts": [
+		8080
+	],
+	"remoteUser": "vscode"
 }
