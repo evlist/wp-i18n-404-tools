@@ -20,3 +20,4 @@ sandbox/
 
 # Composer dependencies
 vendor/
+composer.lock
