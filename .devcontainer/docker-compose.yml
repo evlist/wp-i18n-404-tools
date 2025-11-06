@@ -47,6 +47,10 @@ services:
       - ..:/var/www/html/wp-content/plugins/wp-i18n-404-tools:ro
       - wordpress_data:/var/www/html
       - ./wp-config.php:/var/www/html/wp-config.php:ro
+    networks:
+      default:
+        aliases:
+          - xdebug-host
 
 volumes:
   db_data:
