@@ -23,6 +23,27 @@ if (getenv('CODESPACE_NAME')) {
 }
 
 if ($in_devcontainer) {
+    // ---- Normalise proxy/request headers so WP does not append :8080 ----
+    // If the proxy indicates https, make PHP treat the request as secure.
+    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+        $xfp = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']);
+        if ($xfp === 'https') {
+            $_SERVER['HTTPS'] = 'on';
+            $_SERVER['SERVER_PORT'] = '443';
+        } else {
+            $_SERVER['HTTPS'] = 'off';
+            $_SERVER['SERVER_PORT'] = '80';
+        }
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['SERVER_PORT'] = '443';
+    }
+
+    // Strip any trailing :port from HTTP_HOST to avoid WordPress adding it back.
+    if (!empty($_SERVER['HTTP_HOST'])) {
+        $_SERVER['HTTP_HOST'] = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
+    }
+
     // Detect scheme (prefer X-Forwarded-Proto / X-Forwarded-SSL set by proxy)
     $scheme = 'http';
     if (
