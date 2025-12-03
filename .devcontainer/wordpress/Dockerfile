@@ -23,6 +23,11 @@ RUN pecl channel-update pecl.php.net \
  && pecl install xdebug \
  && docker-php-ext-enable xdebug
 
+# Install WP-CLI (phar)
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x /usr/local/bin/wp \
+  && wp --info || true
+
 # Add custom Xdebug configuration (picked up from conf.d)
 COPY xdebug.ini /usr/local/etc/php/conf.d/99-xdebug.ini
 
