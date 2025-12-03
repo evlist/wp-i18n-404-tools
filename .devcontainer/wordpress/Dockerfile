@@ -1,4 +1,10 @@
-FROM wordpress:6.4-php8.1-apache
+ARG WP_VERSION=latest
+FROM wordpress:${WP_VERSION}
+
+# (Optional) metadata about the image
+LABEL maintainer="evlist <vdv@dyomedea.com>" \
+      description="Devcontainer WordPress image for wp-i18n-404-tools (build-time WP_VERSION=${WP_VERSION})"
+
 
 # Install prerequisites for pecl build
 USER root
