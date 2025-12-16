@@ -15,7 +15,7 @@
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
 	],
 	// Add vscode to docker group & fix workspace ownership (runs once after creation)
-	"postCreateCommand": "sudo groupadd -f docker || true && sudo usermod -aG docker vscode || true && sudo chown -R vscode:vscode /workspaces/wp-i18n-404-tools || true",
+	"postCreateCommand": ".devcontainer/bin/fix-docker-group.sh || true && sudo usermod -aG docker vscode || true && sudo chown -R vscode:vscode /workspaces/wp-i18n-404-tools || true",
 	// Existing startup actions (keep as-is)
 	"postStartCommand": "composer install --no-interaction || true; ./scripts/bootstrap-wp.sh || true",
 	"customizations": {
