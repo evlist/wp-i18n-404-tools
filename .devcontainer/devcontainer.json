@@ -1,40 +1,32 @@
 {
-	"name": "wp-i18n-404-tools Codespace",
-	"dockerComposeFile": [
-		"docker-compose.yml"
-	],
-	"service": "workspace",
-	"workspaceFolder": "/workspaces/wp-i18n-404-tools",
-	"runServices": [
-		"wordpress",
-		"db"
-	],
-	"shutdownAction": "stopCompose",
-	// Mount host Docker socket so docker inside the devcontainer talks to the host daemon
-	"mounts": [
-		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-	],
-	// Add vscode to docker group & fix workspace ownership (runs once after creation)
-	"postCreateCommand": ".devcontainer/bin/fix-docker-group.sh || true && sudo usermod -aG docker vscode || true && sudo chown -R vscode:vscode /workspaces/wp-i18n-404-tools || true",
-	// Existing startup actions (keep as-is)
-	"postStartCommand": "composer install --no-interaction || true; ./scripts/bootstrap-wp.sh || true",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"bmewburn.vscode-intelephense-client",
-				"junstyle.php-cs-fixer",
-				"mikestead.dotenv",
-				"EditorConfig.EditorConfig"
-			]
-		}
-	},
-	"forwardPorts": [
-		8080,
-		9003
-	],
-	// Force docker client to fall back to host daemon API (adjust if host daemon API differs)
-	"remoteEnv": {
-		"DOCKER_API_VERSION": "1.43"
-	},
-	"remoteUser": "vscode"
+  "name": "Codespaces Grafting (LAMP/WP oriented)",
+  "dockerFile": "Dockerfile",
+  "remoteUser": "vscode",
+  "forwardPorts": [80],
+  "initializeCommand": ".devcontainer/sbin/merge-env.sh",
+  "runArgs": ["--env-file", ".devcontainer/tmp/.cs_env.merged"],
+  "postStartCommand": ".devcontainer/sbin/bootstrap.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "mads-hartmann.bash-ide-vscode",
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "ikappas.phpcs",
+        "neilbrayfield.php-docblocker",
+        "johnbillion.vscode-wordpress-hooks",    // optional: WP hooks IntelliSense
+        "ms-azuretools.vscode-docker"            // Microsoft Docker (Container Tools)
+      ],
+      "settings": {
+        "files.associations": {
+          "*.php": "php",
+          "*.inc": "php",
+          "*.module": "php"
+        },
+        "php.validate.executablePath": "/usr/bin/php"
+      }
+    }
+  }
 }

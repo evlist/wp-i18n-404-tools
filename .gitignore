@@ -21,3 +21,6 @@ sandbox/
 # Composer dependencies
 vendor/
 composer.lock
+.vscode/*.bak.*
+.devcontainer/tmp/
+.devcontainer/var/
