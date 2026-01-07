@@ -5,19 +5,5 @@
 
 # WP i18n-404-tools
 
-<p align="center">
-  <img src="logo.svg" width="256" height="256" alt="WP i18n-404-tools Logo" />
-</p>
-
-A WordPress plugin with missing i18N (internationalization) tools.
-
-## Logo
-
-The project logo combines several meaningful elements:
-- 🌍 **Globe** - Represents internationalization (i18n) and global language support
-- **"404"** - Clever reference to "missing" tools (HTTP 404 = Not Found)
-- **"i18n"** - Clear identification of the internationalization focus
-- 🌐 **Language codes** - EN, ES, FR, DE, ZH, JA showing multilingual support
-- 🎨 **WordPress colors** - Official WordPress blue color scheme
-
+  <img src="./i18n-404-tools/admin/images/logo.svg" width="256" style="float:right;max-width:256px;height:auto" alt="WP i18n-404-tools Logo" /> A WordPress plugin with missing i18N (internationalization) tools.
 
