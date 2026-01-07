@@ -17,6 +17,7 @@ class I18N_404_Ajax_Router {
     protected $commands = [
         // 'command'         => [ 'ClassName',                 'file-name.php' ]
         'generate_pot'      => [ 'I18N_404_Generate_Pot_Command', 'class-generate-pot-command.php' ],
+        'generate_json'     => [ 'I18N_404_Generate_JSON_Command', 'class-generate-json-command.php' ],
         // Add more mappings as needed:
         // 'other_command'   => [ 'I18N_404_Other_Command',    'class-other-command.php' ],
     ];
