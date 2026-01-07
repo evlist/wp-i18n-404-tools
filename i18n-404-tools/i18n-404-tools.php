@@ -66,7 +66,7 @@ add_action('init', function() {
         }
         });
 
-// Add the "Generate .pot" link to each plugin row on the Plugins page
+// Add the "Generate .pot" and "Generate JSON" links to each plugin row on the Plugins page
 add_filter('plugin_action_links', function($actions, $plugin_file) {
         if ( current_user_can('manage_options') ) {
         // Load modal config and helpers for the action attributes
