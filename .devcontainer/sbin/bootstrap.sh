@@ -32,6 +32,7 @@ else
 fi
 
 # Add a wp function and make it available to terminals
+echo 'export DOCROOT="/var/www/html"' >> ~/.bash_aliases
 echo 'wp() { sudo -u www-data /usr/local/bin/wp --path="$DOCROOT" "$@"; }' >> ~/.bash_aliases
 source ~/.bash_aliases
 

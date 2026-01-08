@@ -10,7 +10,9 @@ log() { printf "[start] %s\n" "$*"; }
 
 die() { printf "[start:ERROR] %s\n" "$*" >&2; exit 1; }
 
-DOCROOT="/var/www/html"
+# Source bash aliases to get DOCROOT and other environment variables
+[ -f ~/.bash_aliases ] && source ~/.bash_aliases
+
 WORKSPACE="/workspaces/${GITHUB_REPOSITORY##*/}"
 
 # --- Start: services only ---

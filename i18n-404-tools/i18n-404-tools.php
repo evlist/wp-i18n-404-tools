@@ -104,6 +104,13 @@ add_action('admin_enqueue_scripts', function($hook) {
                 [
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'ui'      => $i18n404tools_modal_config,
+                'i18n'    => [
+                        'loading'           => __('Loading...', 'i18n-404-tools'),
+                        'error_no_command'  => __('Error: No command specified', 'i18n-404-tools'),
+                        'error_unexpected'  => __('Error: Unexpected response from server.', 'i18n-404-tools'),
+                        'error_ajax_failed' => __('Error: Could not connect to the server. Please try again.', 'i18n-404-tools'),
+                        'close'             => __('Close', 'i18n-404-tools'),
+                ],
                 ]
                 );
         wp_enqueue_style(

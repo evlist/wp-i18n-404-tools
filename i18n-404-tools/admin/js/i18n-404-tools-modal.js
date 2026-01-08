@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const action = e.target.closest('.' + cfg.action_class);
         if (action) {
             e.preventDefault();
-            showI18n404ToolsModal('Loading…');
+            showI18n404ToolsModal(I18n404ToolsConfig.i18n.loading);
             const plugin = action.getAttribute(cfg.data_plugin);
             const command = action.getAttribute(cfg.data_command);
             const step = action.getAttribute(cfg.data_step) || 'start';
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.className = cfg.overlay_class;
         overlay.innerHTML = `
             <div class="${cfg.content_class}">
-                <span class="dashicons dashicons-no-alt ${cfg.close_class}" title="Close"></span>
+                <span class="dashicons dashicons-no-alt ${cfg.close_class}" title="${I18n404ToolsConfig.i18n.close}"></span>
                 <div class="${cfg.body_class}">${content}</div>
             </div>
         `;
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // AJAX to fetch modal content
     function fetchI18n404ToolsModalContent(plugin, command, step = 'start', data = {}) {
         if (!command) {
-            showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">Error: No command specified.</div>');
+            showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + I18n404ToolsConfig.i18n.error_no_command + '</div>');
             return;
         }
         const postData = Object.assign({}, data, {
@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (json.data && json.data.message) {
                     showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + json.data.message + '</div>');
                 } else {
-                    showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">Error: Unexpected response.</div>');
+                    showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + I18n404ToolsConfig.i18n.error_unexpected + '</div>');
                 }
             })
             .catch(() => {
-                showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">Error: AJAX request failed.</div>');
+                showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + I18n404ToolsConfig.i18n.error_ajax_failed + '</div>');
             });
     }
 });

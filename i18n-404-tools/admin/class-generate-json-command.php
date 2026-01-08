@@ -69,6 +69,25 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
             ];
         }
 
+        // Check if plugin has JavaScript strings that need translation
+        if ( ! $this->has_javascript_strings() ) {
+            $po_list = '<ul>';
+            foreach ( $po_files as $po_file ) {
+                $po_list .= '<li>' . esc_html( basename( $po_file ) ) . '</li>';
+            }
+            $po_list .= '</ul>';
+
+            return [
+                'html' => '<div class="i18n-modal-content">'
+                    . '<p><strong>' . esc_html__('Translation files found:', 'i18n-404-tools') . '</strong></p>'
+                    . $po_list
+                    . '<p>' . esc_html__('JSON files not needed.', 'i18n-404-tools') . '</p>'
+                    . '<p><em>' . esc_html__('This plugin does not use JavaScript translations (wp.i18n).', 'i18n-404-tools') . '</em></p>'
+                    . $this->generate_cancel_button( __('Close', 'i18n-404-tools') )
+                    . '</div>'
+            ];
+        }
+
         // Check for JSON files
         $json_status = $this->get_json_status( $po_files );
         $has_json = ! empty( $json_status['existing'] );
@@ -179,8 +198,8 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
             $result = $this->run_wp_cli_command(
                 'i18n make-json',
                 [
-                    0        => $this->languages_dir,
-                    'purge'  => null,
+                    0          => $this->languages_dir,
+                    'no-purge' => null,
                 ]
             );
 
@@ -302,5 +321,60 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
             'existing' => $existing,
             'outdated' => $outdated,
         ];
+    }
+
+    /**
+     * Check if the plugin has JavaScript files that use wp.i18n for translations.
+     *
+     * @return bool True if JavaScript translation strings are found
+     */
+    protected function has_javascript_strings() {
+        // Check if there are any .js files in the plugin directory
+        $js_files = $this->find_js_files( $this->plugin_dir );
+        
+        if ( empty( $js_files ) ) {
+            return false;
+        }
+
+        // Look for wp.i18n usage patterns in JavaScript files
+        foreach ( $js_files as $js_file ) {
+            $content = @file_get_contents( $js_file );
+            if ( $content === false ) {
+                continue;
+            }
+
+            // Check for wp.i18n.__ or wp.i18n._x or similar patterns
+            if ( preg_match( '/wp\.i18n\.[_a-z]+\s*\(/', $content ) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Find all JavaScript files in a directory.
+     *
+     * @param string $dir Directory to search
+     * @return array List of JavaScript file paths
+     */
+    protected function find_js_files( $dir ) {
+        $js_files = [];
+        
+        if ( ! is_dir( $dir ) ) {
+            return $js_files;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator( $dir, RecursiveDirectoryIterator::SKIP_DOTS )
+        );
+
+        foreach ( $iterator as $file ) {
+            if ( $file->isFile() && $file->getExtension() === 'js' ) {
+                $js_files[] = $file->getPathname();
+            }
+        }
+
+        return $js_files;
     }
 }
