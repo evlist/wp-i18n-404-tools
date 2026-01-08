@@ -1,0 +1,1 @@
+wp language core install fr_FR
