@@ -70,6 +70,65 @@ Think of it like grafting a fruit tree branch onto a rootstock: the scion (templ
 
 ---
 
+## Container Lifecycle
+
+### Q: Why are there two scripts—bootstrap.sh and start.sh? When does each run?
+**A:** They handle two different phases of the Codespace lifecycle:
+
+**bootstrap.sh** (runs once during container creation):
+- One-time setup: Creates the WordPress filesystem, Apache configuration, initializes MariaDB data directory
+- Starts MariaDB temporarily, creates the database and user (idempotent)
+- Downloads WordPress core, creates wp-config.php, installs WordPress if new
+- Sets URLs, configures permalinks
+- Installs and activates plugins
+- **Then stops MariaDB** at the end
+
+**start.sh** (runs every time the container starts or restarts):
+- Starts MariaDB (with fallback to direct daemon if service startup fails)
+- Starts Apache (with fallback to apache2ctl then direct apache2 -k start)
+- That's it. No provisioning, no setup—just service startup
+
+Why split them?
+- **Idempotence**: If you restart the Codespace, you don't re-download WordPress, re-create the database, or re-activate plugins
+- **Speed**: Subsequent starts are fast (just start services, not full bootstrap)
+- **Clarity**: Clear separation between one-time init and recurring startup
+- **Robustness**: Service startup fallbacks work reliably because they're separate from complex provisioning logic
+
+### Q: Why does bootstrap.sh stop MariaDB at the end?
+**A:** To ensure clean separation: `bootstrap.sh` sets everything up, then hands control to `start.sh` for service management. When the container restarts (e.g., Codespace restart), `start.sh` is what runs, and it's designed to start fresh services.
+
+If bootstrap left MariaDB running, then:
+- On first creation it would be running
+- On restart (where only start.sh runs) it would need different logic
+- The scripts would be harder to reason about
+
+By stopping MariaDB at the end of bootstrap, both scripts have clear, predictable entry points.
+
+### Q: I restarted the Codespace but WordPress is not responding. What do I do?
+**A:** Run `start.sh` manually to restart services:
+```bash
+bash .devcontainer/sbin/start.sh
+```
+
+This starts MariaDB and Apache. Your WordPress data is already present from `bootstrap.sh` (which only runs once). If issues persist:
+1. Check MariaDB: `sudo systemctl status mariadb`
+2. Check Apache: `sudo systemctl status apache2`
+3. Check logs: `sudo tail -n 50 /var/log/mysql/error.log` or `/var/log/apache2/error.log`
+
+### Q: Can I add custom startup tasks in start.sh.d/?
+**A:** Yes! Create hooks in `.devcontainer/sbin/start.sh.d/` for tasks that should run on every start/attach:
+
+```bash
+#!/usr/bin/env bash
+# .devcontainer/sbin/start.sh.d/10-healthcheck.local.sh
+log "Checking WordPress health..."
+curl -I http://localhost/wp-login.php || log "Warning: WordPress not responding"
+```
+
+These are useful for monitoring, cache warming, log rotation, or other recurring maintenance—things that should happen every time services start but don't require full re-initialization.
+
+---
+
 ## Troubleshooting
 
 ### Q: The installer aborts saying files would be ignored by .gitignore. What do I do?

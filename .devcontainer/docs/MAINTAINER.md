@@ -155,6 +155,53 @@ Common commands
 
 ---
 
+## Container Lifecycle: bootstrap and start
+
+The Codespace/devcontainer lifecycle is split into two phases to separate one-time initialization from recurring service startup. This design ensures idempotent behavior and clean separation of concerns.
+
+### bootstrap.sh (postCreateCommand — one-time)
+
+Runs **once** during container creation. Handles all setup that should happen only at initialization:
+
+- **Filesystem preparation**: Creates WordPress docroot symlinks, sets Apache configurations (`servername`, `codespaces-https`, `dev-index`), and initializes WP-CLI directories.
+- **MariaDB initialization**: Initializes the MariaDB data directory if it doesn't exist; starts MariaDB temporarily for setup, creates the database and user (idempotent), then **stops MariaDB**.
+- **WordPress setup**: Downloads WordPress core (if missing), creates `wp-config.php`, installs WordPress (if not already installed), sets home/siteurl options, and configures permalinks.
+- **Plugins**: Installs and activates plugins from the `WP_PLUGINS` list and links the workspace plugin.
+- **Extensibility**: Runs hooks from `bootstrap.sh.d/` in alphabetical order (sourced in the current shell, inherit all variables and functions).
+
+**Important**: `bootstrap.sh` stops MariaDB at the end. The `start.sh` script will restart it on the next container start or attach.
+
+### start.sh (postStartCommand, postAttachCommand — recurring)
+
+Runs **every time** the container starts or restarts (including Codespace restarts and re-attachments). Keeps service startup minimal and idempotent:
+
+- **MariaDB startup**: Starts MariaDB via service (with fallback to direct `mariadbd` daemon if service startup fails).
+- **Apache startup**: Starts Apache via service (with fallback to `apache2ctl` then `apache2 -k start`).
+- **Extensibility**: Runs hooks from `start.sh.d/` in alphabetical order (sourced in the current shell for future customizations).
+
+**Note**: No database provisioning or WordPress setup; those happen once in `bootstrap.sh`.
+
+### Lifecycle summary
+
+```
+Container creation (Codespace starts):
+  1. postCreateCommand → bootstrap.sh
+     • One-time FS, MariaDB init, WordPress install, plugins
+     • Stops MariaDB after setup
+  2. postStartCommand → start.sh
+     • Starts MariaDB & Apache
+     • Ready for development
+
+Codespace restart or re-attach:
+  1. postStartCommand → start.sh
+     • Starts MariaDB & Apache
+     • WordPress config and data already present (created by bootstrap)
+     • Ready to develop
+
+```
+
+---
+
 ## Bootstrap customization (bootstrap.sh.d/)
 
 The scion uses a modular bootstrap system inspired by Debian's `.d` directories. During container startup, `bootstrap.sh` sources all scripts in `bootstrap.sh.d/` in alphabetical order.
@@ -203,10 +250,23 @@ THEME_DIR="themes/my-theme"
 
 ### Existing hooks (provided by scion)
 
-- **10-aliases.sh**: Defines shell aliases (`graft`, `upgrade-scion`, `export-scion`) — **managed by scion**
-- **20-plugins.sh**: Links workspace plugin, installs additional plugins from `WP_PLUGINS` — **managed by scion**
+- **10-aliases.sh**: Defines shell aliases (`graft`, `upgrade-scion`, `export-scion`) — **managed by scion** (runs during bootstrap)
+- **20-plugins.sh**: Links workspace plugin, installs additional plugins from `WP_PLUGINS` — **managed by scion** (runs during bootstrap)
 
 **Important**: Don't modify or delete scion-provided hooks (files without `.local` in their name). They will be overwritten during upgrades.
+
+### Start hooks (start.sh.d/)
+
+For future needs, you can create custom hooks in `.devcontainer/sbin/start.sh.d/` to run on every service startup (e.g., health checks, log rotation, custom monitoring). These are sourced after `start.sh` starts MariaDB and Apache.
+
+Example:
+
+```bash
+#!/usr/bin/env bash
+# .devcontainer/sbin/start.sh.d/10-healthcheck.local.sh
+log "Performing health check..."
+curl -I http://localhost/wp-login.php || log "Warning: WordPress not responding"
+```
 
 ### Disabling scion hooks
 
@@ -225,7 +285,23 @@ mv bootstrap.sh.d/40-custom.local.sh bootstrap.sh.d/40-custom.local.sh.disabled
 
 Common issues and remedies
 
-1. Files are missing after install (likely ignored)
+1. **Aliases not available in terminal**
+   - Symptom: `graft` command not found, even after fresh Codespace.
+   - Cause: Aliases are added to `~/.bash_aliases` by `10-aliases.sh` (idempotent, runs once in bootstrap).
+   - Fix: Source `~/.bash_aliases` manually: `source ~/.bash_aliases` or create a new terminal tab.
+
+2. **Services not running after Codespace restart**
+   - Symptom: MariaDB or Apache doesn't respond after Codespace restart.
+   - Cause: `start.sh` runs on postStart/postAttach but may be skipped in edge cases.
+   - Fix: Manually run `bash .devcontainer/sbin/start.sh` to restart services.
+
+3. **WordPress database errors on first boot**
+   - Symptom: "Error establishing a database connection."
+   - Cause: MariaDB initialization may take time on slow containers; `bootstrap.sh` waits up to ~30 seconds.
+   - Fix: Check MariaDB logs: `sudo tail -n 50 /var/log/mysql/error.log`; restart `start.sh` if needed.
+
+4. **Files are missing after install (likely ignored)**
+4. **Files are missing after install (likely ignored)**
    - Symptom: scion files not present after install (or are present locally but not committed).
    - Check:
      ```bash
@@ -233,13 +309,13 @@ Common issues and remedies
      ```
    - Fix: update `.gitignore` or adjust installer preflight; run installer interactively after adjustments.
 
-2. Markdown preview blank in browser (Codespace web UI quirk)
+5. **Markdown preview blank in browser (Codespace web UI quirk)**
    - Workaround: open in a Chromium-based browser or view README on the GitHub repo page.
 
-3. Codespace returns 401 or missing envs
+6. **Codespace returns 401 or missing envs**
    - Ensure required environment variables are set in the Codespace (Secrets / Repository settings) or copy `.devcontainer/.cs_env` to `./.cs_env` and export the necessary vars locally.
 
-4. Upstream rename/migration confusion
+7. **Upstream rename/migration confusion**
    - If the scion repo is renamed, set `UPSTREAM_SCION` to the new `owner/repo@ref` in Codespaces/CI or update the template sample `.devcontainer/.cs_env`.
    - The installer derives `GRAFT_URL` from `UPSTREAM_SCION`; no code change needed if env is updated.
 

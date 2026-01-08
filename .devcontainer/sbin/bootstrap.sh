@@ -163,7 +163,13 @@ fi
 # --- Apache startup ---
 log "Starting Apache..."
 sudo a2enmod rewrite >/dev/null 2>&1 || true
-sudo service apache2 restart || true
+if ! sudo service apache2 restart; then
+  log "Service restart failed, trying apache2ctl..."
+  if ! sudo apache2ctl start; then
+    log "apache2ctl start failed, trying direct apache2 -k start..."
+    sudo /usr/sbin/apache2 -k start || true
+  fi
+fi
 
 # Pretty permalinks best-effort
 wp rewrite structure '/%postname%/' --path="$DOCROOT" >/dev/null 2>&1 || true

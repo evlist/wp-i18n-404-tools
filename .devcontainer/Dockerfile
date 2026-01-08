@@ -40,9 +40,8 @@ RUN printf "<Directory /var/www/html>\n  AllowOverride All\n  Require all grante
       > /etc/apache2/conf-available/wordpress.conf && \
     a2enconf wordpress
 
-# Xdebug configuration (no apt operations here)
+# Xdebug configuration (override the apt-installed package configuration)
 RUN PHPV="$(ls -1 /etc/php | head -n1)" && \
-    mkdir -p /etc/php/${PHPV}/apache2/conf.d /etc/php/${PHPV}/cli/conf.d && \
     printf '%s\n' \
       'zend_extension=xdebug' \
       'xdebug.mode=debug,develop' \
@@ -50,6 +49,5 @@ RUN PHPV="$(ls -1 /etc/php | head -n1)" && \
       'xdebug.discover_client_host=1' \
       'xdebug.client_port=9003' \
       'xdebug.log=/tmp/xdebug.log' \
-      > /etc/php/${PHPV}/apache2/conf.d/99-xdebug.ini && \
-    cp /etc/php/${PHPV}/apache2/conf.d/99-xdebug.ini /etc/php/${PHPV}/cli/conf.d/99-xdebug.ini
+      > /etc/php/${PHPV}/apache2/conf.d/20-xdebug.ini
         

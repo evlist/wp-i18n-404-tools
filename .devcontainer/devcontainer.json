@@ -5,7 +5,9 @@
   "forwardPorts": [80],
   "initializeCommand": ".devcontainer/sbin/merge-env.sh",
   "runArgs": ["--env-file", ".devcontainer/tmp/.cs_env.merged"],
-  "postStartCommand": ".devcontainer/sbin/bootstrap.sh",
+  "postCreateCommand": ".devcontainer/sbin/bootstrap.sh",
+  "postStartCommand": ".devcontainer/sbin/start.sh",
+  "postAttachCommand": ".devcontainer/sbin/start.sh",
   "customizations": {
     "vscode": {
       "extensions": [

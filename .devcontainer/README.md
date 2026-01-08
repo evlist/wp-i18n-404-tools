@@ -34,10 +34,13 @@ Scion structure (short)
 ├── bin/
 │   └── graft.sh          # run this to graft the scion into a repo
 ├── sbin/
-│   ├── bootstrap.sh      # container startup script
+│   ├── bootstrap.sh      # one-time init: FS, Apache, MariaDB, WP, plugins
 │   ├── bootstrap.sh.d/   # modular bootstrap hooks (Debian .d style)
 │   │   ├── 10-aliases.sh # shell aliases (graft, upgrade-scion, export-scion)
-│   │   └── 20-plugins.sh # plugin installation and activation
+│   │   ├── 20-plugins.sh # plugin installation and activation
+│   │   └── 50-bootstrap.local.sh # local customizations (not overwritten)
+│   ├── start.sh          # recurring: start MariaDB, Apache (on every start/attach)
+│   ├── start.sh.d/       # modular start hooks (extensible for future needs)
 │   └── merge-env.sh      # merges .cs_env and .cs_env.d/*
 ├── tmp/                  # temporary files (gitignored)
 ├── var/                  # runtime data (gitignored)
@@ -76,6 +79,21 @@ All other `.vscode/` files you create are yours and won't be touched by upgrades
   bash ~/Downloads/graft.sh      # or: bash ~/Downloads/graft.sh --dry-run
   ```
 - Dry-run recommended: `bash bin/graft.sh --dry-run`
+
+**Lifecycle: bootstrap vs start**
+
+- **bootstrap** (postCreateCommand): one-time setup during container creation
+  - Filesystem: docroot symlinks, Apache confs, WP-CLI directories
+  - MariaDB: initialize data directory (temporary startup for setup)
+  - WordPress: download core, create config, install if new, set URLs, configure permalinks
+  - Plugins: install and activate from `WP_PLUGINS` list
+  - Extensible via hooks in `bootstrap.sh.d/` (sourced in current shell)
+  - MariaDB is stopped after setup; **start.sh will restart it later**
+
+- **start** (postStartCommand, postAttachCommand): recurring on every start/attach
+  - Services only: start MariaDB (with fallback to direct daemon) and Apache
+  - Extensible via hooks in `start.sh.d/` for future service-restart customizations
+  - No database provisioning or WordPress setup here
 
 ⚠️ File replacement behavior during upgrades
 
