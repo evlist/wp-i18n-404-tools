@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # 🌍 WP i18n-404-tools Logo
 
 **Missing Internationalization Tools for WordPress**

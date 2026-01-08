@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof I18n404ToolsConfig === 'undefined' || !I18n404ToolsConfig.ui) {
         console.error('I18n404ToolsConfig.ui is not defined!');

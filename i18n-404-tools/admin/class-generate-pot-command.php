@@ -1,4 +1,9 @@
 <?php
+
+// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // File: i18n-404-tools/admin/class-generate-pot-command.php
 
 if ( ! defined( 'ABSPATH' ) ) {
