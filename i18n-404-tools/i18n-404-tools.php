@@ -76,9 +76,9 @@ add_action(
 	'init',
 	function () {
 		if (
-				defined( 'DOING_AJAX' ) && DOING_AJAX &&
-				isset( $_REQUEST['action'] ) && 'i18n_404_tools_command' === $_REQUEST['action'] &&
-				isset( $_REQUEST['nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'i18n_404_tools_ajax' )
+			defined( 'DOING_AJAX' ) && DOING_AJAX &&
+			isset( $_REQUEST['action'] ) && 'i18n_404_tools_command' === $_REQUEST['action'] &&
+			isset( $_REQUEST['_ajax_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_ajax_nonce'] ) ), 'i18n_404_tools_action' )
 			) {
 			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-command-base.php';
 			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-ajax-router.php';
