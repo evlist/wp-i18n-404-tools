@@ -1,11 +1,13 @@
 <?php
-
-// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+/**
+ * SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * @package I18n_404_Tools
+ */
 
 /**
- * AJAX Router for WP i18n 404 Tools
+ * AJAX Router for WP i18n 404 Tools.
  *
  * @package I18n_404_Tools
  */
@@ -14,23 +16,32 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+/**
+ * Routes AJAX commands to the correct handler classes.
+ */
 class I18N_404_Ajax_Router {
 
 	/**
-	 * Map commands to [class_name, file_name]
+	 * Map commands to their handler class and file.
+	 *
+	 * @var array<string, array{0:string,1:string}>
 	 */
 	protected $commands = array(
-		// 'command'         => [ 'ClassName',                 'file-name.php' ]
+		// Example mapping: command => [ class name, file name ].
 		'generate_pot'  => array( 'I18N_404_Generate_Pot_Command', 'class-generate-pot-command.php' ),
 		'generate_json' => array( 'I18N_404_Generate_JSON_Command', 'class-generate-json-command.php' ),
-		// Add more mappings as needed:
-		// 'other_command'   => [ 'I18N_404_Other_Command',    'class-other-command.php' ],
 	);
 
+	/**
+	 * Hook Ajax handler.
+	 */
 	public function __construct() {
 		add_action( 'wp_ajax_i18n_404_tools_command', array( $this, 'handle_ajax' ) );
 	}
 
+	/**
+	 * Handle Ajax command requests.
+	 */
 	public function handle_ajax() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unauthorized request.', 'i18n-404-tools' ) ), 403 );
@@ -38,10 +49,10 @@ class I18N_404_Ajax_Router {
 
 		check_ajax_referer( 'i18n_404_tools_action' );
 
-		$plugin_slug = isset( $_POST['plugin'] ) ? sanitize_text_field( $_POST['plugin'] ) : '';
-		$command     = isset( $_POST['command'] ) ? sanitize_key( $_POST['command'] ) : '';
-		$step        = isset( $_POST['step'] ) ? sanitize_key( $_POST['step'] ) : '';
-		$request     = $_POST;
+		$plugin_slug = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
+		$command     = isset( $_POST['command'] ) ? sanitize_key( wp_unslash( $_POST['command'] ) ) : '';
+		$step        = isset( $_POST['step'] ) ? sanitize_key( wp_unslash( $_POST['step'] ) ) : '';
+		$request     = wp_unslash( $_POST );
 
 		if ( empty( $plugin_slug ) || empty( $command ) || empty( $step ) ) {
 			wp_send_json_error( array( 'message' => __( 'Missing required parameters.', 'i18n-404-tools' ) ) );
@@ -50,7 +61,7 @@ class I18N_404_Ajax_Router {
 		if ( ! isset( $this->commands[ $command ] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unknown command.', 'i18n-404-tools' ) ) );
 		}
-		list($class_name, $file_name) = $this->commands[ $command ];
+		list( $class_name, $file_name ) = $this->commands[ $command ];
 
 		if ( ! class_exists( $class_name ) ) {
 			$file_path = __DIR__ . '/' . $file_name;

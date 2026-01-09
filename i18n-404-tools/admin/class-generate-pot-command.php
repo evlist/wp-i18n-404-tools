@@ -5,9 +5,10 @@
  * @package I18n_404_Tools
  */
 
-// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,6 +21,11 @@ require_once __DIR__ . '/class-i18n-command-base.php';
  */
 class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 
+	/**
+	 * Set up the POT command.
+	 *
+	 * @param string $plugin Plugin file slug.
+	 */
 	public function __construct( $plugin ) {
 		parent::__construct( $plugin );
 
@@ -31,9 +37,9 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 	/**
 	 * Handle specific steps for .pot generation.
 	 *
-	 * @param string $step    The requested action: 'check' or 'generate'
-	 * @param array  $request The request data, usually $_POST
-	 * @return array          Response data (with 'html' key)
+	 * @param string $step    The requested action: 'check' or 'generate'.
+	 * @param array  $request The request data, usually $_POST.
+	 * @return array          Response data (with 'html' key).
 	 */
 	public function run_step( $step, $request ) {
 		// Step 1: Check if a .pot file exists and show confirmation.
@@ -108,7 +114,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 			);
 		}
 
-		// Fallback for unknown steps
+		// Fallback for unknown steps.
 		return array(
 			'html' => '<div class="i18n-modal-content">'
 				. '<p>' . esc_html__( 'Unknown step.', 'i18n-404-tools' ) . '</p>'

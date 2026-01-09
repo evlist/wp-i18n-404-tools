@@ -5,9 +5,10 @@
  * @package I18n_404_Tools
  */
 
-// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,6 +21,11 @@ require_once __DIR__ . '/class-i18n-command-base.php';
  */
 class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 
+	/**
+	 * Set up the JSON command handler.
+	 *
+	 * @param string $plugin Plugin file slug.
+	 */
 	public function __construct( $plugin ) {
 		parent::__construct( $plugin );
 
@@ -31,9 +37,9 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 	/**
 	 * Handle specific steps for JSON generation.
 	 *
-	 * @param string $step    The requested action: 'check', 'generate', or 'generate_all'
-	 * @param array  $request The request data, usually $_POST
-	 * @return array          Response data (with 'html' key)
+	 * @param string $step    The requested action: 'check', 'generate', or 'generate_all'.
+	 * @param array  $request The request data, usually $_POST.
+	 * @return array          Response data (with 'html' key).
 	 */
 	public function run_step( $step, $request ) {
 		// Step 1: Check .po and .json files status.
@@ -51,7 +57,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			return $this->generate_json_files( true );
 		}
 
-		// Fallback for unknown steps
+		// Fallback for unknown steps.
 		return array(
 			'error'   => true,
 			'message' => __( 'Unknown step.', 'i18n-404-tools' ),
@@ -109,7 +115,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 		}
 		$po_list .= '</ul>';
 
-		// Case 2: No JSON files exist
+		// Case 2: No JSON files exist.
 		if ( ! $has_json ) {
 			return array(
 				'html' => '<div class="i18n-modal-content">'
@@ -135,6 +141,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			. $po_list;
 
 		if ( $has_outdated ) {
+			// Translators: %d is the number of JSON files that are outdated or missing.
 			$outdated_count = count( $json_status['outdated'] );
 			$html          .= '<p>'
 				. sprintf(
@@ -197,7 +204,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			);
 		}
 
-		// Filter files if not generating all
+		// Filter files if not generating all.
 		if ( ! $generate_all ) {
 			$json_status = $this->get_json_status( $po_files );
 			$po_files    = $json_status['outdated'];
@@ -217,16 +224,16 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 
 			$results[] = array(
 				'file'    => basename( $po_file ),
-				'success' => $result['exit_code'] === 0,
+				'success' => 0 === $result['exit_code'],
 				'output'  => trim( $result['stdout'] . "\n" . $result['stderr'] ),
 			);
 
-			if ( $result['exit_code'] !== 0 ) {
+			if ( 0 !== $result['exit_code'] ) {
 				$overall_success = false;
 			}
 		}
 
-		// Build output HTML
+		// Build output HTML.
 		$html = '<div class="i18n-modal-content">';
 
 		if ( $overall_success ) {
@@ -235,7 +242,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			$html .= '<p><strong>' . esc_html__( 'Some JSON files failed to generate.', 'i18n-404-tools' ) . '</strong></p>';
 		}
 
-		// Show results for each file
+		// Show results for each file.
 		$html .= '<div style="margin-top:12px;">';
 		foreach ( $results as $result ) {
 			$status_icon  = $result['success'] ? '✓' : '✗';
