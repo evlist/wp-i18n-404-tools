@@ -1,6 +1,11 @@
 <?php
+/**
+ * Main plugin file.
+ *
+ * @package I18n_404_Tools
+ */
 
-// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -31,7 +36,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-    die;
+	die;
 }
 
 /**
@@ -45,85 +50,103 @@ define( 'I18N_404_TOOLS_VERSION', '1.0.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-i18n-404-tools-activator.php
  */
-require_once plugin_dir_path(__FILE__) . 'admin/class-wpcli-updater.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/class-wpcli-updater.php';
+
+/**
+ * Activate the plugin and download WP-CLI.
+ */
 function activate_i18n_404_tools() {
-    if ( isset( $GLOBALS['i18n_404_tools_wpcli_updater'] ) ) {
-        error_log('download_phar_with_notice: '.$GLOBALS['i18n_404_tools_wpcli_updater']->download_phar_with_notice());
-    }
+	if ( isset( $GLOBALS['i18n_404_tools_wpcli_updater'] ) ) {
+		$GLOBALS['i18n_404_tools_wpcli_updater']->download_phar_with_notice();
+	}
 }
 register_activation_hook( __FILE__, 'activate_i18n_404_tools' );
 
-// Load translations if available
-add_action('plugins_loaded', function() {
-        load_plugin_textdomain('i18n-404-tools', false, dirname(plugin_basename(__FILE__)) . '/languages');
-        });
+// Load translations if available.
+add_action(
+	'plugins_loaded',
+	function () {
+		load_plugin_textdomain( 'i18n-404-tools', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
+);
 
-// Only load base and router for our AJAX requests; router will load command classes dynamically
-add_action('init', function() {
-        if (
-                defined('DOING_AJAX') && DOING_AJAX &&
-                isset($_REQUEST['action']) && $_REQUEST['action'] === 'i18n_404_tools_command'
-           ) {
-        require_once plugin_dir_path(__FILE__) . 'admin/class-i18n-command-base.php';
-        require_once plugin_dir_path(__FILE__) . 'admin/class-i18n-ajax-router.php';
-        new I18N_404_Ajax_Router();
-        }
-        });
+// Only load base and router for our AJAX requests; router will load command classes dynamically.
+add_action(
+	'init',
+	function () {
+		if (
+				defined( 'DOING_AJAX' ) && DOING_AJAX &&
+				isset( $_REQUEST['action'] ) && 'i18n_404_tools_command' === $_REQUEST['action'] &&
+				isset( $_REQUEST['nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'i18n_404_tools_ajax' )
+			) {
+			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-command-base.php';
+			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-ajax-router.php';
+			new I18N_404_Ajax_Router();
+		}
+	}
+);
 
-// Add the "Generate .pot" and "Generate JSON" links to each plugin row on the Plugins page
-add_filter('plugin_action_links', function($actions, $plugin_file) {
-        if ( current_user_can('manage_options') ) {
-        // Load modal config and helpers for the action attributes
-        require_once plugin_dir_path(__FILE__) . 'admin/modal-config.php';
-        require_once plugin_dir_path(__FILE__) . 'admin/helpers.php';
-        
-        $logo_img = '<img src="' . esc_url(plugins_url('admin/images/logo.svg', __FILE__)) . '" alt="" style="height:16px;width:16px;margin-right:5px;vertical-align:-2px;" />';
-        
-        $attrs_pot = i18n404tools_action_attrs('generate_pot', $plugin_file);
-        $actions['i18n_pot'] = '<a href="#" ' . $attrs_pot . '>' . $logo_img . esc_html__('Generate .pot', 'i18n-404-tools') . '</a>';
-        
-        $attrs_json = i18n404tools_action_attrs('generate_json', $plugin_file);
-        $actions['i18n_json'] = '<a href="#" ' . $attrs_json . '>' . $logo_img . esc_html__('Generate JSON', 'i18n-404-tools') . '</a>';
-        }
-        return $actions;
-        }, 10, 2);
+// Add the "Generate .pot" and "Generate JSON" links to each plugin row on the Plugins page.
+add_filter(
+	'plugin_action_links',
+	function ( $actions, $plugin_file ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			// Load modal config and helpers for the action attributes.
+			require_once plugin_dir_path( __FILE__ ) . 'admin/modal-config.php';
+			require_once plugin_dir_path( __FILE__ ) . 'admin/helpers.php';
 
-// Enqueue JS and Dashicons only for the Plugins page
-// /css/i18n-404-tools-admin.css
-add_action('admin_enqueue_scripts', function($hook) {
-        if ( $hook !== 'plugins.php' ) {
-        return;
-        }
-        wp_enqueue_script(
-                'i18n-404-tools-modal',
-                plugins_url('admin/js/i18n-404-tools-modal.js', __FILE__),
-                [],
-                '1.0',
-                true
-                );
-        wp_enqueue_style('dashicons');
-        require plugin_dir_path(__FILE__) . 'admin/modal-config.php';
-        global $i18n404tools_modal_config;
-        wp_localize_script(
-                'i18n-404-tools-modal',
-                'I18n404ToolsConfig',
-                [
-                'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce'    => wp_create_nonce('i18n_404_tools_action'),
-                'ui'      => $i18n404tools_modal_config,
-                'i18n'    => [
-                        'loading'           => __('Loading...', 'i18n-404-tools'),
-                        'error_no_command'  => __('Error: No command specified', 'i18n-404-tools'),
-                        'error_unexpected'  => __('Error: Unexpected response from server.', 'i18n-404-tools'),
-                        'error_ajax_failed' => __('Error: Could not connect to the server. Please try again.', 'i18n-404-tools'),
-                        'close'             => __('Close', 'i18n-404-tools'),
-                ],
-                ]
-                );
-        wp_enqueue_style(
-                'i18n-404-tools-admin',
-                plugins_url('admin/css/i18n-404-tools-admin.css', __FILE__),
-                [],
-                '1.0'
-                );
-});
+			$logo_img = '<img src="' . esc_url( plugins_url( 'admin/images/logo.svg', __FILE__ ) ) . '" alt="" style="height:16px;width:16px;margin-right:5px;vertical-align:-2px;" />';
+
+			$attrs_pot           = i18n404tools_action_attrs( 'generate_pot', $plugin_file );
+			$actions['i18n_pot'] = '<a href="#" ' . $attrs_pot . '>' . $logo_img . esc_html__( 'Generate .pot', 'i18n-404-tools' ) . '</a>';
+
+			$attrs_json           = i18n404tools_action_attrs( 'generate_json', $plugin_file );
+			$actions['i18n_json'] = '<a href="#" ' . $attrs_json . '>' . $logo_img . esc_html__( 'Generate JSON', 'i18n-404-tools' ) . '</a>';
+		}
+		return $actions;
+	},
+	10,
+	2
+);
+
+// Enqueue JS and Dashicons only for the Plugins page.
+add_action(
+	'admin_enqueue_scripts',
+	function ( $hook ) {
+		if ( 'plugins.php' !== $hook ) {
+			return;
+		}
+		wp_enqueue_script(
+			'i18n-404-tools-modal',
+			plugins_url( 'admin/js/i18n-404-tools-modal.js', __FILE__ ),
+			array(),
+			'1.0',
+			true
+		);
+		wp_enqueue_style( 'dashicons' );
+		require plugin_dir_path( __FILE__ ) . 'admin/modal-config.php';
+		global $i18n404tools_modal_config;
+		wp_localize_script(
+			'i18n-404-tools-modal',
+			'I18n404ToolsConfig',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'i18n_404_tools_action' ),
+				'ui'       => $i18n404tools_modal_config,
+				'i18n'     => array(
+					'loading'           => __( 'Loading...', 'i18n-404-tools' ),
+					'error_no_command'  => __( 'Error: No command specified', 'i18n-404-tools' ),
+					'error_unexpected'  => __( 'Error: Unexpected response from server.', 'i18n-404-tools' ),
+					'error_ajax_failed' => __( 'Error: Could not connect to the server. Please try again.', 'i18n-404-tools' ),
+					'close'             => __( 'Close', 'i18n-404-tools' ),
+				),
+			)
+		);
+		wp_enqueue_style(
+			'i18n-404-tools-admin',
+			plugins_url( 'admin/css/i18n-404-tools-admin.css', __FILE__ ),
+			array(),
+			'1.0'
+		);
+	}
+);
