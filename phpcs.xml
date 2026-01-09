@@ -27,18 +27,7 @@
 		<exclude name="WordPress.WP.AlternativeFunctions"/>
 	</rule>
 
-	<!-- WordPress-Core rules -->
-	<rule ref="WordPress-Core"/>
-
-	<!-- WordPress-Docs rules -->
-	<rule ref="WordPress-Docs"/>
-
-	<!-- WordPress-Extra rules -->
-	<rule ref="WordPress-Extra"/>
-
 	<!-- Check for PHP cross-version compatibility -->
 	<config name="testVersion" value="7.4-"/>
-	
-	<!-- Rules: Check PHP version compatibility -->
 	<rule ref="PHPCompatibilityWP"/>
 </ruleset>

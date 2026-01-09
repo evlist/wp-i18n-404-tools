@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Configure PHPCS standards
-        run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp
-
       - name: PHP syntax check
         run: |
           find i18n-404-tools -name "*.php" ! -path "*/vendor/*" -print0 | xargs -0 -n1 php -l
