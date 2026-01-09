@@ -38,6 +38,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
             if ( file_exists( $this->pot_path ) ) {
                 return [
                     'html' => '<div class="i18n-modal-content">'
+                        . $this->generate_modal_header( __('Generate .pot', 'i18n-404-tools') )
                         . '<p>' . esc_html__('A .pot file already exists. Overwrite?', 'i18n-404-tools') . '</p>'
                         . $this->generate_action_button(
                             __('Yes, overwrite', 'i18n-404-tools'),
@@ -52,6 +53,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
             } else {
                 return [
                     'html' => '<div class="i18n-modal-content">'
+                        . $this->generate_modal_header( __('Generate .pot', 'i18n-404-tools') )
                         . '<p>' . esc_html__('No .pot file exists. Generate now?', 'i18n-404-tools') . '</p>'
                         . $this->generate_action_button(
                             __('Generate', 'i18n-404-tools'),
@@ -86,6 +88,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 
             return [
                 'html' => '<div class="i18n-modal-content">'
+                    . $this->generate_modal_header( __('Generate .pot', 'i18n-404-tools') )
                     . '<p><strong>' . $message . '</strong></p>'
                     . '<div class="i18n-copy-wrap" style="display:flex;align-items:center;gap:5px;">'
                     . '<button type="button" class="button i18n-copy-btn" title="' . esc_attr__('Copy output', 'i18n-404-tools') . '">'

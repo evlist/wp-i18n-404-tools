@@ -67,6 +67,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
         if ( empty( $po_files ) ) {
             return [
                 'html' => '<div class="i18n-modal-content">'
+                    . $this->generate_modal_header( __('Generate JSON', 'i18n-404-tools') )
                     . '<p>' . esc_html__('No .po translation files found.', 'i18n-404-tools') . '</p>'
                     . '<p>' . esc_html__('Please create translations first (e.g., using Loco Translate or Poedit).', 'i18n-404-tools') . '</p>'
                     . $this->generate_cancel_button( __('Close', 'i18n-404-tools') )
@@ -84,6 +85,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 
             return [
                 'html' => '<div class="i18n-modal-content">'
+                    . $this->generate_modal_header( __('Generate JSON', 'i18n-404-tools') )
                     . '<p><strong>' . esc_html__('Translation files found:', 'i18n-404-tools') . '</strong></p>'
                     . $po_list
                     . '<p>' . esc_html__('JSON files not needed.', 'i18n-404-tools') . '</p>'
@@ -108,6 +110,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
         if ( ! $has_json ) {
             return [
                 'html' => '<div class="i18n-modal-content">'
+                    . $this->generate_modal_header( __('Generate JSON', 'i18n-404-tools') )
                     . '<p><strong>' . esc_html__('Translation files found:', 'i18n-404-tools') . '</strong></p>'
                     . $po_list
                     . '<p>' . esc_html__('No JSON files found. Generate them now?', 'i18n-404-tools') . '</p>'
@@ -124,6 +127,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 
         // Case 3: JSON files exist
         $html = '<div class="i18n-modal-content">'
+            . $this->generate_modal_header( __('Generate JSON', 'i18n-404-tools') )
             . '<p><strong>' . esc_html__('Translation files found:', 'i18n-404-tools') . '</strong></p>'
             . $po_list;
 

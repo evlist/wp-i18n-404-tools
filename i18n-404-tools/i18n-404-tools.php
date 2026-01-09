@@ -77,11 +77,13 @@ add_filter('plugin_action_links', function($actions, $plugin_file) {
         require_once plugin_dir_path(__FILE__) . 'admin/modal-config.php';
         require_once plugin_dir_path(__FILE__) . 'admin/helpers.php';
         
+        $logo_img = '<img src="' . esc_url(plugins_url('admin/images/logo.svg', __FILE__)) . '" alt="" style="height:16px;width:16px;margin-right:5px;vertical-align:-2px;" />';
+        
         $attrs_pot = i18n404tools_action_attrs('generate_pot', $plugin_file);
-        $actions['i18n_pot'] = '<a href="#" ' . $attrs_pot . '>' . esc_html__('Generate .pot', 'i18n-404-tools') . '</a>';
+        $actions['i18n_pot'] = '<a href="#" ' . $attrs_pot . '>' . $logo_img . esc_html__('Generate .pot', 'i18n-404-tools') . '</a>';
         
         $attrs_json = i18n404tools_action_attrs('generate_json', $plugin_file);
-        $actions['i18n_json'] = '<a href="#" ' . $attrs_json . '>' . esc_html__('Generate JSON', 'i18n-404-tools') . '</a>';
+        $actions['i18n_json'] = '<a href="#" ' . $attrs_json . '>' . $logo_img . esc_html__('Generate JSON', 'i18n-404-tools') . '</a>';
         }
         return $actions;
         }, 10, 2);

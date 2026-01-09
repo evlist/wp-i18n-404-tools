@@ -72,8 +72,29 @@ abstract class I18N_404_Command_Base {
      */
     abstract public function run_step( $step, $request );
 
-    /**
-     * Generate a cancel/close button with proper classes from modal-config.php.
+    /**     * Generate modal header with logo.
+     *
+     * @param string $title Optional title text
+     * @return string       HTML for the header with logo
+     */
+    protected function generate_modal_header( $title = '' ) {
+        // Build logo URL using the plugin directory
+        $plugin_dir = dirname( dirname( dirname( __FILE__ ) ) ); // Go up to /i18n-404-tools/
+        $logo_path = $plugin_dir . '/i18n-404-tools/admin/images/logo.svg';
+        $logo_url = esc_url( plugins_url( 'admin/images/logo.svg', $plugin_dir . '/i18n-404-tools/i18n-404-tools.php' ) );
+        
+        $header = '<div class="i18n-modal-header" style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">'
+            . '<img src="' . $logo_url . '" alt="i18n Tools" style="width:48px;height:48px;" />';
+        
+        if ( ! empty( $title ) ) {
+            $header .= '<h3 style="margin:0;font-size:18px;">' . esc_html( $title ) . '</h3>';
+        }
+        
+        $header .= '</div>';
+        return $header;
+    }
+
+    /**     * Generate a cancel/close button with proper classes from modal-config.php.
      *
      * @param string $label              Button label text
      * @param string $additional_classes Optional additional CSS classes
