@@ -1,0 +1,219 @@
+# Copyright (C) 2026 Eric van der Vlist
+# This file is distributed under the GPL-3.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Missing i18n tools 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/i18n-404-tools\n"
+"POT-Creation-Date: 2026-01-09T08:54:58+00:00\n"
+"PO-Revision-Date: 2026-01-09 09:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: Chinese (China)\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: i18n-404-tools\n"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.3.6"
+
+#. Plugin Name of the plugin
+#: i18n-404-tools.php
+msgid "Missing i18n tools"
+msgstr "缺失的 i18n 工具"
+
+#. Plugin URI of the plugin
+#: i18n-404-tools.php
+msgid "https://github.com/evlist/wp-i18n-404-tools"
+msgstr "https://github.com/evlist/wp-i18n-404-tools"
+
+#. Description of the plugin
+#: i18n-404-tools.php
+msgid "A WordPress plugin with missing i18N (internationalization) tools."
+msgstr "一个补足 WordPress i18N（国际化）工具的插件。"
+
+#. Author of the plugin
+#: i18n-404-tools.php
+msgid "Eric van der Vlist"
+msgstr "Eric van der Vlist"
+
+#. Author URI of the plugin
+#: i18n-404-tools.php
+msgid "https://e.vli.st/"
+msgstr "https://e.vli.st/"
+
+#: admin/class-generate-json-command.php:54
+#: admin/class-generate-pot-command.php:108
+msgid "Unknown step."
+msgstr "未知步骤。"
+
+#: admin/class-generate-json-command.php:70
+msgid "No .po translation files found."
+msgstr "未找到 .po 翻译文件。"
+
+#: admin/class-generate-json-command.php:71
+msgid ""
+"Please create translations first (e.g., using Loco Translate or Poedit)."
+msgstr "请先创建翻译（例如使用 Loco Translate 或 Poedit）。"
+
+#: admin/class-generate-json-command.php:72
+#: admin/class-generate-json-command.php:91
+#: admin/class-generate-json-command.php:188
+#: admin/class-generate-json-command.php:263
+#: admin/class-generate-pot-command.php:99
+#: admin/class-generate-pot-command.php:109 i18n-404-tools.php:117
+msgid "Close"
+msgstr "关闭"
+
+#: admin/class-generate-json-command.php:87
+#: admin/class-generate-json-command.php:111
+#: admin/class-generate-json-command.php:127
+msgid "Translation files found:"
+msgstr "找到的翻译文件："
+
+#: admin/class-generate-json-command.php:89
+msgid "JSON files not needed."
+msgstr "无需生成 JSON 文件。"
+
+#: admin/class-generate-json-command.php:90
+msgid "This plugin does not use JavaScript translations (wp.i18n)."
+msgstr "此插件未使用 JavaScript 翻译（wp.i18n）。"
+
+#: admin/class-generate-json-command.php:113
+msgid "No JSON files found. Generate them now?"
+msgstr "未找到 JSON 文件。现在生成吗？"
+
+#: admin/class-generate-json-command.php:115
+msgid "Generate JSON files"
+msgstr "生成 JSON 文件"
+
+#: admin/class-generate-json-command.php:120
+#: admin/class-generate-json-command.php:157
+#: admin/class-generate-json-command.php:167
+#: admin/class-generate-pot-command.php:49
+#: admin/class-generate-pot-command.php:62
+msgid "Cancel"
+msgstr "取消"
+
+#: admin/class-generate-json-command.php:134
+#, php-format
+msgid "%d JSON file is outdated or missing."
+msgid_plural "%d JSON files are outdated or missing."
+msgstr[0] "%d 个 JSON 文件已过期或缺失。"
+
+#: admin/class-generate-json-command.php:144
+msgid "What would you like to do?"
+msgstr "你想要执行什么操作？"
+
+#: admin/class-generate-json-command.php:146
+msgid "Generate outdated JSON files"
+msgstr "生成过期的 JSON 文件"
+
+#: admin/class-generate-json-command.php:152
+msgid "Generate all JSON files"
+msgstr "生成所有 JSON 文件"
+
+#: admin/class-generate-json-command.php:159
+msgid "All JSON files are up to date."
+msgstr "所有 JSON 文件均为最新。"
+
+#: admin/class-generate-json-command.php:160
+msgid "Would you like to regenerate them anyway?"
+msgstr "仍要重新生成吗？"
+
+#: admin/class-generate-json-command.php:162
+msgid "Regenerate all JSON files"
+msgstr "重新生成所有 JSON 文件"
+
+#: admin/class-generate-json-command.php:187
+msgid "No .po files found."
+msgstr "未找到 .po 文件。"
+
+#: admin/class-generate-json-command.php:226
+msgid "JSON files generated successfully!"
+msgstr "JSON 文件生成成功！"
+
+#: admin/class-generate-json-command.php:228
+msgid "Some JSON files failed to generate."
+msgstr "部分 JSON 文件生成失败。"
+
+#: admin/class-generate-json-command.php:253
+#: admin/class-generate-pot-command.php:91
+msgid "Copy output"
+msgstr "复制输出"
+
+#: admin/class-generate-pot-command.php:41
+msgid "A .pot file already exists. Overwrite?"
+msgstr ".pot 文件已存在，要覆盖吗？"
+
+#: admin/class-generate-pot-command.php:43
+msgid "Yes, overwrite"
+msgstr "是，覆盖"
+
+#: admin/class-generate-pot-command.php:55
+msgid "No .pot file exists. Generate now?"
+msgstr "尚未有 .pot 文件。现在生成吗？"
+
+#: admin/class-generate-pot-command.php:57
+msgid "Generate"
+msgstr "生成"
+
+#: admin/class-generate-pot-command.php:82
+msgid "POT file generated successfully!"
+msgstr "POT 文件生成成功！"
+
+#: admin/class-generate-pot-command.php:84
+msgid "Failed to generate POT file."
+msgstr "生成 POT 文件失败。"
+
+#: admin/class-i18n-ajax-router.php:36
+msgid "Unauthorized request."
+msgstr "未授权的请求。"
+
+#: admin/class-i18n-ajax-router.php:47
+msgid "Missing required parameters."
+msgstr "缺少必需的参数。"
+
+#: admin/class-i18n-ajax-router.php:51
+msgid "Unknown command."
+msgstr "未知命令。"
+
+#: admin/class-i18n-ajax-router.php:60
+msgid "Command file not found: "
+msgstr "未找到命令文件："
+
+#: admin/class-i18n-ajax-router.php:65
+msgid "Command class not found after loading file."
+msgstr "加载文件后未找到命令类。"
+
+#: admin/class-i18n-command-base.php:50
+msgid "Plugin not found."
+msgstr "未找到插件。"
+
+#: admin/class-wpcli-updater.php:84
+msgid "WP-CLI was successfully installed."
+msgstr "已成功安装 WP-CLI。"
+
+#: i18n-404-tools.php:81
+msgid "Generate .pot"
+msgstr "生成 .pot"
+
+#: i18n-404-tools.php:84
+msgid "Generate JSON"
+msgstr "生成 JSON"
+
+#: i18n-404-tools.php:113
+msgid "Loading..."
+msgstr "加载中..."
+
+#: i18n-404-tools.php:114
+msgid "Error: No command specified"
+msgstr "错误：未指定命令"
+
+#: i18n-404-tools.php:115
+msgid "Error: Unexpected response from server."
+msgstr "错误：服务器返回了意外响应。"
+
+#: i18n-404-tools.php:116
+msgid "Error: Could not connect to the server. Please try again."
+msgstr "错误：无法连接服务器。请重试。"
