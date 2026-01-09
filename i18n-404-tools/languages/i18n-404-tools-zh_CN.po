@@ -1,5 +1,5 @@
-# Copyright (C) 2026 Eric van der Vlist
-# This file is distributed under the GPL-3.0+.
+# SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+# SPDX-License-Identifier: GPL-3.0-or-later
 msgid ""
 msgstr ""
 "Project-Id-Version: Missing i18n tools 1.0.0\n"
