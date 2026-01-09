@@ -18,7 +18,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Missing i18n tools
- * Plugin URI:        https://https://github.com/evlist/wp-i18n-404-tools
+ * Plugin URI:        https://github.com/evlist/wp-i18n-404-tools
  * Description:       A WordPress plugin with missing i18N (internationalization) tools.
  * Version:           1.0.0
  * Author:            Eric van der Vlist
@@ -107,6 +107,7 @@ add_action('admin_enqueue_scripts', function($hook) {
                 'I18n404ToolsConfig',
                 [
                 'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce'    => wp_create_nonce('i18n_404_tools_action'),
                 'ui'      => $i18n404tools_modal_config,
                 'i18n'    => [
                         'loading'           => __('Loading...', 'i18n-404-tools'),

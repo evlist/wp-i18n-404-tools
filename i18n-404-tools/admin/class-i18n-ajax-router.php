@@ -29,10 +29,15 @@ class I18N_404_Ajax_Router {
 
     public function __construct() {
         add_action('wp_ajax_i18n_404_tools_command', [ $this, 'handle_ajax' ]);
-        add_action('wp_ajax_nopriv_i18n_404_tools_command', [ $this, 'handle_ajax' ]);
     }
 
     public function handle_ajax() {
+        if ( ! current_user_can('manage_options') ) {
+            wp_send_json_error(['message' => __('Unauthorized request.', 'i18n-404-tools')], 403);
+        }
+
+        check_ajax_referer('i18n_404_tools_action');
+
         $plugin_slug = isset($_POST['plugin']) ? sanitize_text_field($_POST['plugin']) : '';
         $command     = isset($_POST['command']) ? sanitize_key($_POST['command']) : '';
         $step        = isset($_POST['step']) ? sanitize_key($_POST['step']) : '';
