@@ -17,7 +17,14 @@ What’s in the scion (high level)
 - .vscode/ — editor configuration, snippets and stubs (template-managed)
 - docs/ — scion-maintainer docs (upgrade guides, internals)
 - assets/ — icons and images used in the scion docs
+Development tools (installed in container)
+- **Web stack**: Apache, MariaDB, PHP (with Xdebug)
+- **WordPress**: WP-CLI for command-line WordPress management
+- **Code quality**: Composer, PHP_CodeSniffer (phpcs) with WordPress Coding Standards
+- **DevOps**: GitHub CLI (gh), REUSE tool for license compliance
+- **Common utilities**: curl, jq, less, unzip
 
+PHP extensions: php-mysql, php-xml, php-mbstring, php-curl, php-zip, php-xdebug
 Scion structure (short)
 ```
 .devcontainer/

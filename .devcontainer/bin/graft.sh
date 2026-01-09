@@ -664,17 +664,18 @@ if [ "$DRY_RUN" != "true" ]; then
     grep -Fxq ".vscode/*.bak.*" ".gitignore" || gitignore_missing=true
     grep -Fxq ".devcontainer/tmp/" ".gitignore" || gitignore_missing=true
     grep -Fxq ".devcontainer/var/" ".gitignore" || gitignore_missing=true
+    grep -Fxq ".composer/" ".gitignore" || gitignore_missing=true
   fi
   
   if [ "$gitignore_missing" = "true" ]; then
     if [ "$NON_INTERACTIVE" = "true" ]; then
       info "Non-interactive mode: automatically appending recommended .gitignore entries."
       ensure_gitignore_line() { local line="$1"; [ -f ".gitignore" ] || touch ".gitignore"; grep -Fxq "$line" ".gitignore" || printf '%s\n' "$line" >> ".gitignore"; }
-      ensure_gitignore_line ".vscode/*.bak.*"; ensure_gitignore_line ".devcontainer/tmp/"; ensure_gitignore_line ".devcontainer/var/"
+      ensure_gitignore_line ".vscode/*.bak.*"; ensure_gitignore_line ".devcontainer/tmp/"; ensure_gitignore_line ".devcontainer/var/"; ensure_gitignore_line ".composer/"
     else
       if prompt_confirm "Append recommended .gitignore entries for graft scion snapshots and temp dirs?" yes; then
         ensure_gitignore_line() { local line="$1"; [ -f ".gitignore" ] || touch ".gitignore"; grep -Fxq "$line" ".gitignore" || printf '%s\n' "$line" >> ".gitignore"; }
-        ensure_gitignore_line ".vscode/*.bak.*"; ensure_gitignore_line ".devcontainer/tmp/"; ensure_gitignore_line ".devcontainer/var/"
+        ensure_gitignore_line ".vscode/*.bak.*"; ensure_gitignore_line ".devcontainer/tmp/"; ensure_gitignore_line ".devcontainer/var/"; ensure_gitignore_line ".composer/"
         info ".gitignore updated with recommended entries."
       fi
     fi
