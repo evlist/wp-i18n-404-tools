@@ -3,3 +3,4 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 wp language core install fr_FR
+wp language core install zh_CN
