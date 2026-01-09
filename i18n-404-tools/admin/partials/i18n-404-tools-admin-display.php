@@ -1,11 +1,13 @@
 <?php
-
-// SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+/**
+ * SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * @package I18n_404_Tools
+ */
 
 /**
- * Provide a admin area view for the plugin
+ * Provide a admin area view for the plugin.
  *
  * This file is used to markup the admin-facing aspects of the plugin.
  *

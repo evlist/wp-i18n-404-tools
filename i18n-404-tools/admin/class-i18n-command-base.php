@@ -22,36 +22,60 @@ require_once __DIR__ . '/class-wpcli-updater.php';
  */
 abstract class I18N_404_Command_Base {
 
-	/** @var string Plugin file slug (e.g., hello-dolly/hello.php) */
+	/**
+	 * Plugin file slug.
+	 *
+	 * @var string Plugin file slug (e.g., hello-dolly/hello.php)
+	 */
 	protected $plugin;
 
-	/** @var string Full path to the plugin main file */
+	/**
+	 * Full path to the plugin main file.
+	 *
+	 * @var string Full path to the plugin main file
+	 */
 	protected $plugin_path;
 
-	/** @var string Directory containing the plugin */
+	/**
+	 * Directory containing the plugin.
+	 *
+	 * @var string Directory containing the plugin
+	 */
 	protected $plugin_dir;
 
-	/** @var string Directory for languages/ */
+	/**
+	 * Directory for languages.
+	 *
+	 * @var string Directory for languages/
+	 */
 	protected $languages_dir;
 
-	/** @var string Text domain (guessed from plugin main file) */
+	/**
+	 * Text domain.
+	 *
+	 * @var string Text domain (guessed from plugin main file)
+	 */
 	protected $domain;
 
-	/** @var string Full path to the .pot file */
+	/**
+	 * Full path to the .pot file.
+	 *
+	 * @var string Full path to the .pot file
+	 */
 	protected $pot_path;
 
 	/**
 	 * Set up context for the command.
 	 *
-	 * @param string $plugin The plugin file slug (e.g. hello-dolly/hello.php)
-	 * @throws Exception If plugin is missing or paths are invalid
+	 * @param string $plugin The plugin file slug (e.g. hello-dolly/hello.php).
+	 * @throws Exception If plugin is missing or paths are invalid.
 	 */
 	public function __construct( $plugin ) {
 		$this->plugin      = sanitize_text_field( $plugin );
 		$this->plugin_path = WP_PLUGIN_DIR . '/' . $this->plugin;
 
 		if ( ! file_exists( $this->plugin_path ) ) {
-			throw new Exception( __( 'Plugin not found.', 'i18n-404-tools' ) );
+			throw new Exception( esc_html__( 'Plugin not found.', 'i18n-404-tools' ) );
 		}
 
 		$this->plugin_dir    = dirname( $this->plugin_path );
@@ -59,6 +83,7 @@ abstract class I18N_404_Command_Base {
 
 		if ( ! is_dir( $this->languages_dir ) ) {
 			// Attempt to create the languages dir, but ignore errors.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
 			@mkdir( $this->languages_dir, 0775, true );
 		}
 
@@ -70,20 +95,20 @@ abstract class I18N_404_Command_Base {
 	 * Entrypoint for command execution.
 	 * Must be implemented by child classes.
 	 *
-	 * @param string $step    The sub-action/step to perform (e.g. 'check', 'generate')
-	 * @param array  $request Full request (usually $_POST)
-	 * @return array          Result data for Ajax response
+	 * @param string $step    The sub-action/step to perform (e.g. 'check', 'generate').
+	 * @param array  $request Full request (usually $_POST).
+	 * @return array          Result data for Ajax response.
 	 */
 	abstract public function run_step( $step, $request );
 
 	/**     * Generate modal header with logo.
 	 *
-	 * @param string $title Optional title text
-	 * @return string       HTML for the header with logo
+	 * @param string $title Optional title text.
+	 * @return string       HTML for the header with logo.
 	 */
 	protected function generate_modal_header( $title = '' ) {
 		// Build logo URL using the plugin directory.
-		$plugin_dir = dirname( dirname( __DIR__ ) ); // Go up to /i18n-404-tools/
+		$plugin_dir = dirname( dirname( __DIR__ ) ); // Go up to /i18n-404-tools/.
 		$logo_path  = $plugin_dir . '/i18n-404-tools/admin/images/logo.svg';
 		$logo_url   = esc_url( plugins_url( 'admin/images/logo.svg', $plugin_dir . '/i18n-404-tools/i18n-404-tools.php' ) );
 
@@ -100,14 +125,14 @@ abstract class I18N_404_Command_Base {
 
 	/**     * Generate a cancel/close button with proper classes from modal-config.php.
 	 *
-	 * @param string $label              Button label text
-	 * @param string $additional_classes Optional additional CSS classes
-	 * @return string                    HTML for the cancel button
+	 * @param string $label              Button label text.
+	 * @param string $additional_classes Optional additional CSS classes.
+	 * @return string                    HTML for the cancel button.
 	 */
 	protected function generate_cancel_button( $label, $additional_classes = '' ) {
 		global $i18n404tools_modal_config;
 
-		// Ensure modal config is loaded
+		// Ensure modal config is loaded.
 		if ( ! isset( $i18n404tools_modal_config ) ) {
 			require_once __DIR__ . '/modal-config.php';
 		}
@@ -125,17 +150,17 @@ abstract class I18N_404_Command_Base {
 	/**
 	 * Generate an action button with proper classes and data attributes from modal-config.php.
 	 *
-	 * @param string $label              Button label text
-	 * @param string $command            Command name for the action
-	 * @param string $step               Step name for the action
-	 * @param string $additional_classes Optional additional CSS classes
-	 * @param array  $additional_attrs   Optional additional data attributes
-	 * @return string                    HTML for the action button
+	 * @param string $label              Button label text.
+	 * @param string $command            Command name for the action.
+	 * @param string $step               Step name for the action.
+	 * @param string $additional_classes Optional additional CSS classes.
+	 * @param array  $additional_attrs   Optional additional data attributes.
+	 * @return string                    HTML for the action button.
 	 */
 	protected function generate_action_button( $label, $command, $step, $additional_classes = '', $additional_attrs = array() ) {
 		global $i18n404tools_modal_config;
 
-		// Ensure modal config and helpers are loaded
+		// Ensure modal config and helpers are loaded.
 		if ( ! isset( $i18n404tools_modal_config ) ) {
 			require_once __DIR__ . '/modal-config.php';
 		}
@@ -161,15 +186,15 @@ abstract class I18N_404_Command_Base {
 	 * - String keys with null values become flags (--foo).
 	 * - String keys with values become options (--foo="bar").
 	 *
-	 * @param string $subcommand E.g., 'i18n make-pot'
+	 * @param string $subcommand E.g., 'i18n make-pot'.
 	 * @param array  $args       Command arguments and flags.
 	 * @param string $cwd        Optional working directory.
-	 * @return array             ['stdout' => ..., 'stderr' => ..., 'exit_code' => ...]
+	 * @return array             ['stdout' => ..., 'stderr' => ..., 'exit_code' => ...].
 	 */
 	protected function run_wp_cli_command( $subcommand, array $args = array(), $cwd = null ) {
-		// Use the predefined PHP binary if available, fallback to PHP_BINARY
-		// Use constant() to avoid intelephense warnings about undefined constants
-		$php_path = constant( 'WP_CLI_PHP_BINARY' ) ?: PHP_BINARY;
+		// Use the predefined PHP binary if available, fallback to PHP_BINARY.
+		// Use constant() to avoid intelephense warnings about undefined constants.
+		$php_path = defined( 'WP_CLI_PHP_BINARY' ) && WP_CLI_PHP_BINARY ? constant( 'WP_CLI_PHP_BINARY' ) : PHP_BINARY;
 
 		// Get the WP-CLI phar path from updater class.
 		$wp_cli_phar = I18n_404_Tools_WPCLI_Updater::get_phar_path();
@@ -179,7 +204,7 @@ abstract class I18N_404_Command_Base {
 			escapeshellarg( $wp_cli_phar ),
 		);
 
-		// Add the subcommand (e.g. 'i18n make-pot' -> ['i18n', 'make-pot'])
+		// Add the subcommand (e.g. 'i18n make-pot' -> ['i18n', 'make-pot']).
 		foreach ( explode( ' ', $subcommand ) as $part ) {
 			$cmd_parts[] = escapeshellcmd( $part );
 		}
@@ -187,26 +212,26 @@ abstract class I18N_404_Command_Base {
 		// Add arguments and flags.
 		foreach ( $args as $key => $value ) {
 			if ( is_int( $key ) ) {
-				// Positional argument
+				// Positional argument.
 				$cmd_parts[] = escapeshellarg( $value );
+			} elseif ( is_null( $value ) ) {
+				// Option or flag.
+				$cmd_parts[] = '--' . escapeshellcmd( $key );
 			} else {
-				// Option or flag
-				if ( is_null( $value ) ) {
-					$cmd_parts[] = '--' . escapeshellcmd( $key );
-				} else {
-					$cmd_parts[] = '--' . escapeshellcmd( $key ) . '=' . escapeshellarg( $value );
-				}
+				// Option with value.
+				$cmd_parts[] = '--' . escapeshellcmd( $key ) . '=' . escapeshellarg( $value );
 			}
 		}
 
 		$cmd = implode( ' ', $cmd_parts );
 
 		$descriptorspec = array(
-			1 => array( 'pipe', 'w' ), // stdout
-			2 => array( 'pipe', 'w' ), // stderr
+			1 => array( 'pipe', 'w' ), // stdout.
+			2 => array( 'pipe', 'w' ), // stderr.
 		);
 
-		$process = proc_open( $cmd, $descriptorspec, $pipes, $cwd ?: null );
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_proc_open -- Required for WP-CLI execution.
+		$process = proc_open( $cmd, $descriptorspec, $pipes, $cwd ? $cwd : null );
 
 		if ( is_resource( $process ) ) {
 			$stdout = stream_get_contents( $pipes[1] );

@@ -141,10 +141,10 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			. $po_list;
 
 		if ( $has_outdated ) {
-			// Translators: %d is the number of JSON files that are outdated or missing.
 			$outdated_count = count( $json_status['outdated'] );
 			$html          .= '<p>'
 				. sprintf(
+					// Translators: %d is the number of JSON files that are outdated or missing.
 					_n(
 						'%d JSON file is outdated or missing.',
 						'%d JSON files are outdated or missing.',
@@ -189,8 +189,8 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 	/**
 	 * Generate JSON files.
 	 *
-	 * @param bool $generate_all Whether to generate all files or only outdated ones
-	 * @return array Response with HTML content
+	 * @param bool $generate_all Whether to generate all files or only outdated ones.
+	 * @return array Response with HTML content.
 	 */
 	protected function generate_json_files( $generate_all ) {
 		$po_files = $this->get_po_files();
@@ -254,7 +254,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 		}
 		$html .= '</div>';
 
-		// Show command output
+		// Show command output.
 		$combined_output = '';
 		foreach ( $results as $result ) {
 			if ( ! empty( $result['output'] ) ) {
@@ -298,8 +298,8 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 	/**
 	 * Get JSON file status for given .po files.
 	 *
-	 * @param array $po_files List of .po file paths
-	 * @return array Status array with 'existing' and 'outdated' keys
+	 * @param array $po_files List of .po file paths.
+	 * @return array Status array with 'existing' and 'outdated' keys.
 	 */
 	protected function get_json_status( $po_files ) {
 		$existing = array();
@@ -308,19 +308,19 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 		foreach ( $po_files as $po_file ) {
 			$po_basename = basename( $po_file, '.po' );
 
-			// Look for JSON files matching this locale
-			// Format: domain-locale-hash.json
+			// Look for JSON files matching this locale.
+			// Format: domain-locale-hash.json.
 			$json_pattern = $this->languages_dir . '/' . $po_basename . '-*.json';
 			$json_files   = glob( $json_pattern );
 
 			if ( empty( $json_files ) ) {
-				// No JSON files for this .po file
+				// No JSON files for this .po file.
 				$outdated[] = $po_file;
 			} else {
 				$existing = array_merge( $existing, $json_files );
 
-				// Check if any JSON file is older than the .po file
-				$po_mtime       = filemtime( $po_file );
+				// Check if any JSON file is older than the .po file.
+				$po_mtime       = @filemtime( $po_file );
 				$all_up_to_date = true;
 
 				foreach ( $json_files as $json_file ) {
@@ -355,8 +355,9 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			return false;
 		}
 
-		// Look for wp.i18n usage patterns in JavaScript files
+		// Look for wp.i18n usage patterns in JavaScript files.
 		foreach ( $js_files as $js_file ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file reading.
 			$content = @file_get_contents( $js_file );
 			if ( false === $content ) {
 				continue;
@@ -374,8 +375,8 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 	/**
 	 * Find all JavaScript files in a directory.
 	 *
-	 * @param string $dir Directory to search
-	 * @return array List of JavaScript file paths
+	 * @param string $dir Directory to search.
+	 * @return array List of JavaScript file paths.
 	 */
 	protected function find_js_files( $dir ) {
 		$js_files = array();
