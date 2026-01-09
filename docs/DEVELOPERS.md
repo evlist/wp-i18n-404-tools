@@ -210,3 +210,75 @@ It should be possible to integrate AI APIs (OpenAI, Anthropic, Google Gemini, Mi
 - Open issues and PRs on the repository.
 - Describe changes clearly and include steps to verify.
 - Mind i18n consistency and permissions in the dev container.
+
+---
+
+## 🚀 Repository structure: GitHub vs WordPress.org
+
+### GitHub repository layout
+This repository serves **developers** working on the plugin itself. It includes documentation, dev tools, and the plugin source:
+
+```
+wp-i18n-404-tools/              ← GitHub repo root
+├── README.md                    ← For GitHub (developers)
+├── composer.json                ← Dev dependencies
+├── docs/                        ← Developer docs (DEVELOPERS.md, FAQ.md, etc.)
+├── scripts/                     ← Bootstrap scripts
+├── assets/                      ← Plugin icons & banners (for WP.org)
+│   ├── icon-128x128.png
+│   ├── icon-256x256.png
+│   ├── banner-772x250.png
+│   └── banner-1544x500.png
+└── plugin/                      ← The WordPress plugin itself
+    ├── i18n-404-tools.php
+    ├── README.txt               ← For WordPress.org users
+    ├── uninstall.php
+    ├── admin/
+    ├── languages/
+    └── ...
+```
+
+### WordPress.org plugin directory structure
+When published, only the **plugin folder** and **assets** are submitted via SVN:
+
+```
+i18n-404-tools/                 ← WordPress.org SVN repo
+├── trunk/                       ← Development version
+│   ├── i18n-404-tools.php
+│   ├── README.txt
+│   ├── uninstall.php
+│   ├── admin/
+│   ├── languages/
+│   └── ...
+├── tags/
+│   └── 1.0.0/                   ← Release tags (tagged versions)
+│       └── (copy of trunk at release time)
+└── assets/                      ← Plugin icons & banners
+    ├── icon-128x128.png
+    ├── icon-256x256.png
+    ├── banner-772x250.png
+    └── banner-1544x500.png
+```
+
+### What goes where
+
+| File/Folder | GitHub | WordPress.org | Notes |
+|---|---|---|---|
+| `README.md` | ✅ Root | ❌ Not used | For developers on GitHub |
+| `docs/` | ✅ Root | ❌ Not used | Developer documentation |
+| `composer.json` | ✅ Root | ❌ Not used | Dev tools only |
+| `plugin/` | ✅ Root | ✅ Becomes `/trunk/` | The actual WordPress plugin |
+| `README.txt` | ✅ In plugin | ✅ In `/trunk/` | Plugin description for users |
+| `assets/` | ✅ Root | ✅ `/assets/` | Icons, banners, screenshots |
+
+### Publication workflow
+
+1. **Develop locally** in this GitHub repository (`plugin/` folder)
+2. **Tag a release** (e.g., `v1.0.0`)
+3. **Submit to WordPress.org** via SVN:
+   - Copy `plugin/` contents → `wp.org/trunk/`
+   - Copy `assets/` → `wp.org/assets/`
+   - Create a tag (e.g., `wp.org/tags/1.0.0/`)
+4. **Users install** from WordPress.org directory
+
+The GitHub repository is your **development hub**; WordPress.org is your **distribution channel**.
