@@ -1,4 +1,11 @@
 <?xml version="1.0"?>
+
+<!--
+SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 <ruleset name="I18n 404 Tools">
 	<description>WordPress Coding Standards for I18n 404 Tools plugin</description>
 
