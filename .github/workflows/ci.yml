@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: json
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Configure PHPCS standards
+        run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp
+
+      - name: PHP syntax check
+        run: |
+          find i18n-404-tools -name "*.php" ! -path "*/vendor/*" -print0 | xargs -0 -n1 php -l
+
+      - name: PHPCS
+        run: vendor/bin/phpcs --standard=phpcs.xml
+
+      - name: Install REUSE
+        run: pip install --no-cache-dir reuse
+
+      - name: REUSE lint
+        run: reuse lint

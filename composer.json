@@ -1,7 +1,10 @@
 {
   "name": "evlist/wp-i18n-404-tools",
   "require-dev": {
-    "php-stubs/wordpress-stubs": "^6.0"
+    "php-stubs/wordpress-stubs": "^6.0",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "squizlabs/php_codesniffer": "^3.10",
+    "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
     "vendor-dir": "vendor"
