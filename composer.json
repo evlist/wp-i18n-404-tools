@@ -7,6 +7,9 @@
     "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
-    "vendor-dir": "vendor"
+    "vendor-dir": "vendor",
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   }
 }

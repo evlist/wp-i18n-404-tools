@@ -22,7 +22,6 @@ i18n-404-tools/admin/bin/
 
 # Composer dependencies
 vendor/
-composer.lock
 .vscode/*.bak.*
 .devcontainer/tmp/
 .devcontainer/var/
