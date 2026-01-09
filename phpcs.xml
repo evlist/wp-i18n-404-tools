@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<ruleset name="I18n 404 Tools">
+	<description>WordPress Coding Standards for I18n 404 Tools plugin</description>
+
+	<!-- What to scan -->
+	<file>./i18n-404-tools</file>
+
+	<!-- Exclude patterns -->
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/bin/*</exclude-pattern>
+	<exclude-pattern>*.js</exclude-pattern>
+	<exclude-pattern>*.css</exclude-pattern>
+
+	<!-- Show progress -->
+	<arg value="ps"/>
+	<!-- Show sniff codes in all reports -->
+	<arg value="ns"/>
+	<!-- Use colors in output -->
+	<arg name="colors"/>
+
+	<!-- WordPress Coding Standards -->
+	<rule ref="WordPress">
+		<!-- Exclude filename rules - we use WordPress plugin conventions -->
+		<exclude name="WordPress.Files.FileName"/>
+		<!-- Allow system functions for WP-CLI operations -->
+		<exclude name="WordPress.WP.AlternativeFunctions"/>
+	</rule>
+
+	<!-- WordPress-Core rules -->
+	<rule ref="WordPress-Core"/>
+
+	<!-- WordPress-Docs rules -->
+	<rule ref="WordPress-Docs"/>
+
+	<!-- WordPress-Extra rules -->
+	<rule ref="WordPress-Extra"/>
+
+	<!-- Check for PHP cross-version compatibility -->
+	<config name="testVersion" value="7.4-"/>
+	
+	<!-- Rules: Check PHP version compatibility -->
+	<rule ref="PHPCompatibilityWP"/>
+</ruleset>

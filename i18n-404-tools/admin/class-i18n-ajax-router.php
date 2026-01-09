@@ -47,7 +47,7 @@ class I18N_404_Ajax_Router {
 			wp_send_json_error( array( 'message' => __( 'Unauthorized request.', 'i18n-404-tools' ) ), 403 );
 		}
 
-		check_ajax_referer( 'i18n_404_tools_action' );
+		check_ajax_referer( 'i18n_404_tools_action', '_ajax_nonce' );
 
 		$plugin_slug = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
 		$command     = isset( $_POST['command'] ) ? sanitize_key( wp_unslash( $_POST['command'] ) ) : '';
