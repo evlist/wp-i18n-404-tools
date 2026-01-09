@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      - name: Validate plugin structure
+        run: bash scripts/validate-plugin.sh
+
       - name: PHP syntax check
         run: |
           find i18n-404-tools -name "*.php" ! -path "*/vendor/*" -print0 | xargs -0 -n1 php -l
