@@ -164,7 +164,8 @@ abstract class I18N_404_Command_Base {
      */
     protected function run_wp_cli_command( $subcommand, array $args = [], $cwd = null ) {
         // Use the predefined PHP binary if available, fallback to PHP_BINARY
-        $php_path = defined( 'WP_CLI_PHP_BINARY' ) ? WP_CLI_PHP_BINARY : PHP_BINARY;
+        // Use constant() to avoid intelephense warnings about undefined constants
+        $php_path = constant( 'WP_CLI_PHP_BINARY' ) ?: PHP_BINARY;
 
         // Get the WP-CLI phar path from updater class
         $wp_cli_phar = I18n_404_Tools_WPCLI_Updater::get_phar_path();
