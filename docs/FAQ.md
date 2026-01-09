@@ -24,3 +24,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 - **How do I add a new command?**
   Create a class extending the base command, register it in the AJAX router, and expose it via the plugin action links to open the modal (see docs/DEVELOPERS.md).
+
+- **Why does this plugin rely on WP‑CLI (shell execution)? Is it safe?**
+  [WP‑CLI](https://wp-cli.org/) is the canonical tool for extracting strings ([`make-pot`](https://developer.wordpress.org/cli/commands/i18n/make-pot/)) and generating JS translation JSON ([`make-json`](https://developer.wordpress.org/cli/commands/i18n/make-json/)). The plugin wraps these commands to offer a one‑click admin experience. Security measures include: only admins can trigger actions; all inputs are sanitized/escaped; and AJAX requests must be nonce‑protected. On hardened hosts, ensure only trusted admins can access wp‑admin, and keep the server up to date.
+
+- **PHP configuration requirements to run WP‑CLI from PHP?**
+  The server must allow process execution. Typical requirements:
+  - [`proc_open()`](https://www.php.net/proc_open) and/or [`exec()`](https://www.php.net/exec) not listed in [`disable_functions`](https://www.php.net/manual/en/ini.core.php#ini.disable-functions)
+  - [`open_basedir`](https://www.php.net/manual/en/ini.core.php#ini.open-basedir) must allow the plugin path and temp directories
+  - Sufficient memory/time limits for running `php wp-cli.phar`
+  - Outbound HTTP allowed if the PHAR is downloaded at runtime
+  If your host blocks these, run WP‑CLI via SSH/cron instead, or use Loco Translate for `.po/.mo` management and skip the JSON step if your JS doesn’t use `wp.i18n`.

@@ -166,6 +166,18 @@ Result:
 
 ---
 
+## 🧩 Runtime requirements (servers)
+To execute WP‑CLI from PHP, hosting must allow limited process execution. Typical requirements:
+
+- PHP functions: [`proc_open()`](https://www.php.net/proc_open) and/or [`exec()`](https://www.php.net/exec) not listed in [`disable_functions`](https://www.php.net/manual/en/ini.core.php#ini.disable-functions)
+- [`open_basedir`](https://www.php.net/manual/en/ini.core.php#ini.open-basedir) must allow the plugin path and temp directories
+- Reasonable `memory_limit` and `max_execution_time` for `php wp-cli.phar`
+- Outbound HTTP allowed if `wp-cli.phar` is downloaded at runtime (this plugin can bundle/manage the PHAR locally)
+
+References:
+- WP‑CLI site: https://wp-cli.org/
+- WP‑CLI i18n commands: [`make-pot`](https://developer.wordpress.org/cli/commands/i18n/make-pot/), [`make-json`](https://developer.wordpress.org/cli/commands/i18n/make-json/)
+
 ## 🪟 Admin UI Flow
 - Plugin list row includes “Generate .pot” and “Generate JSON”.
 - Clicking opens a modal (HTML via command classes and `modal-config.php`).
