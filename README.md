@@ -31,3 +31,9 @@ See [docs/DEVELOPERS.md](docs/DEVELOPERS.md) for architecture and the i18n workf
 
 See [docs/FAQ.md](docs/FAQ.md).
 
+
+## ⬇️ Downloads
+
+- Nightly ZIP: available on the repository Releases page under the pre‑release tagged `nightly`. It is updated automatically on every push.
+- Workflow artifact: from the latest Actions run, download the `plugin-zip` artifact (transient; expires after ~90 days).
+

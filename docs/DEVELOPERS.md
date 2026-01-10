@@ -307,10 +307,15 @@ The GitHub repository is your **development hub**; WordPress.org is your **distr
 
 - On every push to `main`, GitHub Actions builds an installable ZIP artifact containing only the `i18n-404-tools/` folder.
 - On a published GitHub Release, the same ZIP is automatically attached to the release assets.
+- On a regular push to `main`, a persistent "Nightly" pre-release (tag `nightly`) is updated with the ZIP, so you can download it from the Releases page without creating a full release.
 
 Workflow:
 - See [.github/workflows/plugin-zip.yml](.github/workflows/plugin-zip.yml).
 - Local build script: [scripts/build-plugin-zip.sh](scripts/build-plugin-zip.sh) creates `dist/i18n-404-tools.zip`.
+
+Download options:
+- Actions → open run → Artifacts → `plugin-zip` (transient, expires after ~90 days).
+- Releases → `Nightly` pre-release → download `i18n-404-tools.zip` (persistent across pushes).
 
 Manual run locally:
 ```bash
