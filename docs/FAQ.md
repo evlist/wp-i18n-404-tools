@@ -35,3 +35,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
   - Sufficient memory/time limits for running `php wp-cli.phar`
   - Outbound HTTP allowed if the PHAR is downloaded at runtime
   If your host blocks these, run WP‑CLI via SSH/cron instead, or use Loco Translate for `.po/.mo` management and skip the JSON step if your JS doesn’t use `wp.i18n`.
+
+- **Host compatibility: Do I need to install WP‑CLI myself?**
+  No. The plugin automatically downloads and manages a local `wp-cli.phar` into `/wp-content/uploads/i18n-404-tools/`, and writes an `.htaccess` to prevent direct access to `.phar`/`.htaccess`. Your hosting must allow `shell_exec()` for the plugin to execute this local PHAR. If `shell_exec()` is disabled, contact your provider to enable it or use a host that supports WP‑CLI execution. This keeps installation hands‑free while ensuring secure, local execution.

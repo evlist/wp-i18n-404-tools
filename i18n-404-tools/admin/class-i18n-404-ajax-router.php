@@ -28,8 +28,8 @@ class I18N_404_Ajax_Router {
 	 */
 	protected $commands = array(
 		// Example mapping: command => [ class name, file name ].
-		'generate_pot'  => array( 'I18N_404_Generate_Pot_Command', 'class-generate-pot-command.php' ),
-		'generate_json' => array( 'I18N_404_Generate_JSON_Command', 'class-generate-json-command.php' ),
+		'generate_pot'  => array( 'I18N_404_Generate_Pot_Command', 'class-i18n-404-generate-pot-command.php' ),
+		'generate_json' => array( 'I18N_404_Generate_JSON_Command', 'class-i18n-404-generate-json-command.php' ),
 	);
 
 	/**
@@ -86,6 +86,8 @@ class I18N_404_Ajax_Router {
 				wp_send_json_success( $result );
 			}
 		} catch ( Exception $e ) {
+			wp_send_json_error( array( 'message' => $e->getMessage() ) );
+		} catch ( Throwable $e ) {
 			wp_send_json_error( array( 'message' => $e->getMessage() ) );
 		}
 		wp_die();

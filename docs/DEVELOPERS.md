@@ -38,11 +38,11 @@ Notes:
 i18n-404-tools/
   i18n-404-tools.php           # Main plugin bootstrap
   admin/
-    class-generate-pot-command.php
-    class-generate-json-command.php
-    class-i18n-ajax-router.php
-    class-i18n-command-base.php
-    class-wpcli-updater.php
+    class-i18n-404-generate-pot-command.php
+    class-i18n-404-generate-json-command.php
+    class-i18n-404-ajax-router.php
+    class-i18n-404-command-base.php
+    class-i18n-404-tools-wpcli-updater.php
     helpers.php, modal-config.php
     js/i18n-404-tools-modal.js
     css/i18n-404-tools-admin.css
@@ -68,26 +68,32 @@ scripts/
 - Loads textdomain and wires admin UI actions.
 - Localizes modal strings for JS via `wp_localize_script()`.
 
-### 🔀 AJAX Router: `admin/class-i18n-ajax-router.php`
+### 🔀 AJAX Router: `admin/class-i18n-404-ajax-router.php`
 - Receives `action=i18n_404_tools_command` requests.
 - Dynamically loads command classes and invokes `run_step()`.
 
-### 🧰 Command Base: `admin/class-i18n-command-base.php`
+### 🧰 Command Base: `admin/class-i18n-404-command-base.php`
 - Resolves plugin paths (`plugin_dir`, `languages_dir`, `pot_path`).
 - Provides helpers to run WP‑CLI subcommands using the bundled PHAR.
 - Generates modal buttons and handles common UI pieces.
 
-### ⬇️ WP‑CLI Updater: `admin/class-wpcli-updater.php`
+### ⬇️ WP‑CLI Updater: `admin/class-i18n-404-tools-wpcli-updater.php`
 - Ensures a working `wp-cli.phar` is available for commands.
 
+#### WP‑CLI management and execution
+- Storage: The plugin downloads `wp-cli.phar` into `/wp-content/uploads/i18n-404-tools/` and writes an `.htaccess` to deny direct access to `.phar`/`.htaccess`.
+- Installation: Handled automatically on activation/first use; no manual WP‑CLI install is required.
+- Execution: The plugin invokes the local PHAR using `PHP_BINARY` and relies on `shell_exec()` to run `php wp-cli.phar ...`. Hosting must allow `shell_exec()`; otherwise, WP‑CLI cannot be executed from the plugin.
+- Versioning: After download, the updater runs `--version` to parse and store the current WP‑CLI version in an option for display/diagnostics.
+
 ### 🛎️ Admin Commands
-- `class-generate-pot-command.php`: Runs `wp i18n make-pot` and shows output.
-- `class-generate-json-command.php`: Checks/creates JS translation JSON when needed.
+- `class-i18n-404-generate-pot-command.php`: Runs `wp i18n make-pot` and shows output.
+- `class-i18n-404-generate-json-command.php`: Checks/creates JS translation JSON when needed.
 
 ### 🧩 Adding a new command
 1. Create a class in `admin/` extending `I18N_404_Command_Base` and implement `run_step( $step, $request )`.
-2. Map the command in `admin/class-i18n-ajax-router.php` (`$commands` array: `command_slug => [ ClassName, file-name.php ]`).
-3. Expose the action in the admin list (e.g., update the `plugin_action_links` filter in `i18n-404-tools.php` using `i18n404tools_action_attrs()` to open the modal).
+2. Map the command in `admin/class-i18n-404-ajax-router.php` (`$commands` array: `command_slug => [ ClassName, file-name.php ]`).
+3. Expose the action in the admin list (e.g., update the `plugin_action_links` filter in `i18n-404-tools.php` using `i18n_404_tools_action_attrs()` to open the modal).
 4. Provide UI text in `modal-config.php`/translations as needed.
 
 ---
@@ -103,7 +109,7 @@ scripts/
 ### Generate POT
 Triggered from the plugin UI (Generate .pot), which runs:
 ```php
-// admin/class-generate-pot-command.php
+// admin/class-i18n-404-generate-pot-command.php
 $this->run_wp_cli_command(
   'i18n make-pot',
   [
@@ -124,7 +130,7 @@ msgfmt -o i18n-404-tools-fr_FR.mo i18n-404-tools-fr_FR.po
 
 ### Generate JSON (JS translations)
 The plugin detects whether JS translations are needed:
-- `admin/class-generate-json-command.php` has `has_javascript_strings()` which scans `.js` files for `wp.i18n.__`, `_x`, etc.
+- `admin/class-i18n-404-generate-json-command.php` has `has_javascript_strings()` which scans `.js` files for `wp.i18n.__`, `_x`, etc.
 - If none are found, the UI displays: “JSON files not needed”.
 - If found, the plugin runs:
 ```php
@@ -140,10 +146,10 @@ Notes:
 
 | Phase | Responsible tool | How | Class / UI |
 | --- | --- | --- | --- |
-| Generate POT | Plugin UI | “Generate .pot” action (runs `wp i18n make-pot`) | `admin/class-generate-pot-command.php` |
+| Generate POT | Plugin UI | "Generate .pot" action (runs `wp i18n make-pot`) | `admin/class-i18n-404-generate-pot-command.php` |
 | Update `.po` | Loco Translate (recommended) or translators | Edit translations in Loco/Poedit | n/a (external) |
 | Generate `.mo` | Loco Translate (auto) or CLI | `wp i18n make-mo` or `msgfmt` | n/a (external) |
-| Generate JSON (if JS uses `wp.i18n`) | Plugin UI | “Generate JSON” (runs `wp i18n make-json --no-purge`) | `admin/class-generate-json-command.php` |
+| Generate JSON (if JS uses `wp.i18n`) | Plugin UI | "Generate JSON" (runs `wp i18n make-json --no-purge`) | `admin/class-i18n-404-generate-json-command.php` |
 
 ### 📝 JavaScript localization options
 

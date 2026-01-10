@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Make sure the WPCLI updater class is loaded.
-require_once __DIR__ . '/class-wpcli-updater.php';
+require_once __DIR__ . '/class-i18n-404-tools-wpcli-updater.php';
 
 /**
  * Abstract base class for i18n-404-tools commands.
@@ -82,9 +82,9 @@ abstract class I18N_404_Command_Base {
 		$this->languages_dir = $this->plugin_dir . '/languages';
 
 		if ( ! is_dir( $this->languages_dir ) ) {
-			// Attempt to create the languages dir, but ignore errors.
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
-			@mkdir( $this->languages_dir, 0775, true );
+			// Attempt to create the languages dir using WordPress helper.
+			// Using wp_mkdir_p avoids error silencing and respects WP standards.
+			wp_mkdir_p( $this->languages_dir );
 		}
 
 		$this->domain   = basename( $this->plugin, '.php' );
@@ -130,14 +130,14 @@ abstract class I18N_404_Command_Base {
 	 * @return string                    HTML for the cancel button.
 	 */
 	protected function generate_cancel_button( $label, $additional_classes = '' ) {
-		global $i18n404tools_modal_config;
+		global $i18n_404_tools_modal_config;
 
 		// Ensure modal config is loaded.
-		if ( ! isset( $i18n404tools_modal_config ) ) {
+		if ( ! isset( $i18n_404_tools_modal_config ) ) {
 			require_once __DIR__ . '/modal-config.php';
 		}
 
-		$classes = array( 'button', $i18n404tools_modal_config['close_class'] );
+		$classes = array( 'button', $i18n_404_tools_modal_config['close_class'] );
 		if ( ! empty( $additional_classes ) ) {
 			$classes[] = $additional_classes;
 		}
@@ -158,17 +158,17 @@ abstract class I18N_404_Command_Base {
 	 * @return string                    HTML for the action button.
 	 */
 	protected function generate_action_button( $label, $command, $step, $additional_classes = '', $additional_attrs = array() ) {
-		global $i18n404tools_modal_config;
+		global $i18n_404_tools_modal_config;
 
 		// Ensure modal config and helpers are loaded.
-		if ( ! isset( $i18n404tools_modal_config ) ) {
+		if ( ! isset( $i18n_404_tools_modal_config ) ) {
 			require_once __DIR__ . '/modal-config.php';
 		}
-		if ( ! function_exists( 'i18n404tools_action_attrs' ) ) {
+		if ( ! function_exists( 'i18n_404_tools_action_attrs' ) ) {
 			require_once __DIR__ . '/helpers.php';
 		}
 
-		$base_attrs = i18n404tools_action_attrs( $command, $this->plugin, $step, $additional_classes );
+		$base_attrs = i18n_404_tools_action_attrs( $command, $this->plugin, $step, $additional_classes );
 
 		$extra_attrs = '';
 		foreach ( $additional_attrs as $attr_name => $attr_value ) {
@@ -192,22 +192,22 @@ abstract class I18N_404_Command_Base {
 	 * @return array             ['stdout' => ..., 'stderr' => ..., 'exit_code' => ...].
 	 */
 	protected function run_wp_cli_command( $subcommand, array $args = array(), $cwd = null ) {
-		// Use the predefined PHP binary if available, fallback to PHP_BINARY.
-		// Use constant() to avoid intelephense warnings about undefined constants.
+		// Use the predefined PHP binary if available, or use system default.
+		// PHP_BINARY is not available in web context (PHP-FPM), so use system default.
 		$wp_cli_php = defined( 'WP_CLI_PHP_BINARY' ) ? constant( 'WP_CLI_PHP_BINARY' ) : '';
-		$php_path   = $wp_cli_php ? $wp_cli_php : PHP_BINARY;
+		$php_path   = $wp_cli_php ? $wp_cli_php : '/usr/bin/php';
 
 		// Get the WP-CLI phar path from updater class.
 		$wp_cli_phar = I18n_404_Tools_WPCLI_Updater::get_phar_path();
 
 		$cmd_parts = array(
-			escapeshellcmd( $php_path ),
+			escapeshellarg( $php_path ),
 			escapeshellarg( $wp_cli_phar ),
 		);
 
 		// Add the subcommand (e.g. 'i18n make-pot' -> ['i18n', 'make-pot']).
 		foreach ( explode( ' ', $subcommand ) as $part ) {
-			$cmd_parts[] = escapeshellcmd( $part );
+			$cmd_parts[] = escapeshellarg( $part );
 		}
 
 		// Add arguments and flags.
@@ -217,27 +217,34 @@ abstract class I18N_404_Command_Base {
 				$cmd_parts[] = escapeshellarg( $value );
 			} elseif ( is_null( $value ) ) {
 				// Option or flag.
-				$cmd_parts[] = '--' . escapeshellcmd( $key );
+				$cmd_parts[] = '--' . $key;
 			} else {
 				// Option with value.
-				$cmd_parts[] = '--' . escapeshellcmd( $key ) . '=' . escapeshellarg( $value );
+				$cmd_parts[] = '--' . $key . '=' . escapeshellarg( $value );
 			}
 		}
 
 		$cmd = implode( ' ', $cmd_parts );
+
+		// Ensure we use ABSPATH as working directory for WP-CLI context.
+		if ( ! $cwd ) {
+			$cwd = ABSPATH;
+		}
 
 		$descriptorspec = array(
 			1 => array( 'pipe', 'w' ), // stdout.
 			2 => array( 'pipe', 'w' ), // stderr.
 		);
 
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_proc_open -- Required for WP-CLI execution.
-		$process = proc_open( $cmd, $descriptorspec, $pipes, $cwd ? $cwd : null );
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_proc_open, Generic.PHP.ForbiddenFunctions.Found -- Required for WP-CLI execution.
+		$process = proc_open( $cmd, $descriptorspec, $pipes, $cwd );
 
 		if ( is_resource( $process ) ) {
 			$stdout = stream_get_contents( $pipes[1] );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for pipe cleanup.
 			fclose( $pipes[1] );
 			$stderr = stream_get_contents( $pipes[2] );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for pipe cleanup.
 			fclose( $pipes[2] );
 			$exit_code = proc_close( $process );
 

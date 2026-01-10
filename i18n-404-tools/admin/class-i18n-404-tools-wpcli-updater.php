@@ -10,13 +10,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
 
 	/**
 	 * WP-CLI Phar Updater Class for i18n-404-tools.
 	 */
 	class I18n_404_Tools_WPCLI_Updater {
-		const BIN_DIR          = 'bin/';
 		const PHAR_FILE        = 'wp-cli.phar';
 		const VERSION_OPTION   = 'i18n_404_tools_wpcli_version';
 		const NOTICE_TRANSIENT = 'i18n_404_tools_wpcli_update_notice';
@@ -28,21 +31,23 @@ if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
 		 * @return string Path to wp-cli.phar.
 		 */
 		public static function get_phar_path() {
-			return plugin_dir_path( __FILE__ ) . self::BIN_DIR . self::PHAR_FILE;
+			$upload_dir = wp_upload_dir();
+			return $upload_dir['basedir'] . '/i18n-404-tools/' . self::PHAR_FILE;
 		}
 
 		/**
 		 * Private: Download and check version. Returns true or error string.
 		 */
 		private function download_phar() {
-			$bin_dir     = plugin_dir_path( __FILE__ ) . self::BIN_DIR;
-			$wp_cli_phar = $bin_dir . self::PHAR_FILE;
-			$htaccess    = $bin_dir . '.htaccess';
+			$upload_dir  = wp_upload_dir();
+			$phar_dir    = $upload_dir['basedir'] . '/i18n-404-tools/';
+			$wp_cli_phar = $phar_dir . self::PHAR_FILE;
+			$htaccess    = $phar_dir . '.htaccess';
 
-			// Ensure bin directory exists.
-			if ( ! file_exists( $bin_dir ) ) {
-				if ( ! wp_mkdir_p( $bin_dir ) ) {
-					return 'Could not create bin/ directory.';
+			// Ensure upload directory exists.
+			if ( ! file_exists( $phar_dir ) ) {
+				if ( ! wp_mkdir_p( $phar_dir ) ) {
+					return 'Could not create uploads/i18n-404-tools/ directory.';
 				}
 			}
 
@@ -55,27 +60,33 @@ if ( ! class_exists( 'I18n_404_Tools_WPCLI_Updater' ) ) {
 			if ( empty( $body ) ) {
 				return 'WP-CLI download failed: Empty file received.';
 			}
+
+			// Write PHAR file directly.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Required for downloading binary PHAR file.
 			if ( file_put_contents( $wp_cli_phar, $body ) === false ) {
 				return 'Failed to write wp-cli.phar file.';
 			}
-			@chmod( $wp_cli_phar, 0755 );
+
+			// Create .htaccess that blocks all access in the directory.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Direct write is acceptable in uploads context.
+			if ( file_put_contents( $htaccess, 'Deny from all' ) === false ) {
+				return 'Failed to create .htaccess protection file.';
+			}
 
 			// Get version.
 			$php_path = PHP_BINARY;
 			$cmd      = escapeshellcmd( "$php_path $wp_cli_phar --version" );
-			$output   = shell_exec( $cmd );
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_shell_exec,WordPress.PHP.DiscouragedFunctions.system_calls_shell_exec -- Required for WP-CLI version detection; shell_exec must be enabled on server.
+			$output = shell_exec( $cmd );
 
 			if (
-			empty( $output ) ||
-			! preg_match( '/WP-CLI(?:\s+version)?\s+([0-9.]+)/i', $output, $matches )
+				empty( $output ) ||
+				! preg_match( '/WP-CLI(?:\s+version)?\s+([0-9.]+)/i', $output, $matches )
 			) {
 				return 'Could not execute wp-cli.phar or retrieve version. Output: ' . esc_html( $output );
 			}
 			$version = trim( $matches[1] );
 			update_option( self::VERSION_OPTION, $version );
-
-			// Secure bin/ for Apache.
-			file_put_contents( $htaccess, "Deny from all\n" );
 
 			return true;
 		}

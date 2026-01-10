@@ -10,6 +10,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Output attributes for a modal action element.
  *
@@ -19,21 +23,21 @@
  * @param string $extra_classes  Optional extra CSS classes.
  * @return string Attribute string.
  */
-function i18n404tools_action_attrs( $command, $plugin, $step = 'check', $extra_classes = '' ) {
-	global $i18n404tools_modal_config; // Assume this is set elsewhere.
+function i18n_404_tools_action_attrs( $command, $plugin, $step = 'check', $extra_classes = '' ) {
+	global $i18n_404_tools_modal_config; // Assume this is set elsewhere.
 	$attrs = array();
 
 	// Class attribute.
-	$classes = array( $i18n404tools_modal_config['action_class'] );
+	$classes = array( $i18n_404_tools_modal_config['action_class'] );
 	if ( $extra_classes ) {
 		$classes[] = $extra_classes;
 	}
 	$attrs[] = 'class="' . esc_attr( implode( ' ', $classes ) ) . '"';
 
 	// Data attributes.
-	$attrs[] = $i18n404tools_modal_config['data_command'] . '="' . esc_attr( $command ) . '"';
-	$attrs[] = $i18n404tools_modal_config['data_plugin'] . '="' . esc_attr( $plugin ) . '"';
-	$attrs[] = $i18n404tools_modal_config['data_step'] . '="' . esc_attr( $step ) . '"';
+	$attrs[] = $i18n_404_tools_modal_config['data_command'] . '="' . esc_attr( $command ) . '"';
+	$attrs[] = $i18n_404_tools_modal_config['data_plugin'] . '="' . esc_attr( $plugin ) . '"';
+	$attrs[] = $i18n_404_tools_modal_config['data_step'] . '="' . esc_attr( $step ) . '"';
 
 	return implode( ' ', $attrs );
 }

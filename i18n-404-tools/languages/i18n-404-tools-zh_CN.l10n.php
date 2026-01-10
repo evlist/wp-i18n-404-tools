@@ -6,6 +6,10 @@
  * @package I18n_404_Tools
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Chinese (Simplified) translation data.
  *

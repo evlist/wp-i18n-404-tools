@@ -6,6 +6,10 @@
  * @package I18n_404_Tools
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Provide a admin area view for the plugin.
  *

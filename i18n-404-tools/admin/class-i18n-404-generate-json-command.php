@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once __DIR__ . '/class-i18n-command-base.php';
+require_once __DIR__ . '/class-i18n-404-command-base.php';
 
 /**
  * Command for generating JSON translation files from .po files for a plugin.

@@ -10,9 +10,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-global $i18n404tools_modal_config;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$i18n404tools_modal_config = array(
+global $i18n_404_tools_modal_config;
+
+$i18n_404_tools_modal_config = array(
 	// CSS classes.
 	'action_class'  => 'i18n-404-tools-action',
 	'overlay_class' => 'i18n-404-tools-modal-overlay',

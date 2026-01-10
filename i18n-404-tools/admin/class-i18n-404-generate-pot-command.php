@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once __DIR__ . '/class-i18n-command-base.php';
+require_once __DIR__ . '/class-i18n-404-command-base.php';
 
 /**
  * Command for generating a .pot file for a plugin (with generic modal HTML output).

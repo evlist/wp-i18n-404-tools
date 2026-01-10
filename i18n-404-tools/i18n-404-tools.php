@@ -23,7 +23,7 @@
  * @package           I18n_404_Tools
  *
  * @wordpress-plugin
- * Plugin Name:       Missing i18n tools
+ * Plugin Name:       Missing i18n Tools
  * Plugin URI:        https://github.com/evlist/wp-i18n-404-tools
  * Description:       A WordPress plugin with missing i18N (internationalization) tools.
  * Version:           1.0.0
@@ -51,25 +51,18 @@ define( 'I18N_404_TOOLS_VERSION', '1.0.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-i18n-404-tools-activator.php
  */
-require_once plugin_dir_path( __FILE__ ) . 'admin/class-wpcli-updater.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-404-tools-wpcli-updater.php';
 
 /**
  * Activate the plugin and download WP-CLI.
  */
-function activate_i18n_404_tools() {
+function i18n_404_tools_activate() {
 	if ( isset( $GLOBALS['i18n_404_tools_wpcli_updater'] ) ) {
 		$GLOBALS['i18n_404_tools_wpcli_updater']->download_phar_with_notice();
 	}
 }
-register_activation_hook( __FILE__, 'activate_i18n_404_tools' );
+register_activation_hook( __FILE__, 'i18n_404_tools_activate' );
 
-// Load translations if available.
-add_action(
-	'plugins_loaded',
-	function () {
-		load_plugin_textdomain( 'i18n-404-tools', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-	}
-);
 
 // Only load base and router for our AJAX requests; router will load command classes dynamically.
 add_action(
@@ -80,8 +73,8 @@ add_action(
 			isset( $_REQUEST['action'] ) && 'i18n_404_tools_command' === $_REQUEST['action'] &&
 			isset( $_REQUEST['_ajax_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_ajax_nonce'] ) ), 'i18n_404_tools_action' )
 			) {
-			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-command-base.php';
-			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-ajax-router.php';
+			require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-404-command-base.php';
+					require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-404-ajax-router.php';
 			new I18N_404_Ajax_Router();
 		}
 	}
@@ -98,10 +91,10 @@ add_filter(
 
 			$logo_img = '<img src="' . esc_url( plugins_url( 'admin/images/logo.svg', __FILE__ ) ) . '" alt="" style="height:16px;width:16px;margin-right:5px;vertical-align:-2px;" />';
 
-			$attrs_pot           = i18n404tools_action_attrs( 'generate_pot', $plugin_file );
+			$attrs_pot           = i18n_404_tools_action_attrs( 'generate_pot', $plugin_file );
 			$actions['i18n_pot'] = '<a href="#" ' . $attrs_pot . '>' . $logo_img . esc_html__( 'Generate .pot', 'i18n-404-tools' ) . '</a>';
 
-			$attrs_json           = i18n404tools_action_attrs( 'generate_json', $plugin_file );
+			$attrs_json           = i18n_404_tools_action_attrs( 'generate_json', $plugin_file );
 			$actions['i18n_json'] = '<a href="#" ' . $attrs_json . '>' . $logo_img . esc_html__( 'Generate JSON', 'i18n-404-tools' ) . '</a>';
 		}
 		return $actions;
@@ -126,14 +119,14 @@ add_action(
 		);
 		wp_enqueue_style( 'dashicons' );
 		require plugin_dir_path( __FILE__ ) . 'admin/modal-config.php';
-		global $i18n404tools_modal_config;
+		global $i18n_404_tools_modal_config;
 		wp_localize_script(
 			'i18n-404-tools-modal',
 			'I18n404ToolsConfig',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'i18n_404_tools_action' ),
-				'ui'       => $i18n404tools_modal_config,
+				'ui'       => $i18n_404_tools_modal_config,
 				'i18n'     => array(
 					'loading'           => __( 'Loading...', 'i18n-404-tools' ),
 					'error_no_command'  => __( 'Error: No command specified', 'i18n-404-tools' ),
