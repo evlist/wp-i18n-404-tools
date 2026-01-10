@@ -300,3 +300,26 @@ i18n-404-tools/                 ← WordPress.org SVN repo
 4. **Users install** from WordPress.org directory
 
 The GitHub repository is your **development hub**; WordPress.org is your **distribution channel**.
+
+---
+
+## 🧰 CI: Build ZIP + Release Asset
+
+- On every push to `main`, GitHub Actions builds an installable ZIP artifact containing only the `i18n-404-tools/` folder.
+- On a published GitHub Release, the same ZIP is automatically attached to the release assets.
+
+Workflow:
+- See [.github/workflows/plugin-zip.yml](.github/workflows/plugin-zip.yml).
+- Local build script: [scripts/build-plugin-zip.sh](scripts/build-plugin-zip.sh) creates `dist/i18n-404-tools.zip`.
+
+Manual run locally:
+```bash
+chmod +x scripts/build-plugin-zip.sh
+./scripts/build-plugin-zip.sh
+ls -lh dist/i18n-404-tools.zip
+```
+
+Notes:
+- The ZIP mirrors what WordPress.org expects for initial submission (no `assets/` folder inside).
+- After approval, publish to WordPress.org SVN with `trunk/` (plugin contents) and `assets/` (icons/banners) separately.
+
