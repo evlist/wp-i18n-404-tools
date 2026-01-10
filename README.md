@@ -7,6 +7,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <img src=".devcontainer/assets/icon.svg" width="64" height="64" alt="cs-grafting" />Codespace created with [evlist/codespaces-grafting](https://github.com/evlist/codespaces-grafting) -
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=graft/2026-01-05T23-58-42&repo=evlist/wp-i18n-404-tools)
 [![CI](https://github.com/evlist/wp-i18n-404-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/evlist/wp-i18n-404-tools/actions/workflows/ci.yml)
+[![Nightly ZIP](https://img.shields.io/badge/download-nightly%20zip-blue?logo=github)](https://github.com/evlist/wp-i18n-404-tools/releases/download/nightly/i18n-404-tools.zip)
 ---
 
 # WP i18n-404-tools
