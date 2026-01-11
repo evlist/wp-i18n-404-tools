@@ -78,8 +78,12 @@ jobs:
           path: dist
 
       - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          files: dist/i18n-404-tools.zip
+          artifacts: dist/i18n-404-tools.zip
+          tag: ${{ github.event.release.tag_name }}
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
