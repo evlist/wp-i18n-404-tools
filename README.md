@@ -21,6 +21,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
   <img src="./i18n-404-tools/admin/images/logo.svg" width="256" style="float:right;max-width:256px;height:auto;margin-top:-4em;" alt="WP i18n-404-tools Logo" /> A WordPress plugin with missing i18N (internationalization) tools.
 
+> 📢 **Status**: Plugin submitted to WordPress.org on January 10, 2026. Pending review by the WordPress.org Plugin Review Team.
+
 ## ✨ What this plugin does
 
 This plugin provides one-click i18n maintenance (generate `.pot`, regenerate JSON, copy command output) directly from the WordPress admin, without leaving the browser or running the CLI. It complements tools like **Loco Translate** (recommended for editing `.po`/`.mo`) by handling the operations that typically require WP‑CLI.
