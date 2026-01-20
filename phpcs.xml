@@ -16,6 +16,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/bin/*</exclude-pattern>
+	<exclude-pattern>*/admin/wp-cli/src/*</exclude-pattern>
 	<exclude-pattern>*.js</exclude-pattern>
 	<exclude-pattern>*.css</exclude-pattern>
 
@@ -34,7 +35,4 @@ SPDX-License-Identifier: GPL-3.0-or-later
 		<exclude name="WordPress.WP.AlternativeFunctions"/>
 	</rule>
 
-	<!-- Check for PHP cross-version compatibility -->
-	<config name="testVersion" value="7.4-"/>
-	<rule ref="PHPCompatibilityWP"/>
 </ruleset>

@@ -1,0 +1,9 @@
+{
+  "upstream": "https://github.com/wp-cli/i18n-command",
+  "last_sync": "2026-01-20T22:26:42Z",
+  "commit": "d24a7e9ef12253ff8b3cd69fe23b99cfa31a9888",
+  "commit_short": "d24a7e9",
+  "commit_date": "2026-01-20 13:08:36 +0000",
+  "commit_message": "Update file(s) from wp-cli/.github",
+  "notes": "Code copied exactly from wp-cli/i18n-command without modifications"
+}
