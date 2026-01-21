@@ -213,24 +213,24 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 		$results         = array();
 		$overall_success = true;
 
-		foreach ( $po_files as $po_file ) {
-			$result = $this->run_wp_cli_command(
-				'i18n make-json',
-				array(
-					0          => $this->languages_dir,
-					'no-purge' => null,
-				)
-			);
+		$command_result = $this->extractor->generate_json(
+			$this->languages_dir,
+			array( 'purge' => false )
+		);
 
-			$results[] = array(
-				'file'    => basename( $po_file ),
-				'success' => 0 === $result['exit_code'],
-				'output'  => trim( $result['stdout'] . "\n" . $result['stderr'] ),
-			);
+		$error = isset( $command_result['error'] ) ? trim( (string) $command_result['error'] ) : '';
+		if ( $error ) {
+			error_log( 'I18N 404 Tools JSON generation error: ' . $error );
+		}
 
-			if ( 0 !== $result['exit_code'] ) {
-				$overall_success = false;
-			}
+		$results[] = array(
+			'file'    => $this->languages_dir,
+			'success' => (bool) $command_result['success'],
+			'output'  => trim( (string) $command_result['output'] . ( $error ? "\nERROR: " . $error : '' ) ),
+		);
+
+		if ( ! $command_result['success'] ) {
+			$overall_success = false;
 		}
 
 		// Build output HTML.

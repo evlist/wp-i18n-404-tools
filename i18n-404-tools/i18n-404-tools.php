@@ -47,23 +47,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'I18N_404_TOOLS_VERSION', '1.0.0' );
 
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-i18n-404-tools-activator.php
- */
-require_once plugin_dir_path( __FILE__ ) . 'admin/class-i18n-404-tools-wpcli-updater.php';
-
-/**
- * Activate the plugin and download WP-CLI.
- */
-function i18n_404_tools_activate() {
-	if ( isset( $GLOBALS['i18n_404_tools_wpcli_updater'] ) ) {
-		$GLOBALS['i18n_404_tools_wpcli_updater']->download_phar_with_notice();
-	}
-}
-register_activation_hook( __FILE__, 'i18n_404_tools_activate' );
-
-
 // Only load base and router for our AJAX requests; router will load command classes dynamically.
 add_action(
 	'init',

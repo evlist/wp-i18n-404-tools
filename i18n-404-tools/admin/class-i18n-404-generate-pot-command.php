@@ -78,22 +78,20 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 
 		// Step 2: Generate the .pot file and return output/result.
 		if ( 'generate' === $step ) {
+			$result = $this->extractor->generate_pot( $this->plugin_dir, $this->pot_path, $this->domain );
 
-			$result = $this->run_wp_cli_command(
-				'i18n make-pot',
-				array(
-					0        => $this->plugin_dir,
-					1        => $this->pot_path,
-					'domain' => $this->domain,
-				)
-			);
-
-			$output = esc_html( trim( $result['stdout'] . "\n" . $result['stderr'] ) );
-			if ( 0 === $result['exit_code'] && file_exists( $this->pot_path ) ) {
-				$message = esc_html__( 'POT file generated successfully!', 'i18n-404-tools' );
-			} else {
-				$message = esc_html__( 'Failed to generate POT file.', 'i18n-404-tools' );
+			$error   = isset( $result['error'] ) ? trim( (string) $result['error'] ) : '';
+			$output  = trim( (string) $result['output'] );
+			if ( $error ) {
+				$output = trim( $output . "\nERROR: " . $error );
+				// Emit to PHP error log so failures surface outside the UI.
+				error_log( 'I18N 404 Tools POT generation error: ' . $error );
 			}
+
+			$output  = esc_html( $output );
+			$message = ( $result['success'] && file_exists( $this->pot_path ) )
+				? esc_html__( 'POT file generated successfully!', 'i18n-404-tools' )
+				: esc_html__( 'Failed to generate POT file.', 'i18n-404-tools' );
 
 			return array(
 				'html' => '<div class="i18n-modal-content">'

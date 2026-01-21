@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Make sure the WPCLI updater class is loaded.
-require_once __DIR__ . '/class-i18n-404-tools-wpcli-updater.php';
+require_once __DIR__ . '/class-i18n-wp-cli-compat.php';
+require_once __DIR__ . '/class-i18n-extractor.php';
 
 /**
  * Abstract base class for i18n-404-tools commands.
@@ -65,6 +65,13 @@ abstract class I18N_404_Command_Base {
 	protected $pot_path;
 
 	/**
+	 * In-process WP-CLI extractor wrapper.
+	 *
+	 * @var I18N_404_Extractor
+	 */
+	protected $extractor;
+
+	/**
 	 * Set up context for the command.
 	 *
 	 * @param string $plugin The plugin file slug (e.g. hello-dolly/hello.php).
@@ -87,8 +94,9 @@ abstract class I18N_404_Command_Base {
 			wp_mkdir_p( $this->languages_dir );
 		}
 
-		$this->domain   = basename( $this->plugin, '.php' );
-		$this->pot_path = $this->languages_dir . '/' . $this->domain . '.pot';
+		$this->domain    = basename( $this->plugin, '.php' );
+		$this->pot_path  = $this->languages_dir . '/' . $this->domain . '.pot';
+		$this->extractor = new I18N_404_Extractor();
 	}
 
 	/**
@@ -178,87 +186,5 @@ abstract class I18N_404_Command_Base {
 		return '<button type="button" ' . $base_attrs . $extra_attrs . '>'
 			. esc_html( $label )
 			. '</button>';
-	}
-
-	/**
-	 * Run a WP-CLI command with flexible arguments.
-	 * - Numeric keys are positional arguments.
-	 * - String keys with null values become flags (--foo).
-	 * - String keys with values become options (--foo="bar").
-	 *
-	 * @param string $subcommand E.g., 'i18n make-pot'.
-	 * @param array  $args       Command arguments and flags.
-	 * @param string $cwd        Optional working directory.
-	 * @return array             ['stdout' => ..., 'stderr' => ..., 'exit_code' => ...].
-	 */
-	protected function run_wp_cli_command( $subcommand, array $args = array(), $cwd = null ) {
-		// Use the predefined PHP binary if available, or use system default.
-		// PHP_BINARY is not available in web context (PHP-FPM), so use system default.
-		$wp_cli_php = defined( 'WP_CLI_PHP_BINARY' ) ? constant( 'WP_CLI_PHP_BINARY' ) : '';
-		$php_path   = $wp_cli_php ? $wp_cli_php : '/usr/bin/php';
-
-		// Get the WP-CLI phar path from updater class.
-		$wp_cli_phar = I18n_404_Tools_WPCLI_Updater::get_phar_path();
-
-		$cmd_parts = array(
-			escapeshellarg( $php_path ),
-			escapeshellarg( $wp_cli_phar ),
-		);
-
-		// Add the subcommand (e.g. 'i18n make-pot' -> ['i18n', 'make-pot']).
-		foreach ( explode( ' ', $subcommand ) as $part ) {
-			$cmd_parts[] = escapeshellarg( $part );
-		}
-
-		// Add arguments and flags.
-		foreach ( $args as $key => $value ) {
-			if ( is_int( $key ) ) {
-				// Positional argument.
-				$cmd_parts[] = escapeshellarg( $value );
-			} elseif ( is_null( $value ) ) {
-				// Option or flag.
-				$cmd_parts[] = '--' . $key;
-			} else {
-				// Option with value.
-				$cmd_parts[] = '--' . $key . '=' . escapeshellarg( $value );
-			}
-		}
-
-		$cmd = implode( ' ', $cmd_parts );
-
-		// Ensure we use ABSPATH as working directory for WP-CLI context.
-		if ( ! $cwd ) {
-			$cwd = ABSPATH;
-		}
-
-		$descriptorspec = array(
-			1 => array( 'pipe', 'w' ), // stdout.
-			2 => array( 'pipe', 'w' ), // stderr.
-		);
-
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_proc_open, Generic.PHP.ForbiddenFunctions.Found -- Required for WP-CLI execution.
-		$process = proc_open( $cmd, $descriptorspec, $pipes, $cwd );
-
-		if ( is_resource( $process ) ) {
-			$stdout = stream_get_contents( $pipes[1] );
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for pipe cleanup.
-			fclose( $pipes[1] );
-			$stderr = stream_get_contents( $pipes[2] );
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for pipe cleanup.
-			fclose( $pipes[2] );
-			$exit_code = proc_close( $process );
-
-			return array(
-				'stdout'    => $stdout,
-				'stderr'    => $stderr,
-				'exit_code' => $exit_code,
-			);
-		} else {
-			return array(
-				'stdout'    => '',
-				'stderr'    => 'Could not open process.',
-				'exit_code' => 1,
-			);
-		}
 	}
 }

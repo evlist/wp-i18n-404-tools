@@ -51,9 +51,6 @@ The sync script automatically adds SPDX license headers to all vendored PHP file
 ## Verification
 
 ```bash
-# Add SPDX headers to existing files (one-time migration)
-bash scripts/add-spdx-headers.sh
-
 # Check PHPCS excludes vendored files
 vendor/bin/phpcs i18n-404-tools/admin/wp-cli/src/
 # Should show: "No files to process"

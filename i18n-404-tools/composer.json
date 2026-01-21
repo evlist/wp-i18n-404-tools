@@ -1,0 +1,12 @@
+{
+  "name": "evlist/wp-i18n-404-tools-plugin",
+  "description": "Runtime dependencies for i18n-404-tools WordPress plugin",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "gettext/gettext": "^4.8",
+    "mck89/peast": "^1.13.11"
+  },
+  "config": {
+    "vendor-dir": "vendor"
+  }
+}

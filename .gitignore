@@ -20,8 +20,8 @@ sandbox/
 
 i18n-404-tools/admin/bin/
 
-# Composer dependencies
-vendor/
+# Composer dependencies (dev tools at root only)
+/vendor/
 .vscode/*.bak.*
 .devcontainer/tmp/
 .devcontainer/var/
