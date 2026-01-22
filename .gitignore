@@ -25,3 +25,8 @@ i18n-404-tools/admin/bin/
 .vscode/*.bak.*
 .devcontainer/tmp/
 .devcontainer/var/
+
+# PHPUnit
+.phpunit.cache/
+tests/output/
+tests/expected/

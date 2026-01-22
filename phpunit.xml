@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-FileCopyrightText: 2026 Eric van der Vlist <vdv@dyomedea.com>
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         failOnWarning="true"
+         failOnRisky="true">
+    <testsuites>
+        <testsuite name="I18n 404 Tools Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">i18n-404-tools</directory>
+        </include>
+        <exclude>
+            <directory>i18n-404-tools/vendor</directory>
+            <directory>i18n-404-tools/languages</directory>
+        </exclude>
+    </source>
+</phpunit>
