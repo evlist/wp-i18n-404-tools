@@ -363,8 +363,16 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 				continue;
 			}
 
-			// Check for wp.i18n.__ or wp.i18n._x or similar patterns.
-			if ( preg_match( '/wp\.i18n\.[_a-z]+\s*\(/', $content ) ) {
+			// Détection : appel direct (wp.i18n.__) OU déstructuration suivie d'un appel à __()
+			// 1. wp.i18n.__('...')
+			// 2. const { __ } = wp.i18n; ... __(' 0')
+			if (
+				preg_match( '/wp\\.i18n\\.[_a-z]+\\s*\\(/', $content ) // appel direct
+				|| (
+					preg_match( '/const\\s*\\{[^}]*__[^}]*}\\s*=\\s*wp\\.i18n/', $content )
+					&& preg_match( '/__\\s*\\(/', $content )
+				)
+			) {
 				return true;
 			}
 		}
