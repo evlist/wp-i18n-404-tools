@@ -1,0 +1,36 @@
+# Translation file for context strings test.
+# SPDX-FileCopyrightText: 2026 Eric van der Vlist <vdv@dyomedea.com>
+# SPDX-License-Identifier: GPL-3.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: Test Domain\n"
+"Report-Msgid-Bugs-To: test@example.com\n"
+"POT-Creation-Date: 2026-01-22 10:00+0000\n"
+"PO-Revision-Date: 2026-01-22 10:00+0000\n"
+"Last-Translator: Test User <test@example.com>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: test.js:10
+msgctxt "verb"
+msgid "Post"
+msgstr "Publier"
+
+#: test.js:15
+msgctxt "noun"
+msgid "Post"
+msgstr "Article"
+
+#: test.js:20
+msgctxt "menu item"
+msgid "Settings"
+msgstr "Réglages"
+
+#: test.js:25
+msgctxt "button"
+msgid "Cancel"
+msgstr "Annuler"

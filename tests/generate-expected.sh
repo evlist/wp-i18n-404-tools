@@ -45,3 +45,51 @@ done
 
 echo ""
 echo "Done! Expected .pot files are in ${EXPECTED_DIR}/"
+
+# Generate expected JSON files.
+echo ""
+echo "Generating expected .json files with wp-cli..."
+
+JSON_INPUT_DIR="${FIXTURES_DIR}/json-input"
+
+if [ -d "${JSON_INPUT_DIR}" ]; then
+    for po_file in "${JSON_INPUT_DIR}"/*.po; do
+        if [ -f "${po_file}" ]; then
+            po_name=$(basename "${po_file}" .po)
+            
+            echo "Processing ${po_name}..."
+            
+            # Create temporary directory for JSON output.
+            temp_json_dir=$(mktemp -d)
+            
+            # Copy .po file to temp directory.
+            cp "${po_file}" "${temp_json_dir}/"
+            
+            # Generate JSON with wp-cli.
+            wp i18n make-json "${temp_json_dir}" \
+                --no-purge \
+                2>&1 | grep -v "^Debug:" || true
+            
+            # Find generated JSON files and copy to expected directory.
+            json_count=0
+            for json_file in "${temp_json_dir}"/*.json; do
+                if [ -f "${json_file}" ]; then
+                    json_basename=$(basename "${json_file}")
+                    cp "${json_file}" "${EXPECTED_DIR}/${json_basename}"
+                    echo "  ✓ Generated ${EXPECTED_DIR}/${json_basename}"
+                    json_count=$((json_count + 1))
+                fi
+            done
+            
+            if [ $json_count -eq 0 ]; then
+                echo "  ✗ No JSON files generated for ${po_name}"
+            fi
+            
+            # Cleanup temp directory.
+            rm -rf "${temp_json_dir}"
+        fi
+    done
+fi
+
+echo ""
+echo "Done! Expected files are in ${EXPECTED_DIR}/"

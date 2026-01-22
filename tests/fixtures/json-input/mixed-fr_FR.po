@@ -1,0 +1,42 @@
+# Translation file with mixed string types.
+# SPDX-FileCopyrightText: 2026 Eric van der Vlist <vdv@dyomedea.com>
+# SPDX-License-Identifier: GPL-3.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: Test Domain\n"
+"Report-Msgid-Bugs-To: test@example.com\n"
+"POT-Creation-Date: 2026-01-22 10:00+0000\n"
+"PO-Revision-Date: 2026-01-22 10:00+0000\n"
+"Last-Translator: Test User <test@example.com>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: test.js:10
+msgid "Simple string"
+msgstr "Chaîne simple"
+
+#: test.js:20
+msgid "One user"
+msgid_plural "%d users"
+msgstr[0] "Un utilisateur"
+msgstr[1] "%d utilisateurs"
+
+#: test.js:30
+msgctxt "action"
+msgid "Save"
+msgstr "Enregistrer"
+
+#: test.js:40
+msgctxt "file menu"
+msgid "One document"
+msgid_plural "%d documents"
+msgstr[0] "Un document"
+msgstr[1] "%d documents"
+
+#: test.js:50
+msgid "String with \"quotes\""
+msgstr "Chaîne avec des \"guillemets\""

@@ -1,0 +1,62 @@
+# Translation file with both PHP and JavaScript references.
+# SPDX-FileCopyrightText: 2026 Eric van der Vlist <vdv@dyomedea.com>
+# SPDX-License-Identifier: GPL-3.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: Test Domain\n"
+"Report-Msgid-Bugs-To: test@example.com\n"
+"POT-Creation-Date: 2026-01-22 10:00+0000\n"
+"PO-Revision-Date: 2026-01-22 10:00+0000\n"
+"Last-Translator: Test User <test@example.com>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: admin/settings.php:15
+msgid "PHP Settings Page"
+msgstr "Page de réglages PHP"
+
+#: admin/script.js:10
+msgid "JavaScript Settings"
+msgstr "Réglages JavaScript"
+
+#: includes/functions.php:45
+msgid "PHP Function Result"
+msgstr "Résultat de fonction PHP"
+
+#: assets/main.js:20
+msgid "Main JavaScript String"
+msgstr "Chaîne JavaScript principale"
+
+#: admin/class-handler.php:100
+msgid "One PHP item"
+msgid_plural "%d PHP items"
+msgstr[0] "Un élément PHP"
+msgstr[1] "%d éléments PHP"
+
+#: assets/utils.js:30
+msgid "One JS item"
+msgid_plural "%d JS items"
+msgstr[0] "Un élément JS"
+msgstr[1] "%d éléments JS"
+
+#: templates/page.php:50
+msgctxt "admin menu"
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: admin/app.js:40
+msgctxt "button"
+msgid "Save"
+msgstr "Enregistrer"
+
+#: includes/helpers.php:75
+msgid "PHP Helper String"
+msgstr "Chaîne d'aide PHP"
+
+#: src/components/modal.js:50
+msgid "Close Modal"
+msgstr "Fermer la fenêtre"
