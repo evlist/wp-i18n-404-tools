@@ -1,4 +1,6 @@
 <?php
+// Protection contre l'accès direct.
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Fichier de stubs pour la compatibilité WP-CLI i18n.
  *

@@ -105,15 +105,12 @@ class I18N_404_Extractor {
 					break;
 				}
 			}
-			if ( ! class_exists( '\\Gettext\\Translations' ) ) {
-				trigger_error( 'I18N 404 Tools: Gettext\\Translations still missing; checked autoload and manual includes.', E_USER_WARNING );
-			}
 		}
 
 		// Register PSR-4 autoloader for WP_CLI\I18n classes from vendored code.
 		$src_dir = __DIR__ . '/wp-cli/src';
 		spl_autoload_register(
-			function ( $class ) use ( $src_dir ) {
+			function ( $classname ) use ( $src_dir ) {
 				// Handle WP_CLI\I18n\* classes.
 				if ( 0 === strpos( $class, 'WP_CLI\\I18n\\' ) ) {
 					$relative_class = substr( $class, strlen( 'WP_CLI\\I18n\\' ) );
@@ -212,7 +209,6 @@ class I18N_404_Extractor {
 				'logs'    => $logger->export(),
 			);
 		} catch ( WP_CLI_ExitException $e ) {
-			trigger_error( 'I18N 404 Tools extractor WP_CLI_ExitException: ' . $e->getMessage(), E_USER_WARNING );
 			return array(
 				'success' => false,
 				'output'  => $logger->to_string(),
@@ -220,7 +216,6 @@ class I18N_404_Extractor {
 				'logs'    => $logger->export(),
 			);
 		} catch ( \Exception $e ) {
-			trigger_error( 'I18N 404 Tools extractor Exception: ' . $e->getMessage(), E_USER_WARNING );
 			return array(
 				'success' => false,
 				'output'  => $logger->to_string(),
@@ -228,7 +223,6 @@ class I18N_404_Extractor {
 				'logs'    => $logger->export(),
 			);
 		} catch ( \Throwable $e ) {
-			trigger_error( 'I18N 404 Tools extractor Throwable: ' . $e->getMessage(), E_USER_WARNING );
 			return array(
 				'success' => false,
 				'output'  => $logger->to_string(),

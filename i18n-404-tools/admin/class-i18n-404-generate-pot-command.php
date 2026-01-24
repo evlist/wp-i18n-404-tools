@@ -80,12 +80,11 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 		if ( 'generate' === $step ) {
 			$result = $this->extractor->generate_pot( $this->plugin_dir, $this->pot_path, $this->domain );
 
-			$error   = isset( $result['error'] ) ? trim( (string) $result['error'] ) : '';
-			$output  = trim( (string) $result['output'] );
+			$error = isset( $result['error'] ) ? trim( (string) $result['error'] ) : '';
+			$output = trim( (string) $result['output'] );
 			if ( $error ) {
 				$output = trim( $output . "\nERROR: " . $error );
-				// Emit to PHP error log so failures surface outside the UI.
-				trigger_error( 'I18N 404 Tools POT generation error: ' . $error, E_USER_WARNING );
+				// Logging intentionally removed for production compliance.
 			}
 
 			$output  = esc_html( $output );

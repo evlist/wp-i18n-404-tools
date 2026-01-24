@@ -220,7 +220,8 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 
 		$error = isset( $command_result['error'] ) ? trim( (string) $command_result['error'] ) : '';
 		if ( $error ) {
-			error_log( 'I18N 404 Tools JSON generation error: ' . $error );
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Logging removed for production compliance.
+//			error_log( 'I18N 404 Tools JSON generation error: ' . esc_html( $error ) );
 		}
 
 		$results[] = array(

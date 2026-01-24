@@ -1,4 +1,5 @@
 === Missing i18n Tools ===
+A set of tools to help manage and generate translation files for 404 pages in WordPress.
 Contributors: evlist
 Donate link: https://e.vli.st/
 Tags: i18n, translation, pot, json, gettext
