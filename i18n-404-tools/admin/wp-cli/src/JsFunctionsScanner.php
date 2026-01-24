@@ -1,9 +1,5 @@
 <?php
 
-// SPDX-FileCopyrightText: 2011-2026 WP-CLI Contributors <https://wp-cli.org>
-//
-// SPDX-License-Identifier: MIT
-
 namespace WP_CLI\I18n;
 
 use Gettext\Utils\JsFunctionsScanner as GettextJsFunctionsScanner;
@@ -372,7 +368,7 @@ final class JsFunctionsScanner extends GettextJsFunctionsScanner {
 	}
 
 	/**
-	 * Returns wether or not a comment precedes a node.
+	 * Returns whether or not a comment precedes a node.
 	 * The comment must be before the node and on the same line or the one before.
 	 *
 	 * @param Node\Comment $comment The comment.

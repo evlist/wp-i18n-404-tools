@@ -1,5 +1,5 @@
 #!/bin/bash
-# SPDX-FileCopyrightText: 2025 Eric van der Vlist <vdv@dyomedea.com>
+# SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -40,7 +40,7 @@ UPSTREAM_REPO="https://github.com/wp-cli/i18n-command.git"
 TARGET_DIR="i18n-404-tools/admin/wp-cli"
 SRC_DIR="$TARGET_DIR/src"
 SYNC_LOG="$TARGET_DIR/SYNC-LOG.md"
-VENDOR_INFO="$TARGET_DIR/vendor-info.json"
+UPSTREAM_INFO="$TARGET_DIR/upstream-info.json"
 TEMP_DIR="/tmp/wp-cli-i18n-sync-$$"
 CACHED_COMMIT=""
 
@@ -74,8 +74,8 @@ echo "  Commit: $COMMIT"
 echo "  Date: $COMMIT_DATE"
 echo "  Message: $COMMIT_MSG"
 
-if [ -f "$VENDOR_INFO" ]; then
-    CACHED_COMMIT=$(python3 - "$VENDOR_INFO" <<'PY'
+if [ -f "$UPSTREAM_INFO" ]; then
+    CACHED_COMMIT=$(python3 - "$UPSTREAM_INFO" <<'PY'
 import json, sys
 try:
     with open(sys.argv[1]) as f:
@@ -128,32 +128,12 @@ ls -1 "$SRC_DIR" | head -5
 echo "  ... and $(ls -1 "$SRC_DIR" | wc -l) file(s) total"
 echo ""
 
-# Add SPDX license headers to all PHP files
-echo -e "${YELLOW}⚖️  Adding SPDX license headers...${NC}"
-if command -v reuse >/dev/null 2>&1; then
-    reuse annotate \
-        --copyright "WP-CLI Contributors <https://wp-cli.org>" \
-        --license "MIT" \
-        --year "$YEAR_RANGE" \
-        --recursive \
-        "$SRC_DIR" >/dev/null 2>&1 && {
-            echo -e "${GREEN}✓ SPDX headers added to all vendored files${NC}"
-        } || {
-            echo -e "${YELLOW}  ⚠️  Some headers may already exist or failed to add${NC}"
-        }
-else
-    echo -e "${YELLOW}  ⚠️  Warning: 'reuse' tool not found, skipping SPDX headers${NC}"
-    echo -e "${YELLOW}  ℹ️  Install with: pip install reuse${NC}"
-fi
-echo ""
-
-# Copy composer files
+# Copy dependency information
 echo -e "${YELLOW}📦 Copying dependency information...${NC}"
-cp "$TEMP_DIR/i18n-command/composer.json" "$TARGET_DIR/composer.json.upstream" 2>/dev/null || true
+cp "$TEMP_DIR/i18n-command/upstream-package.json" "$TARGET_DIR/upstream-package.json" 2>/dev/null || true
 
-# Create vendor-info.json file
 echo -e "${YELLOW}📝 Updating metadata...${NC}"
-cat > "$VENDOR_INFO" << EOF
+cat > "$UPSTREAM_INFO" << EOF
 {
   "upstream": "https://github.com/wp-cli/i18n-command",
   "last_sync": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
@@ -165,7 +145,7 @@ cat > "$VENDOR_INFO" << EOF
 }
 EOF
 
-echo -e "${GREEN}✓ vendor-info.json created${NC}"
+echo -e "${GREEN}✓ upstream-info.json created${NC}"
 
 # Update SYNC-LOG
 if [ ! -f "$SYNC_LOG" ]; then
@@ -206,7 +186,7 @@ echo "📊 Summary:"
 echo "  - Commit: $COMMIT"
 echo "  - Files: $(ls -1 "$SRC_DIR" | wc -l)"
 echo "  - Target: $SRC_DIR"
-echo "  - Metadata: $VENDOR_INFO"
+echo "  - Metadata: $UPSTREAM_INFO"
 echo "  - Log: $SYNC_LOG"
 echo ""
 echo -e "${YELLOW}⚠️  Next steps:${NC}"

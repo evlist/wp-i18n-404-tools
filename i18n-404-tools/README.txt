@@ -6,8 +6,19 @@ Requires at least: 6.0
 Tested up to: 6.9
 Stable tag: 1.0.0
 Requires PHP: 8.0
+
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+== License compliance ==
+
+This plugin is distributed under the GPLv3 or later license. It uses several Composer dependencies and includes vendored code from the upstream project [wp-cli/i18n-command](https://github.com/wp-cli/i18n-command) (MIT license).
+
+All license and copyright information for dependencies is tracked in the repository using the REUSE specification, via the `.reuse/dep5` file at the root of the source repository. This file is not included in plugin releases, but ensures full traceability and compliance for developers and auditors.
+
+Vendored code from `wp-cli/i18n-command` is located in `admin/wp-cli/src/` and is not modified except for license headers. Composer dependencies are managed via `composer.json` and `composer.lock`.
+
+For more details, see the repository documentation and compliance files.
 
 WordPress internationalization tools: generate POT and JSON translation files from any installed plugin directly from the admin interface.
 

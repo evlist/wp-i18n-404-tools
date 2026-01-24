@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2025 Eric van der Vlist <vdv@dyomedea.com>
+SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
 
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
@@ -37,14 +37,14 @@ The sync script automatically adds SPDX license headers to all vendored PHP file
  * SPDX-License-Identifier: MIT
  */
 ```
-
 **Rationale:**
+...existing code...
 - Headers embedded directly in source files travel with the code
 - Plugin distribution includes proper license information (no external `.reuse/dep5` needed)
 - Properly credits upstream authors (WP-CLI Contributors)
 - Uses correct license (MIT, as per upstream LICENSE file)
 - Automated via `reuse annotate --recursive` in [`sync-i18n-from-upstream.sh`](../../../scripts/sync-i18n-from-upstream.sh)
-- Maintains traceability via `vendor-info.json` and `SYNC-LOG.md`
+- Maintains traceability via `upstream-info.json` and `SYNC-LOG.md`
 
 **Note:** If `reuse` tool is not available, the script will warn but continue. Headers can be added manually later.
 
@@ -77,4 +77,4 @@ When running [`scripts/sync-i18n-from-upstream.sh`](../../../scripts/sync-i18n-f
 - Upstream repository: https://github.com/wp-cli/i18n-command
 - Upstream license: MIT (see LICENSE file in repo)
 - Sync script: [`scripts/sync-i18n-from-upstream.sh`](scripts/sync-i18n-from-upstream.sh)
-- Version tracking: [`i18n-404-tools/admin/wp-cli/vendor-info.json`](i18n-404-tools/admin/wp-cli/vendor-info.json)
+- Version tracking: [`i18n-404-tools/admin/wp-cli/upstream-info.json`](i18n-404-tools/admin/wp-cli/upstream-info.json)

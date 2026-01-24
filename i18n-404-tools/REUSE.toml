@@ -1,0 +1,42 @@
+# REUSE.toml for wp-i18n-404-tools
+# SPDX license compliance for project and Composer dependencies
+
+version = 1
+
+[[annotations]]
+path = "vendor/composer/**"
+precedence = "closest"
+SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/autoload.php"
+precedence = "closest"
+SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/bin/**"
+precedence = "closest"
+SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
+SPDX-License-Identifier = "MIT"
+
+# Gettext (MIT)
+[[annotations]]
+path = "vendor/gettext/**"
+precedence = "closest"
+SPDX-FileCopyrightText = "2017 Oscar Otero Marzoa"
+SPDX-License-Identifier = "MIT"
+
+# Peast (BSD-3-Clause)
+[[annotations]]
+path = "vendor/mck89/**"
+precedence = "closest"
+SPDX-FileCopyrightText = "2024 Marco Marchiò"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = "admin/wp-cli/src/**"
+precedence = "closest"
+SPDX-FileCopyrightText = "2011-2026 WP-CLI Contributors <https://wp-cli.org>"
+SPDX-License-Identifier = "MIT"

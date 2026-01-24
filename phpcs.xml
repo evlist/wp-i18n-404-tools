@@ -19,6 +19,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 	<exclude-pattern>*/admin/wp-cli/src/*</exclude-pattern>
 	<exclude-pattern>*.js</exclude-pattern>
 	<exclude-pattern>*.css</exclude-pattern>
+	<exclude-pattern>*/languages/*</exclude-pattern>
 
 	<!-- Show progress -->
 	<arg value="ps"/>

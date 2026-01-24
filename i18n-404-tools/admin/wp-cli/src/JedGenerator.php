@@ -1,9 +1,5 @@
 <?php
 
-// SPDX-FileCopyrightText: 2011-2026 WP-CLI Contributors <https://wp-cli.org>
-//
-// SPDX-License-Identifier: MIT
-
 namespace WP_CLI\I18n;
 
 use Gettext\Generators\Jed;
