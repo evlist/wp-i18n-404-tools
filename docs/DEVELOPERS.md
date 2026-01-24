@@ -15,8 +15,7 @@ This guide explains how the plugin is structured, how to develop and test locall
 
 - Purpose: Provide missing internationalization tools for WordPress plugins.
 - Key features:
-  - Generate `.pot` via WP‑CLI without leaving wp-admin
-  - Generate `.json` for JS translations when needed
+  - Generate `.pot` and `.json` files using PHP classes borrowed from WP‑CLI/i18n-command, without shell access
   - Admin UI with modal actions and AJAX router
 
 ## 💻 Recommended dev environment (Codespaces)

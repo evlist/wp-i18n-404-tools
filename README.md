@@ -27,11 +27,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 This plugin provides one-click i18n maintenance (generate `.pot`, regenerate JSON, copy command output) directly from the WordPress admin, without leaving the browser or running the CLI. It complements tools like **Loco Translate** (recommended for editing `.po`/`.mo`) by handling the operations that typically require WP‑CLI.
 
-### ⚠️ Technical Note: WP-CLI Execution
 
-This plugin needs to run **WP-CLI** to perform i18n operations, but you do not need to install WP-CLI yourself. The plugin automatically downloads and manages a local `wp-cli.phar` in WordPress uploads, protected by `.htaccess`.
+### ⚠️ Technical Note: WP-CLI Integration
 
-Some hosting providers restrict or disable the PHP function `shell_exec()`. This function must be enabled for the plugin to execute the local `wp-cli.phar`. If `shell_exec()` is blocked on your server, please ask your hosting provider to enable it or use a host that supports WP-CLI execution.
+This plugin performs i18n operations by directly using PHP classes borrowed from the official [wp-cli/i18n-command](https://github.com/wp-cli/i18n-command) project. There is no need for shell access, `shell_exec`, or a separate WP-CLI installation. All translation extraction and file generation is handled internally in PHP, ensuring maximum compatibility and security.
 
 ## 📚 Developer Docs
 

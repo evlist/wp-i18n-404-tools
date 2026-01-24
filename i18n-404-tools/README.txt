@@ -38,12 +38,8 @@ Missing i18n Tools provides WordPress internationalization features that are mis
 
 = Technical Requirements =
 
-**Important**: This plugin needs to execute **WP-CLI** to generate POT and JSON files, but you do not need to install WP-CLI yourself. The plugin automatically downloads and manages a local `wp-cli.phar` in `/wp-content/uploads/i18n-404-tools/` (protected by `.htaccess`).
 
-For execution, the PHP function `shell_exec()` must be enabled by your hosting provider. If your server blocks `shell_exec()`, you may need to:
-* Ask your hosting provider to enable `shell_exec()` (and allow running the local `wp-cli.phar`)
-* Use a hosting plan that supports WP-CLI execution (common on managed WordPress hosts)
-* Check your control panel for WP-CLI/Shell settings if available
+**Important**: This plugin generates POT and JSON files by directly using PHP classes borrowed from the official [wp-cli/i18n-command](https://github.com/wp-cli/i18n-command) project. You do not need to install WP-CLI or enable any shell functions. All operations are performed internally in PHP for maximum compatibility and security.
 
 = Use Cases =
 
