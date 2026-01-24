@@ -110,7 +110,7 @@ class I18N_404_Extractor {
 		// Register PSR-4 autoloader for WP_CLI\I18n classes from vendored code.
 		$src_dir = __DIR__ . '/wp-cli/src';
 		spl_autoload_register(
-			function ( $classname ) use ( $src_dir ) {
+			function ( $class ) use ( $src_dir ) {
 				// Handle WP_CLI\I18n\* classes.
 				if ( 0 === strpos( $class, 'WP_CLI\\I18n\\' ) ) {
 					$relative_class = substr( $class, strlen( 'WP_CLI\\I18n\\' ) );
