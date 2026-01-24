@@ -22,7 +22,10 @@ For more details, see the repository documentation and compliance files.
 
 WordPress internationalization tools: generate POT and JSON translation files from any installed plugin directly from the admin interface.
 
+
 == Description ==
+
+Easily generate POT and JSON translation files for any plugin, directly from the WordPress admin—no command-line or WP-CLI required.
 
 Missing i18n Tools provides WordPress internationalization features that are missing from the WordPress admin interface and common free plugins. It allows you to generate POT (Portable Object Template) files and JSON translation files for any installed plugin directly from your WordPress admin, without needing command-line access or WP-CLI.
 

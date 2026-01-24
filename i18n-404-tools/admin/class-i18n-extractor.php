@@ -106,7 +106,7 @@ class I18N_404_Extractor {
 				}
 			}
 			if ( ! class_exists( '\\Gettext\\Translations' ) ) {
-				error_log( 'I18N 404 Tools: Gettext\\Translations still missing; checked autoload and manual includes.' );
+				trigger_error( 'I18N 404 Tools: Gettext\\Translations still missing; checked autoload and manual includes.', E_USER_WARNING );
 			}
 		}
 
@@ -212,7 +212,7 @@ class I18N_404_Extractor {
 				'logs'    => $logger->export(),
 			);
 		} catch ( WP_CLI_ExitException $e ) {
-			error_log( 'I18N 404 Tools extractor WP_CLI_ExitException: ' . $e->getMessage() );
+			trigger_error( 'I18N 404 Tools extractor WP_CLI_ExitException: ' . $e->getMessage(), E_USER_WARNING );
 			return array(
 				'success' => false,
 				'output'  => $logger->to_string(),
@@ -220,7 +220,7 @@ class I18N_404_Extractor {
 				'logs'    => $logger->export(),
 			);
 		} catch ( \Exception $e ) {
-			error_log( 'I18N 404 Tools extractor Exception: ' . $e->getMessage() );
+			trigger_error( 'I18N 404 Tools extractor Exception: ' . $e->getMessage(), E_USER_WARNING );
 			return array(
 				'success' => false,
 				'output'  => $logger->to_string(),
@@ -228,7 +228,7 @@ class I18N_404_Extractor {
 				'logs'    => $logger->export(),
 			);
 		} catch ( \Throwable $e ) {
-			error_log( 'I18N 404 Tools extractor Throwable: ' . $e->getMessage() );
+			trigger_error( 'I18N 404 Tools extractor Throwable: ' . $e->getMessage(), E_USER_WARNING );
 			return array(
 				'success' => false,
 				'output'  => $logger->to_string(),
