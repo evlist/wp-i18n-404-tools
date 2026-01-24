@@ -26,7 +26,7 @@
  * Plugin Name:       Missing i18n Tools
  * Plugin URI:        https://github.com/evlist/wp-i18n-404-tools
  * Description:       A WordPress plugin with missing i18N (internationalization) tools.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Eric van der Vlist
  * Author URI:        https://e.vli.st/
  * License:           GPL-3.0+

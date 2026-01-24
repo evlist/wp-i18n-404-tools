@@ -1,15 +1,15 @@
 === Missing i18n Tools ===
-A set of tools to help manage and generate translation files for 404 pages in WordPress.
 Contributors: evlist
 Donate link: https://e.vli.st/
 Tags: i18n, translation, pot, json, gettext
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 8.0
-
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+Generate POT and JSON translation files for any installed plugin directly from the admin interface—no shell_exec, no external WP-CLI required.
 
 == License compliance ==
 
@@ -54,8 +54,6 @@ Missing i18n Tools provides WordPress internationalization features that are mis
 
 = Technical Details =
 
-The plugin automatically downloads and manages WP-CLI (WordPress Command Line Interface) internally to perform translation operations. It uses WordPress AJAX for smooth user experience and supports both traditional PHP translations and modern JavaScript translations (JED format).
-
 All operations respect WordPress coding standards and follow security best practices with proper nonce verification and capability checks.
 
 = Translation of the Plugin =
@@ -93,7 +91,7 @@ Once activated, you'll see new action links ("Generate .pot" and "Generate JSON"
 
 = Do I need WP-CLI installed on my server? =
 
-No! The plugin automatically downloads and manages WP-CLI internally. You don't need shell access or any command-line tools.
+No! The plugin uses WP-CLI classes internally without running WP-CLI. You don't need shell access or any command-line tools.
 
 = Which plugins can I generate translations for? =
 
