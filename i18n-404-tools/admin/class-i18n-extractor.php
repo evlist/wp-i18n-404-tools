@@ -62,51 +62,6 @@ class I18N_404_Extractor {
 			}
 		}
 
-		$stubs = __DIR__ . '/wp-cli/gettext-stubs.php';
-
-		// Provide an autoloader so Gettext classes resolve to our stubs when the real dependency is absent.
-		$load_gettext_stubs = function () use ( $stubs ) {
-			if ( file_exists( $stubs ) ) {
-				require_once $stubs;
-				return class_exists( '\\Gettext\\Translations', false );
-			}
-			return false;
-		};
-
-		spl_autoload_register(
-			function ( $class ) use ( $load_gettext_stubs ) {
-				if ( 0 === strpos( $class, 'Gettext\\' ) ) {
-					return $load_gettext_stubs();
-				}
-				return false;
-			}
-		);
-
-		// Fallback: manually include Gettext\Translations if autoloaders were not found or class is still missing.
-		if ( ! class_exists( '\\Gettext\\Translations' ) ) {
-			$load_gettext_stubs();
-
-			$vendor_roots = array();
-			if ( $found_autoload ) {
-				$vendor_roots[] = dirname( $found_autoload, 2 );
-			}
-			foreach ( $autoload_paths as $autoload ) {
-				$vendor_roots[] = dirname( $autoload, 2 );
-			}
-			$vendor_roots   = array_filter( array_unique( $vendor_roots ) );
-			$translations_paths = array();
-			foreach ( $vendor_roots as $root ) {
-				$translations_paths[] = $root . '/gettext/gettext/src/Translations.php';
-				$translations_paths[] = $root . '/vendor/gettext/gettext/src/Translations.php';
-			}
-			foreach ( $translations_paths as $file ) {
-				if ( file_exists( $file ) ) {
-					require_once $file;
-					break;
-				}
-			}
-		}
-
 		// Register PSR-4 autoloader for WP_CLI\I18n classes from vendored code.
 		$src_dir = __DIR__ . '/wp-cli/src';
 		spl_autoload_register(
