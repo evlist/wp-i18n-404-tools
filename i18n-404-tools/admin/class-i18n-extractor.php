@@ -28,75 +28,29 @@ class I18N_404_Extractor {
 	 */
 	private $loaded = false;
 
-	/**
-	 * Ensure vendor autoload and all command classes are loaded once.
-	 */
+			   /**
+				* Ensure vendor autoload and local WP_CLI\I18n classes are loaded once.
+				*/
 	private function ensure_loaded() {
 		if ( $this->loaded ) {
 			return;
 		}
 
-		// Load WP_CLI\Utils functions that are needed by vendored code.
-		require_once __DIR__ . '/class-i18n-wp-cli-utils.php';
+		// Load Composer's autoloader from the standard plugin vendor directory.
+		require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
-		// Try to locate Composer's autoloader from multiple possible locations.
-		// Plugin vendor (gettext/gettext) is searched FIRST for priority.
-		$autoload_paths = array(
-			dirname( __DIR__ ) . '/vendor/autoload.php',     // Plugin vendor (i18n-404-tools/vendor) - FIRST PRIORITY.
-			dirname( __DIR__, 2 ) . '/vendor/autoload.php',  // Repo root when plugin lives in /i18n-404-tools/.
-			dirname( __DIR__, 3 ) . '/vendor/autoload.php',  // When plugin is placed under wp-content/plugins/.
-			dirname( __DIR__, 4 ) . '/vendor/autoload.php',  // Safety net for odd layouts.
-			dirname( __DIR__, 8 ) . '/vendor/autoload.php',  // Devcontainer path back to repo root vendor/.
-			( defined( 'ABSPATH' ) ? ABSPATH . '../vendor/autoload.php' : null ),
-			( defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR . '/vendor/autoload.php' : null ),
-		);
-
-		$autoload_paths = array_filter( array_unique( $autoload_paths ) );
-
-		$found_autoload = null;
-		foreach ( $autoload_paths as $autoload ) {
-			if ( file_exists( $autoload ) ) {
-				require_once $autoload;
-				$found_autoload = $autoload;
-				break;
-			}
-		}
-
-		// Register PSR-4 autoloader for WP_CLI\I18n classes from vendored code.
+		// Register a local PSR-4 autoloader for WP_CLI\I18n classes from admin/wp-cli/src.
 		$src_dir = __DIR__ . '/wp-cli/src';
 		spl_autoload_register(
 			function ( $class ) use ( $src_dir ) {
-				// Handle WP_CLI\I18n\* classes.
 				if ( 0 === strpos( $class, 'WP_CLI\\I18n\\' ) ) {
 					$relative_class = substr( $class, strlen( 'WP_CLI\\I18n\\' ) );
-					$file            = $src_dir . '/' . str_replace( '\\', '/', $relative_class ) . '.php';
+					$file = $src_dir . '/' . str_replace( '\\', '/', $relative_class ) . '.php';
 					if ( file_exists( $file ) ) {
 						require_once $file;
 						return true;
 					}
 				}
-
-				// Handle WP_CLI\Utils - create it dynamically from our global WP_CLI_Utils.
-				if ( 'WP_CLI\\Utils' === $class ) {
-					// Create an alias to the global WP_CLI_Utils class.
-					class_alias( 'WP_CLI_Utils', 'WP_CLI\\Utils' );
-					return true;
-				}
-
-				// Handle WP_CLI\ExitException - create it dynamically from our global class.
-				if ( 'WP_CLI\\ExitException' === $class ) {
-					class_alias( 'WP_CLI_ExitException', 'WP_CLI\\ExitException' );
-					return true;
-				}
-
-				// Handle WP_CLI_Command from our shim.
-				if ( 'WP_CLI_Command' === $class || 'WP_CLI\\Command' === $class ) {
-					if ( ! class_exists( 'WP_CLI_Command' ) ) {
-						class_alias( 'WP_CLI_Command', 'WP_CLI\\Command' );
-					}
-					return true;
-				}
-
 				return false;
 			}
 		);
