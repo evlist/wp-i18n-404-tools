@@ -170,29 +170,30 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 				) . ' '
 				. $this->generate_cancel_button( __( 'Cancel', 'i18n-404-tools' ) );
 		} else {
-			$html .= '<p>' . esc_html__( 'All JSON files are up to date.', 'i18n-404-tools' ) . '</p>'
-				. '<p>' . esc_html__( 'Would you like to regenerate them anyway?', 'i18n-404-tools' ) . '</p>'
-				. $this->generate_action_button(
-					__( 'Regenerate all JSON files', 'i18n-404-tools' ),
-					'generate_json',
-					'generate_all',
-					'button-primary'
-				) . ' '
-				. $this->generate_cancel_button( __( 'Cancel', 'i18n-404-tools' ) );
-		}
+		              if ( $error ) {
+							error_log( '[i18n-404-tools] JSON generation error: ' . $error );
+							$output = '';
+		              }
 
-		$html .= '</div>';
+						$output  = esc_html( $output );
+						$message = ( $result['success'] && file_exists( $this->json_path ) )
+							? esc_html__( 'JSON files generated successfully!', 'i18n-404-tools' )
+							: esc_html__( 'An error occurred. Please contact the administrator.', 'i18n-404-tools' );
 
-		return array( 'html' => $html );
-	}
-
-	/**
-	 * Generate JSON files.
-	 *
-	 * @param bool $generate_all Whether to generate all files or only outdated ones.
-	 * @return array Response with HTML content.
-	 */
-	protected function generate_json_files( $generate_all ) {
+						return array(
+							'html' => '<div class="i18n-modal-content">'
+								. $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
+								. '<p><strong>' . $message . '</strong></p>'
+								. ( $output ? '<div class="i18n-copy-wrap" style="display:flex;align-items:center;gap:5px;">'
+								. '<button type="button" class="button i18n-copy-btn" title="' . esc_attr__( 'Copy output', 'i18n-404-tools' ) . '">'
+								. esc_html__( 'Copy output', 'i18n-404-tools' )
+								. '</button>'
+								. '</div>'
+								. '<pre class="i18n-404-tools-output" style="margin-top:10px;max-height:200px;overflow:auto;">' . $output . '</pre>' : '' )
+								. $this->generate_cancel_button( __( 'Close', 'i18n-404-tools' ) )
+								. '</div>',
+						);
+					}
 		$po_files = $this->get_po_files();
 
 		if ( empty( $po_files ) ) {

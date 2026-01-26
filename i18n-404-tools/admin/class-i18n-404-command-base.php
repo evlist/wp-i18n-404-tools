@@ -85,7 +85,7 @@ abstract class I18N_404_Command_Base {
 			throw new Exception( esc_html__( 'Plugin not found.', 'i18n-404-tools' ) );
 		}
 
-		$this->plugin_dir    = dirname( $this->plugin_path );
+		$this->plugin_dir    = $this->plugin_path;
 		$this->languages_dir = $this->plugin_dir . '/languages';
 
 		if ( ! is_dir( $this->languages_dir ) ) {

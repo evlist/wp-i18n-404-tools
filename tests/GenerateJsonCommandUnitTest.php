@@ -36,20 +36,22 @@ class GenerateJsonCommandUnitTest extends TestCase {
 	private $plugin_dir;
 	private $languages_dir;
 	private $domain;
+	private $plugin_folder;
 
-	protected function setUp(): void {
-		$unique            = 'jsoncmd-' . uniqid();
-		$this->plugin_slug = $unique . '/' . $unique . '.php';
-		$this->plugin_dir  = WP_PLUGIN_DIR . '/' . dirname( $this->plugin_slug );
-		$this->languages_dir = $this->plugin_dir . '/languages';
-		$this->domain      = basename( $this->plugin_slug, '.php' );
+	       protected function setUp(): void {
+		       $unique            = 'jsoncmd-' . uniqid();
+		       $this->plugin_folder = $unique;
+		       $this->plugin_slug = $unique; // On passe le slug dossier, pas le chemin relatif du fichier principal
+		       $this->plugin_dir  = WP_PLUGIN_DIR . '/' . $this->plugin_folder;
+		       $this->languages_dir = $this->plugin_dir . '/languages';
+		       $this->domain      = $unique;
 
-		if ( ! is_dir( $this->languages_dir ) ) {
-			mkdir( $this->languages_dir, 0755, true );
-		}
+		       if ( ! is_dir( $this->languages_dir ) ) {
+			       mkdir( $this->languages_dir, 0755, true );
+		       }
 
-		file_put_contents( $this->plugin_dir . '/' . basename( $this->plugin_slug ), "<?php\n// test plugin stub\n" );
-	}
+		       file_put_contents( $this->plugin_dir . '/' . $this->plugin_folder . '.php', "<?php\n// test plugin stub\n" );
+	       }
 
 	protected function tearDown(): void {
 		if ( is_dir( $this->plugin_dir ) ) {
@@ -57,9 +59,9 @@ class GenerateJsonCommandUnitTest extends TestCase {
 		}
 	}
 
-	private function make_command() {
-		return new Testable_JSON_Command( $this->plugin_slug );
-	}
+	       private function make_command() {
+		       return new Testable_JSON_Command( $this->plugin_slug );
+	       }
 
 	private function remove_dir( $dir ) {
 		$items = scandir( $dir );

@@ -36,7 +36,6 @@ class I18N_404_Extractor {
 			return;
 		}
 
-
 			   // Load Composer's autoloader from the standard plugin vendor directory.
 			   require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
