@@ -1,17 +1,15 @@
-# SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
 # Copyright (C) 2026 Eric van der Vlist
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
+# This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Missing i18n Tools 1.0.0\n"
+"Project-Id-Version: Missing i18n Tools 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/i18n-404-tools\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-21T23:19:46+00:00\n"
+"POT-Creation-Date: 2026-01-26T09:21:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0-stub\n"
 "X-Domain: i18n-404-tools\n"
@@ -66,7 +64,7 @@ msgid "Plugin not found."
 msgstr ""
 
 #: admin/class-i18n-404-generate-json-command.php:63
-#: admin/class-i18n-404-generate-pot-command.php:118
+#: admin/class-i18n-404-generate-pot-command.php:117
 msgid "Unknown step."
 msgstr ""
 
@@ -89,9 +87,9 @@ msgstr ""
 #: admin/class-i18n-404-generate-json-command.php:82
 #: admin/class-i18n-404-generate-json-command.php:102
 #: admin/class-i18n-404-generate-json-command.php:202
-#: admin/class-i18n-404-generate-json-command.php:277
-#: admin/class-i18n-404-generate-pot-command.php:109
-#: admin/class-i18n-404-generate-pot-command.php:119
+#: admin/class-i18n-404-generate-json-command.php:278
+#: admin/class-i18n-404-generate-pot-command.php:108
+#: admin/class-i18n-404-generate-pot-command.php:118
 #: i18n-404-tools.php:118
 msgid "Close"
 msgstr ""
@@ -162,22 +160,22 @@ msgstr ""
 msgid "No .po files found."
 msgstr ""
 
-#: admin/class-i18n-404-generate-json-command.php:240
+#: admin/class-i18n-404-generate-json-command.php:241
 msgid "JSON files generated successfully!"
 msgstr ""
 
-#: admin/class-i18n-404-generate-json-command.php:242
+#: admin/class-i18n-404-generate-json-command.php:243
 msgid "Some JSON files failed to generate."
 msgstr ""
 
-#: admin/class-i18n-404-generate-json-command.php:267
-#: admin/class-i18n-404-generate-pot-command.php:101
+#: admin/class-i18n-404-generate-json-command.php:268
+#: admin/class-i18n-404-generate-pot-command.php:100
 msgid "Copy output"
 msgstr ""
 
 #: admin/class-i18n-404-generate-pot-command.php:50
 #: admin/class-i18n-404-generate-pot-command.php:65
-#: admin/class-i18n-404-generate-pot-command.php:98
+#: admin/class-i18n-404-generate-pot-command.php:97
 #: i18n-404-tools.php:78
 msgid "Generate .pot"
 msgstr ""
@@ -198,11 +196,11 @@ msgstr ""
 msgid "Generate"
 msgstr ""
 
-#: admin/class-i18n-404-generate-pot-command.php:93
+#: admin/class-i18n-404-generate-pot-command.php:92
 msgid "POT file generated successfully!"
 msgstr ""
 
-#: admin/class-i18n-404-generate-pot-command.php:94
+#: admin/class-i18n-404-generate-pot-command.php:93
 msgid "Failed to generate POT file."
 msgstr ""
 

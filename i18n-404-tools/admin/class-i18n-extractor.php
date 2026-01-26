@@ -36,8 +36,12 @@ class I18N_404_Extractor {
 			return;
 		}
 
-		// Load Composer's autoloader from the standard plugin vendor directory.
-		require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+
+			   // Load Composer's autoloader from the standard plugin vendor directory.
+			   require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+
+			   // Always load WP_CLI\Utils functions for both web and test contexts.
+			   require_once __DIR__ . '/class-i18n-wp-cli-utils.php';
 
 		// Register a local PSR-4 autoloader for WP_CLI\I18n classes from admin/wp-cli/src.
 		$src_dir = __DIR__ . '/wp-cli/src';
