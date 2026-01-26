@@ -98,10 +98,11 @@ add_action(
 		wp_enqueue_script(
 			'i18n-404-tools-modal',
 			plugins_url( 'admin/js/i18n-404-tools-modal.js', __FILE__ ),
-			array(),
+			array( 'wp-i18n' ),
 			'1.0',
 			true
 		);
+		wp_set_script_translations( 'i18n-404-tools-modal', 'i18n-404-tools', plugin_dir_path( __FILE__ ) . 'languages' );
 		wp_enqueue_style( 'dashicons' );
 		require plugin_dir_path( __FILE__ ) . 'admin/modal-config.php';
 		global $i18n_404_tools_modal_config;
@@ -112,13 +113,6 @@ add_action(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'i18n_404_tools_action' ),
 				'ui'       => $i18n_404_tools_modal_config,
-				'i18n'     => array(
-					'loading'           => __( 'Loading...', 'i18n-404-tools' ),
-					'error_no_command'  => __( 'Error: No command specified', 'i18n-404-tools' ),
-					'error_unexpected'  => __( 'Error: Unexpected response from server.', 'i18n-404-tools' ),
-					'error_ajax_failed' => __( 'Error: Could not connect to the server. Please try again.', 'i18n-404-tools' ),
-					'close'             => __( 'Close', 'i18n-404-tools' ),
-				),
 			)
 		);
 		wp_enqueue_style(

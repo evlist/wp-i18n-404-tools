@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Missing i18n tools 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/i18n-404-tools\n"
 "POT-Creation-Date: 2026-01-09T08:54:58+00:00\n"
-"PO-Revision-Date: 2026-01-09 09:57+0000\n"
+"PO-Revision-Date: 2026-01-26 15:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: Chinese (China)\n"
 "Language: zh_CN\n"
@@ -17,203 +17,200 @@ msgstr ""
 "X-Domain: i18n-404-tools\n"
 "X-Loco-Version: 2.8.0; wp-6.9; php-8.3.6"
 
-#. Plugin Name of the plugin
-#: i18n-404-tools.php
-msgid "Missing i18n tools"
-msgstr "缺失的 i18n 工具"
-
-#. Plugin URI of the plugin
-#: i18n-404-tools.php
-msgid "https://github.com/evlist/wp-i18n-404-tools"
-msgstr "https://github.com/evlist/wp-i18n-404-tools"
-
-#. Description of the plugin
-#: i18n-404-tools.php
-msgid "A WordPress plugin with missing i18N (internationalization) tools."
-msgstr "一个补足 WordPress i18N（国际化）工具的插件。"
-
-#. Author of the plugin
-#: i18n-404-tools.php
-msgid "Eric van der Vlist"
-msgstr "Eric van der Vlist"
-
-#. Author URI of the plugin
-#: i18n-404-tools.php
-msgid "https://e.vli.st/"
-msgstr "https://e.vli.st/"
-
-#: admin/class-generate-json-command.php:54
-#: admin/class-generate-pot-command.php:108
-msgid "Unknown step."
-msgstr "未知步骤。"
-
-#: admin/class-generate-json-command.php:70
-msgid "No .po translation files found."
-msgstr "未找到 .po 翻译文件。"
-
-#: admin/class-generate-json-command.php:71
-msgid ""
-"Please create translations first (e.g., using Loco Translate or Poedit)."
-msgstr "请先创建翻译（例如使用 Loco Translate 或 Poedit）。"
-
-#: admin/class-generate-json-command.php:72
-#: admin/class-generate-json-command.php:91
-#: admin/class-generate-json-command.php:188
-#: admin/class-generate-json-command.php:263
-#: admin/class-generate-pot-command.php:99
-#: admin/class-generate-pot-command.php:109 i18n-404-tools.php:117
-msgid "Close"
-msgstr "关闭"
-
-#: admin/class-generate-json-command.php:87
-#: admin/class-generate-json-command.php:111
-#: admin/class-generate-json-command.php:127
-msgid "Translation files found:"
-msgstr "找到的翻译文件："
-
-#: admin/class-generate-json-command.php:89
-msgid "JSON files not needed."
-msgstr "无需生成 JSON 文件。"
-
-#: admin/class-generate-json-command.php:90
-msgid "This plugin does not use JavaScript translations (wp.i18n)."
-msgstr "此插件未使用 JavaScript 翻译（wp.i18n）。"
-
-#: admin/class-generate-json-command.php:113
-msgid "No JSON files found. Generate them now?"
-msgstr "未找到 JSON 文件。现在生成吗？"
-
-#: admin/class-generate-json-command.php:115
-msgid "Generate JSON files"
-msgstr "生成 JSON 文件"
-
-#: admin/class-generate-json-command.php:120
-#: admin/class-generate-json-command.php:157
-#: admin/class-generate-json-command.php:167
-#: admin/class-generate-pot-command.php:49
-#: admin/class-generate-pot-command.php:62
-msgid "Cancel"
-msgstr "取消"
-
-#: admin/class-generate-json-command.php:134
+#. Translators: %d is the number of JSON files that are outdated or missing.
+#: admin/class-i18n-404-generate-json-command.php:148
 #, php-format
 msgid "%d JSON file is outdated or missing."
 msgid_plural "%d JSON files are outdated or missing."
 msgstr[0] "%d 个 JSON 文件已过期或缺失。"
 
-#: admin/class-generate-json-command.php:144
-msgid "What would you like to do?"
-msgstr "你想要执行什么操作？"
-
-#: admin/class-generate-json-command.php:146
-msgid "Generate outdated JSON files"
-msgstr "生成过期的 JSON 文件"
-
-#: admin/class-generate-json-command.php:152
-msgid "Generate all JSON files"
-msgstr "生成所有 JSON 文件"
-
-#: admin/class-generate-json-command.php:159
-msgid "All JSON files are up to date."
-msgstr "所有 JSON 文件均为最新。"
-
-#: admin/class-generate-json-command.php:160
-msgid "Would you like to regenerate them anyway?"
-msgstr "仍要重新生成吗？"
-
-#: admin/class-generate-json-command.php:162
-msgid "Regenerate all JSON files"
-msgstr "重新生成所有 JSON 文件"
-
-#: admin/class-generate-json-command.php:187
-msgid "No .po files found."
-msgstr "未找到 .po 文件。"
-
-#: admin/class-generate-json-command.php:226
-msgid "JSON files generated successfully!"
-msgstr "JSON 文件生成成功！"
-
-#: admin/class-generate-json-command.php:228
-msgid "Some JSON files failed to generate."
-msgstr "部分 JSON 文件生成失败。"
-
-#: admin/class-generate-json-command.php:253
-#: admin/class-generate-pot-command.php:91
-msgid "Copy output"
-msgstr "复制输出"
-
-#: admin/class-generate-pot-command.php:41
+#: admin/class-i18n-404-generate-pot-command.php:48
 msgid "A .pot file already exists. Overwrite?"
 msgstr ".pot 文件已存在，要覆盖吗？"
 
-#: admin/class-generate-pot-command.php:43
-msgid "Yes, overwrite"
-msgstr "是，覆盖"
+#. Description of the plugin
+#: i18n-404-tools.php:28
+msgid "A WordPress plugin with missing i18N (internationalization) tools."
+msgstr "一个补足 WordPress i18N（国际化）工具的插件。"
 
-#: admin/class-generate-pot-command.php:55
-msgid "No .pot file exists. Generate now?"
-msgstr "尚未有 .pot 文件。现在生成吗？"
+#: admin/class-i18n-404-generate-json-command.php:181
+#: admin/class-i18n-404-generate-pot-command.php:88
+msgid "An error occurred. Please contact the administrator."
+msgstr ""
 
-#: admin/class-generate-pot-command.php:57
-msgid "Generate"
-msgstr "生成"
+#: admin/class-i18n-404-generate-json-command.php:132
+#: admin/class-i18n-404-generate-json-command.php:171
+#: admin/class-i18n-404-generate-pot-command.php:70
+msgid "Cancel"
+msgstr "取消"
 
-#: admin/class-generate-pot-command.php:82
-msgid "POT file generated successfully!"
-msgstr "POT 文件生成成功！"
+#: admin/class-i18n-404-generate-json-command.php:82
+#: admin/class-i18n-404-generate-json-command.php:102
+#: admin/class-i18n-404-generate-json-command.php:193
+#: admin/class-i18n-404-generate-json-command.php:203
+#: admin/class-i18n-404-generate-json-command.php:279
+#: admin/class-i18n-404-generate-pot-command.php:100
+#: admin/class-i18n-404-generate-pot-command.php:109
+#: admin/js/i18n-404-tools-modal.js:46
+msgid "Close"
+msgstr "关闭"
 
-#: admin/class-generate-pot-command.php:84
-msgid "Failed to generate POT file."
-msgstr "生成 POT 文件失败。"
-
-#: admin/class-i18n-ajax-router.php:36
-msgid "Unauthorized request."
-msgstr "未授权的请求。"
-
-#: admin/class-i18n-ajax-router.php:47
-msgid "Missing required parameters."
-msgstr "缺少必需的参数。"
-
-#: admin/class-i18n-ajax-router.php:51
-msgid "Unknown command."
-msgstr "未知命令。"
-
-#: admin/class-i18n-ajax-router.php:60
-msgid "Command file not found: "
-msgstr "未找到命令文件："
-
-#: admin/class-i18n-ajax-router.php:65
+#: admin/class-i18n-404-ajax-router.php:89
 msgid "Command class not found after loading file."
 msgstr "加载文件后未找到命令类。"
 
-#: admin/class-i18n-command-base.php:50
-msgid "Plugin not found."
-msgstr "未找到插件。"
+#: admin/class-i18n-404-ajax-router.php:84
+msgid "Command file not found: "
+msgstr "未找到命令文件："
 
-#: admin/class-wpcli-updater.php:84
-msgid "WP-CLI was successfully installed."
-msgstr "已成功安装 WP-CLI。"
+#: admin/class-i18n-404-generate-json-command.php:188
+#: admin/class-i18n-404-generate-json-command.php:189
+#: admin/class-i18n-404-generate-json-command.php:269
+#: admin/class-i18n-404-generate-pot-command.php:95
+#: admin/class-i18n-404-generate-pot-command.php:96
+msgid "Copy output"
+msgstr "复制输出"
 
-#: i18n-404-tools.php:81
-msgid "Generate .pot"
-msgstr "生成 .pot"
+#. Author of the plugin
+#: i18n-404-tools.php:30
+msgid "Eric van der Vlist"
+msgstr "Eric van der Vlist"
 
-#: i18n-404-tools.php:84
-msgid "Generate JSON"
-msgstr "生成 JSON"
+#: admin/js/i18n-404-tools-modal.js:97
+msgid "Error: Could not connect to the server. Please try again."
+msgstr "错误：无法连接服务器。请重试。"
 
-#: i18n-404-tools.php:113
-msgid "Loading..."
-msgstr "加载中..."
-
-#: i18n-404-tools.php:114
+#: admin/js/i18n-404-tools-modal.js:66
 msgid "Error: No command specified"
 msgstr "错误：未指定命令"
 
-#: i18n-404-tools.php:115
+#: admin/js/i18n-404-tools-modal.js:93
 msgid "Error: Unexpected response from server."
 msgstr "错误：服务器返回了意外响应。"
 
-#: i18n-404-tools.php:116
-msgid "Error: Could not connect to the server. Please try again."
-msgstr "错误：无法连接服务器。请重试。"
+#: admin/class-i18n-404-generate-pot-command.php:59
+msgid "Generate"
+msgstr "生成"
+
+#: admin/class-i18n-404-generate-pot-command.php:67
+#: admin/class-i18n-404-generate-pot-command.php:92 i18n-404-tools.php:80
+msgid "Generate .pot"
+msgstr "生成 .pot"
+
+#: admin/class-i18n-404-generate-json-command.php:166
+msgid "Generate all JSON files"
+msgstr "生成所有 JSON 文件"
+
+#: admin/class-i18n-404-generate-json-command.php:79
+#: admin/class-i18n-404-generate-json-command.php:97
+#: admin/class-i18n-404-generate-json-command.php:122
+#: admin/class-i18n-404-generate-json-command.php:139
+#: admin/class-i18n-404-generate-json-command.php:185 i18n-404-tools.php:83
+msgid "Generate JSON"
+msgstr "生成 JSON"
+
+#: admin/class-i18n-404-generate-json-command.php:127
+msgid "Generate JSON files"
+msgstr "生成 JSON 文件"
+
+#: admin/class-i18n-404-generate-json-command.php:160
+msgid "Generate outdated JSON files"
+msgstr "生成过期的 JSON 文件"
+
+#. Author URI of the plugin
+#: i18n-404-tools.php:31
+msgid "https://e.vli.st/"
+msgstr "https://e.vli.st/"
+
+#. Plugin URI of the plugin
+#: i18n-404-tools.php:27
+msgid "https://github.com/evlist/wp-i18n-404-tools"
+msgstr "https://github.com/evlist/wp-i18n-404-tools"
+
+#: admin/class-i18n-404-generate-json-command.php:180
+#: admin/class-i18n-404-generate-json-command.php:242
+msgid "JSON files generated successfully!"
+msgstr "JSON 文件生成成功！"
+
+#: admin/class-i18n-404-generate-json-command.php:100
+msgid "JSON files not needed."
+msgstr "无需生成 JSON 文件。"
+
+#: admin/js/i18n-404-tools-modal.js:19
+msgid "Loading..."
+msgstr "加载中..."
+
+#. Plugin Name of the plugin
+#: i18n-404-tools.php:26
+#, fuzzy
+#| msgid "Missing i18n tools"
+msgid "Missing i18n Tools"
+msgstr "缺失的 i18n 工具"
+
+#: admin/class-i18n-404-ajax-router.php:71
+msgid "Missing required parameters."
+msgstr "缺少必需的参数。"
+
+#: admin/class-i18n-404-generate-json-command.php:202
+msgid "No .po files found."
+msgstr "未找到 .po 文件。"
+
+#: admin/class-i18n-404-generate-json-command.php:80
+msgid "No .po translation files found."
+msgstr "未找到 .po 翻译文件。"
+
+#: admin/class-i18n-404-generate-pot-command.php:57
+msgid "No .pot file exists. Generate now?"
+msgstr "尚未有 .pot 文件。现在生成吗？"
+
+#: admin/class-i18n-404-generate-json-command.php:125
+msgid "No JSON files found. Generate them now?"
+msgstr "未找到 JSON 文件。现在生成吗？"
+
+#: admin/class-i18n-404-generate-json-command.php:81
+msgid ""
+"Please create translations first (e.g., using Loco Translate or Poedit)."
+msgstr "请先创建翻译（例如使用 Loco Translate 或 Poedit）。"
+
+#: admin/class-i18n-404-command-base.php:85
+msgid "Plugin not found."
+msgstr "未找到插件。"
+
+#: admin/class-i18n-404-generate-pot-command.php:87
+msgid "POT file generated successfully!"
+msgstr "POT 文件生成成功！"
+
+#: admin/class-i18n-404-generate-json-command.php:244
+msgid "Some JSON files failed to generate."
+msgstr "部分 JSON 文件生成失败。"
+
+#: admin/class-i18n-404-generate-json-command.php:101
+msgid "This plugin does not use JavaScript translations (wp.i18n)."
+msgstr "此插件未使用 JavaScript 翻译（wp.i18n）。"
+
+#: admin/class-i18n-404-generate-json-command.php:98
+#: admin/class-i18n-404-generate-json-command.php:123
+#: admin/class-i18n-404-generate-json-command.php:140
+msgid "Translation files found:"
+msgstr "找到的翻译文件："
+
+#: admin/class-i18n-404-ajax-router.php:60
+msgid "Unauthorized request."
+msgstr "未授权的请求。"
+
+#: admin/class-i18n-404-ajax-router.php:75
+msgid "Unknown command."
+msgstr "未知命令。"
+
+#: admin/class-i18n-404-generate-json-command.php:63
+#: admin/class-i18n-404-generate-pot-command.php:108
+msgid "Unknown step."
+msgstr "未知步骤。"
+
+#: admin/class-i18n-404-generate-json-command.php:158
+msgid "What would you like to do?"
+msgstr "你想要执行什么操作？"
+
+#: admin/class-i18n-404-generate-pot-command.php:50
+msgid "Yes, overwrite"
+msgstr "是，覆盖"

@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+const { __ } = window.wp.i18n;
+
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof I18n404ToolsConfig === 'undefined' || !I18n404ToolsConfig.ui) {
         console.error('I18n404ToolsConfig.ui is not defined!');
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const action = e.target.closest('.' + cfg.action_class);
         if (action) {
             e.preventDefault();
-            showI18n404ToolsModal(I18n404ToolsConfig.i18n.loading);
+            showI18n404ToolsModal(__( 'Loading...', 'i18n-404-tools' ));
             const plugin = action.getAttribute(cfg.data_plugin);
             const command = action.getAttribute(cfg.data_command);
             const step = action.getAttribute(cfg.data_step) || 'start';
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.className = cfg.overlay_class;
         overlay.innerHTML = `
             <div class="${cfg.content_class}">
-                <span class="dashicons dashicons-no-alt ${cfg.close_class}" title="${I18n404ToolsConfig.i18n.close}"></span>
+                <span class="dashicons dashicons-no-alt ${cfg.close_class}" title="${__( 'Close', 'i18n-404-tools' )}"></span>
                 <div class="${cfg.body_class}">${content}</div>
             </div>
         `;
@@ -61,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // AJAX to fetch modal content
     function fetchI18n404ToolsModalContent(plugin, command, step = 'start', data = {}) {
         if (!command) {
-            showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + I18n404ToolsConfig.i18n.error_no_command + '</div>');
+            showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + __( 'Error: No command specified', 'i18n-404-tools' ) + '</div>');
             return;
         }
         const postData = Object.assign({}, data, {
@@ -88,11 +90,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (json.data && json.data.message) {
                     showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + json.data.message + '</div>');
                 } else {
-                    showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + I18n404ToolsConfig.i18n.error_unexpected + '</div>');
+                    showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + __( 'Error: Unexpected response from server.', 'i18n-404-tools' ) + '</div>');
                 }
             })
             .catch(() => {
-                showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + I18n404ToolsConfig.i18n.error_ajax_failed + '</div>');
+                showI18n404ToolsModal('<div class="i18n-404-tools-modal-error">' + __( 'Error: Could not connect to the server. Please try again.', 'i18n-404-tools' ) + '</div>');
             });
     }
 });
