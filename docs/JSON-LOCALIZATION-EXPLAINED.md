@@ -4,165 +4,235 @@ SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# 🌍 Comment WordPress charge les traductions JavaScript avec les fichiers JSON
+# WordPress Plugin Localization Methods (2025-2026)
 
-## Le Problème
+## 🌍 Overview of Localization Approaches
 
-Vous avez vu que wp-cli génère **plusieurs fichiers JSON** avec des noms comme :
-```
-php-and-js-fr_FR-03273cb8448a05312170701e034b100b.json
-php-and-js-fr_FR-345980b30b12cfe078f9cd7c2ae9feac.json
-php-and-js-fr_FR-616cd17457f52bc81f2b5fc7db1b0b10.json
-...
-```
+WordPress plugins can be localized using different methods, each with specific advantages and use cases.
 
-## La Solution : Hash MD5 du chemin du fichier source
+---
 
-WordPress utilise un système de **correspondance par hash MD5** :
+## 1️⃣ **Classic Method: `.po`/`.mo` + `load_plugin_textdomain()`**
 
-### 1. Génération des fichiers JSON (wp-cli)
-
-wp-cli crée **un fichier JSON par fichier source JavaScript** :
-
-| Fichier source | Hash MD5 | Fichier JSON généré |
-|----------------|----------|---------------------|
-| `admin/script.js` | `345980b30b12cfe078f9cd7c2ae9feac` | `domaine-fr_FR-345980b30b12cfe078f9cd7c2ae9feac.json` |
-| `assets/main.js` | `616cd17457f52bc81f2b5fc7db1b0b10` | `domaine-fr_FR-616cd17457f52bc81f2b5fc7db1b0b10.json` |
-| `admin/app.js` | `bd531acd6b29cc840c177260c5f68ec2` | `domaine-fr_FR-bd531acd6b29cc840c177260c5f68ec2.json` |
-
-Le hash est calculé : `md5( chemin_relatif_du_fichier_source )`
-
-### 2. Chargement dans WordPress (runtime)
-
-Quand vous enregistrez un script JS avec `wp_enqueue_script()` :
-
+### Code Example
 ```php
-wp_enqueue_script( 'mon-script', 
-    plugins_url( 'assets/main.js', __FILE__ ), 
-    array( 'wp-i18n' ) 
-);
-
-wp_set_script_translations( 'mon-script', 'mon-domaine' );
+// In main plugin file
+function my_plugin_load_textdomain() {
+    load_plugin_textdomain( 
+        'my-plugin', 
+        false, 
+        dirname( plugin_basename( __FILE__ ) ) . '/languages' 
+    );
+}
+add_action( 'plugins_loaded', 'my_plugin_load_textdomain' );
 ```
 
-WordPress fait automatiquement :
-
-1. **Calcule le chemin relatif** du fichier JS : `assets/main.js`
-2. **Calcule le hash MD5** : `md5('assets/main.js')` = `616cd17457f52bc81f2b5fc7db1b0b10`
-3. **Cherche le fichier JSON** correspondant : `mon-domaine-fr_FR-616cd17457f52bc81f2b5fc7db1b0b10.json`
-4. **Charge les traductions** et les injecte dans `wp.i18n`
-
-### 3. Utilisation dans JavaScript
-
-Dans votre fichier `assets/main.js` :
-
-```javascript
-const { __ } = wp.i18n;
-
-console.log( __( 'Main JavaScript String', 'mon-domaine' ) );
-// Affiche: "Chaîne JavaScript principale" (si locale fr_FR)
+### File Structure
+```
+my-plugin/
+├── languages/
+│   ├── my-plugin.pot          (template)
+│   ├── my-plugin-fr_FR.po     (editable source)
+│   ├── my-plugin-fr_FR.mo     (compiled binary)
+│   └── my-plugin-es_ES.po/mo
 ```
 
-## Exemple Concret
+### ✅ Pros
+- Historical WordPress standard
+- Compatible with all tools (Poedit, Loco Translate)
+- Works with translate.wordpress.org
+- Well documented and supported
 
-### Fichier PHP (enregistrement)
+### ❌ Cons
+- Binary `.mo` files (not version-control friendly)
+- Requires compilation `.po` → `.mo`
+- Performance: loads entire file into memory
+- Not suitable for modern JavaScript
 
+---
+
+## 2️⃣ **Modern Method: JSON (for JavaScript) + `.mo` (for PHP)**
+
+Since WordPress 5.0+ with Gutenberg:
+
+### Code Example
 ```php
-// i18n-404-tools.php
-wp_enqueue_script(
-    'i18n-404-tools-modal',
-    plugins_url( 'admin/js/i18n-404-tools-modal.js', __FILE__ ),
-    array( 'wp-i18n' ),
-    '1.0',
-    true
-);
+// PHP: classic method
+load_plugin_textdomain( 'my-plugin', false, ... );
 
-// Indique à WordPress où trouver les traductions
+// JS: automatic JSON loading
 wp_set_script_translations( 
-    'i18n-404-tools-modal',  // Handle du script
-    'i18n-404-tools',        // Domaine de traduction
-    plugin_dir_path( __FILE__ ) . 'languages'  // Dossier des traductions
+    'my-script-handle', 
+    'my-plugin', 
+    plugin_dir_path( __FILE__ ) . 'languages' 
 );
 ```
 
-### Fichier JSON généré
+### File Structure
+```
+my-plugin/
+├── languages/
+│   ├── my-plugin.pot
+│   ├── my-plugin-fr_FR.po
+│   ├── my-plugin-fr_FR.mo                    (for PHP)
+│   ├── my-plugin-fr_FR-{hash}.json           (for JS)
+│   └── my-plugin-fr_FR-{hash2}.json          (one per JS script)
+```
 
-Contenu de `i18n-404-tools-fr_FR-abc123def456.json` :
-
+### JSON Format
 ```json
 {
-    "translation-revision-date": "2026-01-22 10:00+0000",
-    "generator": "WP-CLI/2.12.0",
-    "source": "admin/js/i18n-404-tools-modal.js",
-    "domain": "messages",
-    "locale_data": {
-        "messages": {
-            "": {
-                "domain": "messages",
-                "lang": "fr_FR",
-                "plural-forms": "nplurals=2; plural=(n > 1);"
-            },
-            "Loading...": ["Chargement..."],
-            "Close": ["Fermer"]
-        }
+  "domain": "my-plugin",
+  "locale_data": {
+    "my-plugin": {
+      "": {
+        "domain": "my-plugin",
+        "lang": "fr_FR"
+      },
+      "Hello World": ["Bonjour le monde"]
     }
+  }
 }
 ```
 
-### Utilisation JavaScript
+### ✅ Pros
+- **JS Performance**: loads only necessary translations
+- Supports React, Vue, Angular
+- Human-readable and version-control friendly JSON files
+- Automatic split by JS script
 
-```javascript
-// admin/js/i18n-404-tools-modal.js
-const { __ } = wp.i18n;
+### ❌ Cons
+- Dual management: `.mo` for PHP + `.json` for JS
+- Hash in filenames (complex to manage)
+- **Requires WP-CLI** (`wp i18n make-json`) ← **This is where i18n-404-tools comes in!**
 
-console.log( __( 'Loading...', 'i18n-404-tools' ) );
-// Affiche: "Chargement..." (en français)
+---
 
-console.log( __( 'Close', 'i18n-404-tools' ) );
-// Affiche: "Fermer"
+## 3️⃣ **WordPress.org Method (GlotPress)**
+
+For plugins hosted on WordPress.org:
+
+### Code Example
+```php
+// Minimalist: just declare text domain
+load_plugin_textdomain( 'my-plugin' );
 ```
 
-## Pourquoi ce système ?
+### Workflow
+1. Generate `.pot` and commit it
+2. WordPress.org automatically extracts strings
+3. Translators translate on translate.wordpress.org
+4. WordPress automatically downloads `.mo`/`.json` from WP servers
 
-### Avantages
+### ✅ Pros
+- **Zero translation maintenance**
+- Global translator community
+- Automatic updates
+- No need to commit `.po`/`.mo` files
 
-1. **Performance** : Chaque fichier JS ne charge que ses propres traductions (pas tout le catalogue)
-2. **Cache** : Les fichiers JSON peuvent être mis en cache séparément
-3. **Modularité** : Chaque composant JS a ses traductions isolées
+### ❌ Cons
+- Reserved for WordPress.org plugins
+- Dependency on WordPress servers
+- Delay between string creation and translation availability
 
-### Le fichier `source` dans le JSON
+---
 
-Notez la propriété `"source"` dans le JSON :
+## 📊 Comparison Table
 
-```json
-"source": "admin/js/i18n-404-tools-modal.js"
+| Criterion | Classic `.po`/`.mo` | Modern JSON | GlotPress (WP.org) |
+|-----------|-------------------|-------------|-------------------|
+| **PHP** | ✅ Perfect | ✅ Perfect | ✅ Perfect |
+| **JavaScript** | ⚠️ Heavy | ✅ Optimal | ✅ Optimal |
+| **Performance** | ⚠️ Loads all | ✅ Split per script | ✅ Split per script |
+| **Tools** | ✅ All | ⚠️ WP-CLI required | ✅ Automatic |
+| **Version Control** | ❌ Binary files | ✅ Readable JSON | ✅ No files |
+| **Maintenance** | ⚠️ Manual | ⚠️ Manual | ✅ Automatic |
+
+---
+
+## 🎯 Current Trend (2025-2026)
+
+**Clear direction**: **JSON for JS + GlotPress for distribution**
+
+WordPress is moving towards:
+- ✅ Removing `.mo` files from repositories (automatic download)
+- ✅ Systematic JSON for all JavaScript code
+- ✅ GlotPress as distribution standard
+- ✅ Only `.pot` files in repository
+
+---
+
+## 💡 The Role of **i18n-404-tools**
+
+The **i18n-404-tools** plugin fills a critical gap in the modern localization workflow by providing:
+
+### 🔧 What i18n-404-tools Does
+- ✅ **Generate `.pot` files** without WP-CLI access
+- ✅ **Generate JSON translation files** from `.po` files (the "WP-CLI required" step!)
+- ✅ One-click i18n maintenance directly from WordPress admin
+- ✅ No shell access or command-line tools needed
+
+### 🎯 Use Case
+**For developers who want modern JSON translations but:**
+- Don't have WP-CLI installed
+- Don't have shell/SSH access
+- Want to stay in the WordPress admin interface
+- Need a GUI alternative to `wp i18n make-json`
+
+---
+
+## 🔄 Recommended Workflow with i18n-404-tools
+
+### For Plugins Not Yet on WordPress.org (Hybrid Approach)
+
+This approach ensures compatibility with both GitHub distribution and future WordPress.org hosting:
+```php
+// Load both .mo (PHP) and JSON (JS)
+load_plugin_textdomain( 'my-plugin', false, ... );
+wp_set_script_translations( 'my-script', 'my-plugin', ... );
 ```
 
-C'est une **métadonnée informative** pour les développeurs. Le vrai mécanisme de correspondance est le **hash MD5 dans le nom du fichier**.
-
-## Vérification Manuelle
-
-Pour vérifier le hash d'un fichier :
-
-```bash
-# Le chemin relatif (depuis la racine du plugin)
-echo -n "admin/js/i18n-404-tools-modal.js" | md5sum
-
-# Devrait correspondre au hash dans le nom du fichier JSON
+### File Structure (Commit All Translation Files)
+```
+my-plugin/
+├── languages/
+│   ├── my-plugin.pot              ← Generated by i18n-404-tools
+│   ├── my-plugin-fr_FR.po         ← Edited with Poedit/Loco Translate
+│   ├── my-plugin-fr_FR.mo         ← Generated by i18n-404-tools
+│   └── my-plugin-fr_FR-{hash}.json ← Generated by i18n-404-tools
 ```
 
-## Résumé
+### Workflow Steps
+1. **Generate `.pot`** using i18n-404-tools admin interface
+2. **Translate** using Poedit, Loco Translate, or any `.po` editor
+3. **Generate `.mo` and `.json`** using i18n-404-tools admin interface
+4. **Commit all files** (`.pot`, `.po`, `.mo`, `.json`) to repository
 
-```
-Fichier JS → Chemin relatif → MD5 → Nom du fichier JSON → Correspondance automatique
-     ↓                                                              ↓
-   Script enregistré avec wp_enqueue_script()              Traductions chargées
-   + wp_set_script_translations()                          et injectées dans wp.i18n
-```
+### Why This Approach?
+- ✅ Works immediately when installed from GitHub
+- ✅ Easy transition to WordPress.org later (just stop committing `.mo`/`.json`)
+- ✅ No dependency on external servers
+- ✅ Users get translations immediately after install
 
-WordPress gère tout automatiquement ! Vous n'avez qu'à :
-1. Générer les fichiers JSON avec wp-cli (ou ce plugin)
-2. Appeler `wp_set_script_translations()` avec le bon domaine
-3. Utiliser `wp.i18n.__()` dans votre JavaScript
+---
 
-✨ **Les traductions sont automatiquement chargées pour chaque script !**
+## 🚀 Future Migration Path
+
+When moving to WordPress.org:
+1. Keep generating `.pot` with i18n-404-tools
+2. Stop committing `.mo` and `.json` files
+3. Let translate.wordpress.org handle distribution
+4. Update `.gitignore` to exclude translation files except `.pot`
+
+---
+
+## 📚 Summary
+
+| Method | Best For | Tools Needed |
+|--------|----------|--------------|
+| **Classic** | Legacy plugins, PHP-only | Poedit, Loco Translate |
+| **Modern (JSON)** | Gutenberg blocks, React apps | **i18n-404-tools** or WP-CLI |
+| **GlotPress** | WordPress.org plugins | None (automatic) |
+| **Hybrid** (recommended for i18n-404-tools) | GitHub + future WP.org | **i18n-404-tools** |
+
+**i18n-404-tools makes modern WordPress localization accessible to everyone, regardless of hosting environment or technical expertise.**
