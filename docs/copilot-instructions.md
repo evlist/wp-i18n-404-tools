@@ -44,6 +44,7 @@ This WordPress plugin provides missing internationalization (i18n) tools directl
 2. **WordPress Standards**: Code must pass WordPress Coding Standards (PHPCS) and `wp plugin check`
 3. **No Cheating**: Never use `phpcs:ignore` or similar suppressions
 4. **Security Best Practices**: Follow WordPress security guidelines (escaping, sanitization, nonces, capability checks)
+5. **Internationalization**: All user-facing strings must be translatable using WordPress i18n functions
 
 ### Protected Files
 **NEVER modify these directories** - they contain vendored/copied library code:
