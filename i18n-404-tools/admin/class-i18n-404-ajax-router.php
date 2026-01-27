@@ -3,23 +3,6 @@
  * SPDX-FileCopyrightText: 2025, 2026 Eric van der Vlist <vdv@dyomedea.com>
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
-		   // Accept only plugin slugs: letters, numbers, hyphens.
-		   $plugin_slug = isset( $_POST['plugin'] ) ? preg_replace( '/[^a-zA-Z0-9\-]/', '', wp_unslash( $_POST['plugin'] ) ) : '';
-		   // Validate plugin slug against installed plugins
-		   if ( ! $plugin_slug || ! function_exists( 'get_plugins' ) ) {
-			   require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		   }
-		   $all_plugins = array_keys( get_plugins() );
-		   $valid_slugs = array();
-		   foreach ( $all_plugins as $plugin_file ) {
-			   $slug = preg_replace( '/\/.*$/', '', $plugin_file );
-			   $valid_slugs[$slug] = true;
-		   }
-		   if ( empty( $plugin_slug ) || ! isset( $valid_slugs[ $plugin_slug ] ) ) {
-			   wp_send_json_error( array( 'message' => __( 'Invalid plugin.', 'i18n-404-tools' ) ) );
-		   }
-
-/**
  * AJAX Router for WP i18n 404 Tools.
  *
  * @package I18n_404_Tools

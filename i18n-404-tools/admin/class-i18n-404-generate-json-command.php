@@ -20,23 +20,7 @@ require_once __DIR__ . '/class-i18n-404-command-base.php';
  * Command for generating JSON translation files from .po files for a plugin.
  */
 class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
-	/**
-	 * Generate JSON translation files from .po files.
-	 *
-	 * @param bool $overwrite Overwrite existing JSON files if true.
-	 * @return array Response with HTML content.
-	 */
-	protected function generate_json_files( $overwrite = false ) {
-		// Cette méthode doit être adaptée selon la logique métier du plugin.
-		// Ici, on retourne simplement un message de succès pour restaurer la compatibilité.
-		return array(
-			'html' => '<div class="i18n-modal-content">'
-				. $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
-				. '<p>' . esc_html__( 'JSON generation logic not yet implemented.', 'i18n-404-tools' ) . '</p>'
-				. $this->generate_cancel_button( __( 'Close', 'i18n-404-tools' ) )
-				. '</div>',
-		);
-	}
+	
 
 	/**
 	 * Set up the JSON command handler.
@@ -255,66 +239,94 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 	}
 
 	/**
-	 * Check if the plugin has JavaScript files that use wp.i18n for translations.
+	 * Check if the .pot file contains references to JavaScript files.
 	 *
-	 * @return bool True if JavaScript translation strings are found
+	 * @return bool True if JS references are found, false otherwise.
 	 */
 	protected function has_javascript_strings() {
-		// Check if there are any .js files in the plugin directory.
-		$js_files = $this->find_js_files( $this->plugin_dir );
 
-		if ( empty( $js_files ) ) {
+	    $handle = fopen( $this->pot_path, 'r' );
+		if ( ! $handle ) {
 			return false;
 		}
 
-		// Look for wp.i18n usage patterns in JavaScript files.
-		foreach ( $js_files as $js_file ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file reading.
-			$content = @file_get_contents( $js_file );
-			if ( false === $content ) {
-				continue;
-			}
-
-			// Détection : appel direct (wp.i18n.__) OU déstructuration suivie d'un appel à __()
-			// 1. wp.i18n.__('...')
-			// 2. const { __ } = wp.i18n; ... __(' 0')
-			if (
-				preg_match( '/wp\\.i18n\\.[_a-z]+\\s*\\(/', $content ) // appel direct
-				|| (
-					preg_match( '/const\\s*\\{[^}]*__[^}]*}\\s*=\\s*wp\\.i18n/', $content )
-					&& preg_match( '/__\\s*\\(/', $content )
-				)
-			) {
+		while ( ( $line = fgets( $handle ) ) !== false ) {
+			// Match lines starting with #: and containing a filename ending with .js
+			if ( preg_match( '/^#:.*\.js(:\d+)?\s?$/', $line ) ) {
+				fclose( $handle );
 				return true;
 			}
 		}
+
+		fclose( $handle );
 
 		return false;
 	}
 
 	/**
-	 * Find all JavaScript files in a directory.
+	 * Generate JSON files from .po files.
 	 *
-	 * @param string $dir Directory to search.
-	 * @return array List of JavaScript file paths.
+	 * @param bool $overwrite Whether to overwrite existing JSON files.
+	 * @return array Result array with HTML content and success flag.
 	 */
-	protected function find_js_files( $dir ) {
-		$js_files = array();
+	protected function generate_json_files( $overwrite = false ) {
+		$po_files = $this->get_po_files();
+		$results  = array();
+		$success  = true;
 
-		if ( ! is_dir( $dir ) ) {
-			return $js_files;
+		if ( empty( $po_files ) ) {
+			return array(
+				'html' => '<div class="i18n-modal-content">'
+					. $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
+					. '<p>' . esc_html__( 'No .po files found.', 'i18n-404-tools' ) . '</p>'
+					. $this->generate_cancel_button( __( 'Close', 'i18n-404-tools' ) )
+					. '</div>',
+			);
 		}
 
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( $dir, RecursiveDirectoryIterator::SKIP_DOTS )
+		$assoc_args = array(
+			'output' => $this->languages_dir,
+			'force'  => $overwrite,
+			'quiet'  => true,
 		);
 
-		foreach ( $iterator as $file ) {
-			if ( $file->isFile() && 'js' === $file->getExtension() ) {
-				$js_files[] = $file->getPathname();
+		foreach ( $po_files as $po_file ) {
+			$ret = $this->extractor->generate_json( $po_file, $assoc_args );
+			if ( is_array( $ret ) && ! empty( $ret['success'] ) ) {
+				$locale = basename( $po_file, '.po' );
+				$json_files = glob( $this->languages_dir . '/' . $locale . '-*.json' );
+				foreach ( $json_files as $json_file ) {
+					$results[] = array(
+						'file'    => basename( $json_file ),
+						'status'  => 'generated',
+						'message' => __( 'Generated', 'i18n-404-tools' ),
+					);
+				}
+			} else {
+				$results[] = array(
+					'file'    => basename( $po_file ),
+					'status'  => 'error',
+					'message' => is_array($ret) && !empty($ret['error']) ? $ret['error'] : __( 'Unknown error', 'i18n-404-tools' ),
+				);
+				$success = false;
 			}
 		}
 
-		return $js_files;
+		$html = '<div class="i18n-modal-content">'
+			. $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
+			. '<ul>';
+		foreach ( $results as $result ) {
+			$html .= '<li><strong>' . esc_html( $result['file'] ) . '</strong>: '
+				. esc_html( $result['message'] ) . '</li>';
+		}
+		$html .= '</ul>'
+			. $this->generate_cancel_button( __( 'Close', 'i18n-404-tools' ) )
+			. '</div>';
+
+		return array(
+			'html'    => $html,
+			'success' => $success,
+		);
 	}
+
 }
