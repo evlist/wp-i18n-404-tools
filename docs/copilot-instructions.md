@@ -51,6 +51,19 @@ This WordPress plugin provides missing internationalization (i18n) tools directl
 - `vendor/`
 - `wp-cli/src/`
 
+## Structural Integrity & PHP Placement
+- **No Method Nesting:** Always ensure that a new or modified method is placed outside of other methods. Check closing braces `}` before insertion.
+- **Namespace Awareness:** Maintain strict adherence to the defined `namespace` and `use` statements. Do not re-declare or omit them.
+- **Indentation Consistency:** Use the project's standard (Tabs for WordPress) to prevent the diff engine from misaligning the code.
+- **Contextual Anchors:** If a file is large, provide the code within its immediate class context to help the IDE's insertion tool locate the correct line.
+
+## Internationalization (i18n) & Localization (l10n)
+- **Modern WP Standards:** Always use WordPress i18n functions. Never hardcode strings.
+- **PHP i18n:** Use `__()`, `_e()`, `_x()`, or `_n()`. Always include the correct text domain (`i18n-404-tools`, defined in project headers).
+- **JavaScript i18n:** Use the `@wordpress/i18n` package (e.g., `__('string', 'domain')`). 
+- **Script Localization:** When registering scripts, always use `wp_set_script_translations()` for any JS file that contains translatable strings.
+- **JSON Compatibility:** Ensure that translatable strings in JS are compatible with `wp-cli make-json` extraction. Do not use dynamic variables inside translation functions (e.g., `__( variable, domain )` is forbidden).
+
 ### Language Guidelines
 - **Code comments & documentation**: English only
 - **Developer communication**: French or English accepted
