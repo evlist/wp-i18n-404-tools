@@ -68,6 +68,18 @@ This WordPress plugin provides missing internationalization (i18n) tools directl
 - **Code comments & documentation**: English only
 - **Developer communication**: French or English accepted
 
+## Automated Log Inspection
+- **Direct Log Access:** The WordPress debug log is located at `/var/www/html/wp-content/debug.log`. You have read access to this file.
+- **Proactive Tail:** If I describe a bug or a "white screen", start by reading the last 20-50 lines of this file to find relevant PHP Notices, Warnings, or Fatal Errors.
+- **Hook & i18n Debugging:** Look specifically for "Mismatched text domain" or "Missing .mo file" entries in this log when troubleshooting localization.
+- **Context Correlation:** Compare the timestamps in the log with my current issue to ensure you are analyzing the correct error burst.
+
+## Debugging & Xdebug First
+- **Stop Guessing:** If a bug depends on dynamic WordPress data (like Hook priority, Global variables, or Query results), do not guess the values.
+- **Suggest Breakpoints:** Instead of proposing multiple code fixes, suggest 2-3 strategic breakpoints for Xdebug. Specify the file and line number.
+- **Variable Inspection:** Tell me exactly which variables to inspect in the "Watch" or "Variables" panel (e.g., `$wp_query`, `$post`, or your Class properties).
+- **Interactive Debugging:** Before rewriting a method, ask me: "Could you check the value of [Variable] at line [X]? This would confirm if [Assumption] is correct."
+
 ## What I Expect from You, Copilot
 - Respect WordPress standards and project conventions
 - Never suggest `shell_exec`, `exec`, `system`, or shell commands
