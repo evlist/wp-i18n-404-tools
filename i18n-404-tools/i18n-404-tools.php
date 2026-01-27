@@ -74,7 +74,7 @@ add_filter(
 
 			$logo_img = '<img src="' . esc_url( plugins_url( 'admin/images/logo.svg', __FILE__ ) ) . '" alt="" style="height:16px;width:16px;margin-right:5px;vertical-align:-2px;" />';
 
-			// Extract plugin slug from plugin_file (e.g. 'i18n-404-tools/i18n-404-tools.php' => 'i18n-404-tools')
+			// Extract plugin slug from plugin_file (e.g. 'i18n-404-tools/i18n-404-tools.php' => 'i18n-404-tools').
 			$plugin_slug = preg_replace( '/\/.*$/', '', $plugin_file );
 			$attrs_pot           = i18n_404_tools_action_attrs( 'generate_pot', $plugin_slug );
 			$actions['i18n_pot'] = '<a href="#" ' . $attrs_pot . '>' . $logo_img . esc_html__( 'Generate .pot', 'i18n-404-tools' ) . '</a>';

@@ -72,7 +72,7 @@ class I18N_404_Generate_Pot_Command extends I18N_404_Command_Base {
 			);
 		}
 
-		// Step 2: Génération du .pot
+		// Step 2: Génération du .pot.
 		if ( 'generate' === $step ) {
 			$result = $this->extractor->generate_pot( $this->plugin_dir, $this->pot_path, $this->domain );
 			$error  = isset( $result['error'] ) ? trim( (string) $result['error'] ) : '';
