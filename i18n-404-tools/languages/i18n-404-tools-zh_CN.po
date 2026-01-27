@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Missing i18n tools 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/i18n-404-tools\n"
 "POT-Creation-Date: 2026-01-09T08:54:58+00:00\n"
-"PO-Revision-Date: 2026-01-26 15:24+0000\n"
+"PO-Revision-Date: 2026-01-27 10:09+0000\n"
 "Last-Translator: \n"
 "Language-Team: Chinese (China)\n"
 "Language: zh_CN\n"
@@ -36,7 +36,7 @@ msgstr "一个补足 WordPress i18N（国际化）工具的插件。"
 #: admin/class-i18n-404-generate-json-command.php:181
 #: admin/class-i18n-404-generate-pot-command.php:88
 msgid "An error occurred. Please contact the administrator."
-msgstr ""
+msgstr "发生错误。请联系管理员。"
 
 #: admin/class-i18n-404-generate-json-command.php:132
 #: admin/class-i18n-404-generate-json-command.php:171
@@ -142,7 +142,6 @@ msgstr "加载中..."
 
 #. Plugin Name of the plugin
 #: i18n-404-tools.php:26
-#, fuzzy
 #| msgid "Missing i18n tools"
 msgid "Missing i18n Tools"
 msgstr "缺失的 i18n 工具"

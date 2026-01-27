@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-01-07T19:26:21+00:00\n"
-"PO-Revision-Date: 2026-01-26 14:28+0000\n"
+"PO-Revision-Date: 2026-01-27 10:09+0000\n"
 "Language: fr_FR\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: i18n-404-tools\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Loco-Version: 2.8.0; wp-6.9; php-8.3.6"
 
 #. Translators: %d is the number of JSON files that are outdated or missing.
-#: admin/class-i18n-404-generate-json-command.php:148
+#: admin/class-i18n-404-generate-json-command.php:149
 #, php-format
 msgid "%d JSON file is outdated or missing."
 msgid_plural "%d JSON files are outdated or missing."
@@ -36,39 +36,34 @@ msgstr ""
 "Un plugin WordPress avec des outils manquants pour l'i18N "
 "(internationalisation)."
 
-#: admin/class-i18n-404-generate-json-command.php:181
 #: admin/class-i18n-404-generate-pot-command.php:88
 msgid "An error occurred. Please contact the administrator."
 msgstr "Une erreur est survenue, merci de contacter un administrateur."
 
-#: admin/class-i18n-404-generate-json-command.php:132
-#: admin/class-i18n-404-generate-json-command.php:171
+#: admin/class-i18n-404-generate-json-command.php:133
+#: admin/class-i18n-404-generate-json-command.php:172
 #: admin/class-i18n-404-generate-pot-command.php:70
 msgid "Cancel"
 msgstr "Annuler"
 
-#: admin/class-i18n-404-generate-json-command.php:82
-#: admin/class-i18n-404-generate-json-command.php:102
-#: admin/class-i18n-404-generate-json-command.php:193
-#: admin/class-i18n-404-generate-json-command.php:203
-#: admin/class-i18n-404-generate-json-command.php:279
+#: admin/class-i18n-404-generate-json-command.php:83
+#: admin/class-i18n-404-generate-json-command.php:103
+#: admin/class-i18n-404-generate-json-command.php:282
+#: admin/class-i18n-404-generate-json-command.php:323
 #: admin/class-i18n-404-generate-pot-command.php:100
 #: admin/class-i18n-404-generate-pot-command.php:109
 #: admin/js/i18n-404-tools-modal.js:46
 msgid "Close"
 msgstr "Fermer"
 
-#: admin/class-i18n-404-ajax-router.php:89
+#: admin/class-i18n-404-ajax-router.php:72
 msgid "Command class not found after loading file."
 msgstr "Classe de commande introuvable après le chargement du fichier."
 
-#: admin/class-i18n-404-ajax-router.php:84
+#: admin/class-i18n-404-ajax-router.php:67
 msgid "Command file not found: "
 msgstr "Fichier de commande introuvable : "
 
-#: admin/class-i18n-404-generate-json-command.php:188
-#: admin/class-i18n-404-generate-json-command.php:189
-#: admin/class-i18n-404-generate-json-command.php:269
 #: admin/class-i18n-404-generate-pot-command.php:95
 #: admin/class-i18n-404-generate-pot-command.php:96
 msgid "Copy output"
@@ -100,25 +95,30 @@ msgstr "Générer"
 msgid "Generate .pot"
 msgstr "Générer le fichier .pot"
 
-#: admin/class-i18n-404-generate-json-command.php:166
+#: admin/class-i18n-404-generate-json-command.php:167
 msgid "Generate all JSON files"
 msgstr "Générer tous les fichiers JSON"
 
-#: admin/class-i18n-404-generate-json-command.php:79
-#: admin/class-i18n-404-generate-json-command.php:97
-#: admin/class-i18n-404-generate-json-command.php:122
-#: admin/class-i18n-404-generate-json-command.php:139
-#: admin/class-i18n-404-generate-json-command.php:185 i18n-404-tools.php:83
+#: admin/class-i18n-404-generate-json-command.php:80
+#: admin/class-i18n-404-generate-json-command.php:98
+#: admin/class-i18n-404-generate-json-command.php:123
+#: admin/class-i18n-404-generate-json-command.php:140
+#: admin/class-i18n-404-generate-json-command.php:280
+#: admin/class-i18n-404-generate-json-command.php:316 i18n-404-tools.php:83
 msgid "Generate JSON"
 msgstr "Générer JSON"
 
-#: admin/class-i18n-404-generate-json-command.php:127
+#: admin/class-i18n-404-generate-json-command.php:128
 msgid "Generate JSON files"
 msgstr "Générer les fichiers JSON"
 
-#: admin/class-i18n-404-generate-json-command.php:160
+#: admin/class-i18n-404-generate-json-command.php:161
 msgid "Generate outdated JSON files"
 msgstr "Générer les fichiers JSON obsolètes"
+
+#: admin/class-i18n-404-generate-json-command.php:302
+msgid "Generated"
+msgstr "Généré"
 
 #. Author URI of the plugin
 #: i18n-404-tools.php:31
@@ -131,12 +131,7 @@ msgstr "https://e.vli.st/"
 msgid "https://github.com/evlist/wp-i18n-404-tools"
 msgstr "https://github.com/evlist/wp-i18n-404-tools"
 
-#: admin/class-i18n-404-generate-json-command.php:180
-#: admin/class-i18n-404-generate-json-command.php:242
-msgid "JSON files generated successfully!"
-msgstr "Fichiers JSON générés avec succès !"
-
-#: admin/class-i18n-404-generate-json-command.php:100
+#: admin/class-i18n-404-generate-json-command.php:101
 msgid "JSON files not needed."
 msgstr "Fichiers JSON non nécessaires."
 
@@ -146,20 +141,19 @@ msgstr "Chargement..."
 
 #. Plugin Name of the plugin
 #: i18n-404-tools.php:26
-#, fuzzy
 #| msgid "Missing i18n tools"
 msgid "Missing i18n Tools"
 msgstr "Outils i18n manquants"
 
-#: admin/class-i18n-404-ajax-router.php:71
+#: admin/class-i18n-404-ajax-router.php:54
 msgid "Missing required parameters."
 msgstr "Paramètres requis manquants."
 
-#: admin/class-i18n-404-generate-json-command.php:202
+#: admin/class-i18n-404-generate-json-command.php:281
 msgid "No .po files found."
 msgstr "Aucun fichier .po trouvé."
 
-#: admin/class-i18n-404-generate-json-command.php:80
+#: admin/class-i18n-404-generate-json-command.php:81
 msgid "No .po translation files found."
 msgstr "Aucun fichier de traduction .po trouvé."
 
@@ -167,11 +161,11 @@ msgstr "Aucun fichier de traduction .po trouvé."
 msgid "No .pot file exists. Generate now?"
 msgstr "Aucun fichier .pot n'existe. Générer maintenant ?"
 
-#: admin/class-i18n-404-generate-json-command.php:125
+#: admin/class-i18n-404-generate-json-command.php:126
 msgid "No JSON files found. Generate them now?"
 msgstr "Aucun fichier JSON trouvé. Les générer maintenant ?"
 
-#: admin/class-i18n-404-generate-json-command.php:81
+#: admin/class-i18n-404-generate-json-command.php:82
 msgid ""
 "Please create translations first (e.g., using Loco Translate or Poedit)."
 msgstr ""
@@ -186,34 +180,34 @@ msgstr "Plugin non trouvé."
 msgid "POT file generated successfully!"
 msgstr "Fichier POT généré avec succès !"
 
-#: admin/class-i18n-404-generate-json-command.php:244
-msgid "Some JSON files failed to generate."
-msgstr "Certains fichiers JSON n'ont pas pu être générés."
-
-#: admin/class-i18n-404-generate-json-command.php:101
+#: admin/class-i18n-404-generate-json-command.php:102
 msgid "This plugin does not use JavaScript translations (wp.i18n)."
 msgstr "Ce plugin n'utilise pas les traductions JavaScript (wp.i18n)."
 
-#: admin/class-i18n-404-generate-json-command.php:98
-#: admin/class-i18n-404-generate-json-command.php:123
-#: admin/class-i18n-404-generate-json-command.php:140
+#: admin/class-i18n-404-generate-json-command.php:99
+#: admin/class-i18n-404-generate-json-command.php:124
+#: admin/class-i18n-404-generate-json-command.php:141
 msgid "Translation files found:"
 msgstr "Fichiers de traduction trouvés :"
 
-#: admin/class-i18n-404-ajax-router.php:60
+#: admin/class-i18n-404-ajax-router.php:43
 msgid "Unauthorized request."
 msgstr "Requête non autorisée."
 
-#: admin/class-i18n-404-ajax-router.php:75
+#: admin/class-i18n-404-ajax-router.php:58
 msgid "Unknown command."
 msgstr "Commande inconnue."
 
-#: admin/class-i18n-404-generate-json-command.php:63
+#: admin/class-i18n-404-generate-json-command.php:309
+msgid "Unknown error"
+msgstr "Erreur inconnue"
+
+#: admin/class-i18n-404-generate-json-command.php:64
 #: admin/class-i18n-404-generate-pot-command.php:108
 msgid "Unknown step."
 msgstr "Étape inconnue."
 
-#: admin/class-i18n-404-generate-json-command.php:158
+#: admin/class-i18n-404-generate-json-command.php:159
 msgid "What would you like to do?"
 msgstr "Que voulez-vous faire ?"
 
