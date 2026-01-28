@@ -53,7 +53,7 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			return $this->generate_json_files( false );
 		}
 
-		// Step 3: Generate all JSON files (overwrite existing).
+		// Step 3: Generate all JSON files (overwrite_non_outdated existing).
 		if ( 'generate_all' === $step ) {
 			return $this->generate_json_files( true );
 		}
@@ -135,13 +135,12 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			);
 		}
 
-		// Case 3: JSON files exist.
-		$html = '<div class="i18n-modal-content">'
-			. $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
-			. '<p><strong>' . esc_html__( 'Translation files found:', 'i18n-404-tools' ) . '</strong></p>'
-			. $po_list;
+		   // Case 3: JSON files exist.
+		   $html = '<div class="i18n-modal-content">'
+			   . $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
+			   . '<p><strong>' . esc_html__( 'Translation files found:', 'i18n-404-tools' ) . '</strong></p>'
+			   . $po_list;
 
-		if ( $has_outdated ) {
 			$outdated_count = count( $json_status['outdated'] );
 			$html          .= '<p>'
 				. sprintf(
@@ -156,23 +155,21 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 				)
 				. '</p>';
 
-			$html .= '<p>' . esc_html__( 'What would you like to do?', 'i18n-404-tools' ) . '</p>'
-				. $this->generate_action_button(
+			$html .= $this->generate_action_button(
 					__( 'Generate outdated JSON files', 'i18n-404-tools' ),
 					'generate_json',
 					'generate',
-					'button-primary'
+					'button-primary' . ( $outdated_count === 0 ? ' disabled' : '' ) // Disable if none outdated
 				) . ' '
 				. $this->generate_action_button(
-					__( 'Generate all JSON files', 'i18n-404-tools' ),
-					'generate_json',
-					'generate_all',
-					''
-				) . ' '
-				. $this->generate_cancel_button( __( 'Cancel', 'i18n-404-tools' ) );
-		}
+				   __( 'Generate all JSON files', 'i18n-404-tools' ),
+				   'generate_json',
+				   'generate_all',
+				   'button-primary'
+			   ) . ' '
+			   . $this->generate_cancel_button( __( 'Cancel', 'i18n-404-tools' ) );
 
-		return array( 'html' => $html );
+		   return array( 'html' => $html );
 	}
 
 	// ... autres méthodes ...
@@ -266,10 +263,10 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 	/**
 	 * Generate JSON files from .po files.
 	 *
-	 * @param bool $overwrite Whether to overwrite existing JSON files.
+	 * @param bool $overwrite_non_outdated If true, (re)generate all JSON files. If false, only generate for outdated/missing.
 	 * @return array Result array with HTML content and success flag.
 	 */
-	protected function generate_json_files( $overwrite = false ) {
+	protected function generate_json_files( $overwrite_non_outdated = false ) {
 		$po_files = $this->get_po_files();
 		$results  = array();
 		$success  = true;
@@ -284,13 +281,30 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			);
 		}
 
+		// Get status to determine which .po files are outdated/missing JSON.
+		$json_status = $this->get_json_status( $po_files );
+		$target_po_files = $overwrite_non_outdated
+			? $po_files
+			: $json_status['outdated'];
+
+		if ( empty( $target_po_files ) ) {
+			return array(
+				'html' => '<div class="i18n-modal-content">'
+					. $this->generate_modal_header( __( 'Generate JSON', 'i18n-404-tools' ) )
+					. '<p>' . esc_html__( 'All JSON files are up to date.', 'i18n-404-tools' ) . '</p>'
+					. $this->generate_cancel_button( __( 'Close', 'i18n-404-tools' ) )
+					. '</div>',
+				'success' => true,
+			);
+		}
+
 		$assoc_args = array(
 			'output' => $this->languages_dir,
-			'force'  => $overwrite,
+			'force'  => true, // Always force overwrite for selected files.
 			'quiet'  => true,
 		);
 
-		foreach ( $po_files as $po_file ) {
+		foreach ( $target_po_files as $po_file ) {
 			$ret = $this->extractor->generate_json( $po_file, $assoc_args );
 			if ( is_array( $ret ) && ! empty( $ret['success'] ) ) {
 				$locale = basename( $po_file, '.po' );
@@ -328,5 +342,4 @@ class I18N_404_Generate_JSON_Command extends I18N_404_Command_Base {
 			'success' => $success,
 		);
 	}
-
 }

@@ -15,8 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound
-
 // Provide a stable WP-CLI version string expected by bundled commands.
 if ( ! defined( 'WP_CLI_VERSION' ) ) {
 	define( 'WP_CLI_VERSION', '2.11.0-stub' );
@@ -241,4 +239,3 @@ class I18n_WP_CLI_Logger {
 }
 
 // phpcs:enable Generic.Files.OneObjectStructurePerFile.MultipleFound
-
