@@ -45,7 +45,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'I18N_404_TOOLS_VERSION', '1.0.0' );
+define( 'I18N_404_TOOLS_VERSION', '1.1.0' );
 
 // Only load base and router for our AJAX requests; router will load command classes dynamically.
 add_action(

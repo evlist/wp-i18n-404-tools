@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 msgid ""
 msgstr ""
-"Project-Id-Version: Missing i18n tools 1.0.0\n"
+"Project-Id-Version: Missing i18n tools 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/i18n-404-tools\n"
 "Last-Translator: \n"
 "Language-Team: Français\n"

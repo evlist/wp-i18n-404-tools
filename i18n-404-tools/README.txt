@@ -132,6 +132,9 @@ Absolutely! The plugin is fully translatable. You can use Missing i18n Tools to 
 
 == Changelog ==
 
+= 1.1.0 =
+* Refactoring to use vendored WP-CLI i18n classes instead of shell_exec.
+
 = 1.0.0 =
 * Initial release
 * Generate POT (Portable Object Template) files for any plugin
@@ -145,6 +148,9 @@ Absolutely! The plugin is fully translatable. You can use Missing i18n Tools to 
 * WordPress Coding Standards compliant
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Full compatibility.
 
 = 1.0.0 =
 Initial release of Missing i18n Tools. Generate POT and JSON translation files directly from WordPress admin, including strings from JavaScript files!
