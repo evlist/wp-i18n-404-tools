@@ -26,6 +26,8 @@ WordPress internationalization tools: generate POT and JSON translation files fr
 
 == Description ==
 
+⚠️ Project Status: On Standby > This project was designed to bridge the gap between WP-CLI and the WordPress dashboard for modern i18n workflows. Since Loco Translate now natively supports these features (JSON generation and JS text extraction), this plugin is currently on standby.
+
 Easily generate POT and JSON translation files for any plugin, directly from the WordPress admin—no command-line or WP-CLI required.
 
 Missing i18n Tools provides WordPress internationalization features that are missing from the WordPress admin interface and common free plugins. It allows you to generate POT (Portable Object Template) files and JSON translation files for any installed plugin directly from your WordPress admin, without needing command-line access or WP-CLI.

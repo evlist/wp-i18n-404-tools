@@ -21,7 +21,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
   <img src="./i18n-404-tools/admin/images/logo.svg" width="256" style="float:right;max-width:256px;height:auto;margin-top:-4em;" alt="WP i18n-404-tools Logo" /> A WordPress plugin with missing i18N (internationalization) tools.
 
-> 📢 **Status**: Plugin submitted to WordPress.org on January 10, 2026. Pending review by the WordPress.org Plugin Review Team.
+> ⚠️ **Project Status**: On Standby > This project was designed to bridge the gap between WP-CLI and the WordPress dashboard for modern i18n workflows. Since Loco Translate now natively supports these features (JSON generation and JS text extraction), this plugin is currently on standby. 
 
 ## ✨ What this plugin does
 
