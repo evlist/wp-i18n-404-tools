@@ -21,7 +21,18 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
   <img src="./i18n-404-tools/admin/images/logo.svg" width="256" style="float:right;max-width:256px;height:auto;margin-top:-4em;" alt="WP i18n-404-tools Logo" /> A WordPress plugin with missing i18N (internationalization) tools.
 
-> ⚠️ **Project Status**: On Standby > This project was designed to bridge the gap between WP-CLI and the WordPress dashboard for modern i18n workflows. Since Loco Translate now natively supports these features (JSON generation and JS text extraction), this plugin is currently on standby. 
+# 🏁 Project Status: Completed & Evolved
+
+This project, **i18n-404-tools**, was created to bridge the "missing links" (the *404s*) in the WordPress i18n dashboard—specifically the native management of JSON files and JS text extraction.
+
+While tools like Loco Translate have since integrated some of these features, the vision for a fully automated, agent-based workflow has outgrown the scope of this utility.
+
+### 🚀 What's next?
+This repository is now officially closed in favor of [**I18nly**](https://github.com/votre-pseudo/wp-i18nly).
+
+**I18nly** takes the core concepts developed here and evolves them into a comprehensive workflow manager that abstracts the technical complexity of Gettext files entirely.
+
+*This code remains here for archival purposes.*
 
 ## ✨ What this plugin does
 
